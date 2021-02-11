@@ -1,0 +1,28 @@
+{
+  "name": "server",
+  "version": "1.0.0",
+  "description": "Web equipaments server",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "start": "nodemon index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/PauCasademont/equipaments.git"
+  },
+  "author": "Pau Casademont",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/PauCasademont/equipaments/issues"
+  },
+  "homepage": "https://github.com/PauCasademont/equipaments#readme",
+  "dependencies": {
+    "body-parser": "^1.19.0",
+    "cors": "^2.8.5",
+    "dotenv": "^8.2.0",
+    "express": "^4.17.1",
+    "mongoose": "^5.11.15",
+    "nodemon": "^2.0.7"
+  }
+}
