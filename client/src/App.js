@@ -1,8 +1,17 @@
+import {BrowserRouter, Switch, Route } from 'react-router-dom';
+
 import Map from './components/Map/Map';
 
 function App() {
   return (
-    <Map />
+    <BrowserRouter>
+      <Switch>
+        <Route
+          path="/" exact
+          render={() => <Map />}
+        />
+      </Switch>
+    </BrowserRouter>
   );
 }
 
