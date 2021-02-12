@@ -11,7 +11,8 @@ const publicFacilitySchema = mongoose.Schema({
         annual_data: [{
             _id: false,
             concept: String,
-            values: [Number]
+            consumption: [Number],
+            price: [Number]
         }]
     }]
 });
