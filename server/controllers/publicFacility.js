@@ -1,11 +1,16 @@
-import publicFacilityModel from '../models/publicFacility.js';
+import PublicFacilityModel from '../models/publicFacility.js';
 
 export const createPublicFacility = async (req, res) => {
+    const { name } = req.body;
+
     try {
-        const result = await publicFacilityModel.create(req.body);
+        const oldPublicFacility = await PublicFacilityModel.findOne({ name });
+        if (oldPublicFacility) return res.status(400).json({ message: `Public facility \'${name}\' already exists`})
+        
+        const result = await PublicFacilityModel.create(req.body);
         res.status(201).json({result});
     } catch (error) {
-        res.status(409).json({ message: "Infrastructure could not be create"});
+        res.status(500).json({ message: "Public facility could not be created"});
         console.log(error);
     }
 }
