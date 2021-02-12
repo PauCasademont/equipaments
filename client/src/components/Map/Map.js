@@ -1,21 +1,30 @@
-import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet'
+import { useState, useEffect } from 'react';
+import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
 
 import './Map.css';
+import { getPublicFalcilities } from '../../actions/publicFacility';
 
 const INITIAL_MAP_CONFIG = {center: [41.98311,2.82493], zoom: 14}
-const POSITIONS = [[41.983149,2.824774], [41.98422256,2.82645151], [41.998070,2.803530], [41.973036,2.842113]]
 
 function Map() {
+    const [publicFacilities, setPublicFacilities] = useState([]);
+
+    useEffect(() => {
+        getPublicFalcilities()
+            .then((res) => {setPublicFacilities(res.data.result)})
+            .catch((error) => {console.log(error)});
+    }, []);
+
     return (                     
         <MapContainer center={INITIAL_MAP_CONFIG.center} zoom={INITIAL_MAP_CONFIG.zoom} scrollWheelZoom={true}>
             <TileLayer
                 attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
                 url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-            />
-            {POSITIONS.map((position, index) => (
-                <Marker position={position} key={index}>
+            />          
+            {publicFacilities.map(({ _id, name, typology, coordinates, area }) => (
+                <Marker position={coordinates} key={_id}>
                     <Popup>
-                        A pretty CSS3 popup. <br /> Easily customizable.
+                        {name} <br /> Tipologia: {typology} <br /> {area ? `Superficie: ${area}` : ''}
                     </Popup>
                 </Marker>
             ))}
