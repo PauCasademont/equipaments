@@ -1,10 +1,11 @@
 import { useState, useEffect } from 'react';
-import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
-import { Typography, IconButton } from '@material-ui/core';
-import L from 'leaflet';
+import { MapContainer, TileLayer, LayersControl, LayerGroup } from 'react-leaflet';
+import groupBy from 'lodash.groupby';
 
 import './Map.css';
 import { getPublicFalcilities } from '../../actions/publicFacility';
+import CustomMarker from './CustomMarker/CustomMarker';
+import { typologies } from '../../constants/publicFacility.js';
 
 const INITIAL_MAP_CONFIG = {center: [41.98311,2.82493], zoom: 14}
 
@@ -17,53 +18,38 @@ function getIcons() {
     return res;
 }
 
-function getIconMarker(icon) {
-    return new L.icon({
-        iconUrl: icon,
-        iconSize: [45, 45]
-    });
-}
-
 function Map() {
-    const [publicFacilities, setPublicFacilities] = useState([]);
+    const [map, setMap] = useState(null);
+    const [publicFacilities, setPublicFacilities] = useState(null);
     const icons = getIcons();
 
-    useEffect(() => {
+    useEffect(() => {       
         getPublicFalcilities()
-            .then((res) => {setPublicFacilities(res.data.result)})
-            .catch((error) => {console.log(error)});
+            .then((res) => {
+                const groupedByTypology = groupBy(res.data.result, facility => facility.typology);                    
+                setPublicFacilities(groupedByTypology);
+            })
+            .catch((error) => {console.log(error)});        
     }, []);
+    
 
-
-    return (                     
-        <MapContainer center={INITIAL_MAP_CONFIG.center} zoom={INITIAL_MAP_CONFIG.zoom} scrollWheelZoom={true}>
+    return (
+        <MapContainer center={INITIAL_MAP_CONFIG.center} zoom={INITIAL_MAP_CONFIG.zoom} scrollWheelZoom={true} whenCreated={setMap}>
             <TileLayer
                 attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
                 url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-            />          
-            {publicFacilities.map(({ _id, name, typology, coordinates, area }) => (
-                <Marker position={coordinates} key={_id} icon={getIconMarker(icons[`${typology}`])}>
-                    <Popup maxWidth='500'>
-                        <div className='popup-title-div'>
-                            <Typography className='popup-title-text' variant='h6' gutterBottom aling='center'>
-                                {name}
-                            </Typography>
-                        </div>
-                        <Typography className='popup-info' variant='body1' >
-                            Tipologia: {typology} <br /> {area ? <>{`Superficie: ${area} m`}<sup>2</sup></> : ''}
-                        </Typography>
-                        <IconButton className='icon-button'>
-                            <img className='icon' src={icons.consum} alt='icon_btn' />
-                        </IconButton>
-                        <IconButton className='icon-button'>
-                            <img className='icon' src={icons.cost} alt='icon_btn' />
-                        </IconButton>
-                        {area && <IconButton className='icon-button'>
-                            <img className='icon' src={icons.indicadors} alt='icon_btn' />
-                        </IconButton>}
-                    </Popup>
-                </Marker>
-            ))}
+            />     
+            <LayersControl position='topright'>
+                { publicFacilities && typologies.map((typology, index) => (                    
+                    <LayersControl.Overlay key={index} checked name={typology.name}>
+                        <LayerGroup>
+                            {publicFacilities[typology.icon]?.map((publicFacility) => (                
+                                <CustomMarker key={publicFacility._id} publicFacility={publicFacility} icons={icons} />
+                            ))}  
+                        </LayerGroup>
+                    </LayersControl.Overlay>
+                ))}
+            </LayersControl>                    
         </MapContainer>  
     )
 }

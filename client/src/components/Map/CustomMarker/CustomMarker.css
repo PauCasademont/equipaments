@@ -1,0 +1,25 @@
+.popup-title-div {
+    background-color: deepskyblue;
+    padding-right: 15px;
+    padding-left: 15px;
+    margin: 10px;
+}
+
+.popup-title-text {
+   color: white;
+}
+
+.popup-info {
+    margin-left: 15px !important;
+}
+
+.icon-button {
+    width: 80px;
+    height: 80px;
+    margin-top: -10px !important;
+}
+
+.icon {
+    width: 90%;
+    height: 90%;  
+}
