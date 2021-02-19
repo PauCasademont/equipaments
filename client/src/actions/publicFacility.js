@@ -7,3 +7,11 @@ export const getPublicFalcilities =  async () => {
         console.log(error);
     }
 }
+
+export const getPublicFacilityData = async (id) => {
+    try {
+        return await api.req_getPublicFacilityData(id)
+    } catch (error) {
+        console.log(error)
+    }
+}
