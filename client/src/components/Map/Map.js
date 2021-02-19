@@ -1,11 +1,11 @@
 import { useState, useEffect } from 'react';
 import { MapContainer, TileLayer, LayersControl, LayerGroup } from 'react-leaflet';
-import groupBy from 'lodash.groupby';
 
 import './Map.css';
 import { getPublicFalcilities } from '../../actions/publicFacility';
 import CustomMarker from './CustomMarker/CustomMarker';
 import { typologies } from '../../constants/publicFacility.js';
+import { useHistory } from 'react-router-dom';
 
 const INITIAL_MAP_CONFIG = {center: [41.98311,2.82493], zoom: 14}
 
@@ -18,20 +18,24 @@ function getIcons() {
     return res;
 }
 
-function Map() {
+function Map({ setSelectedFacility }) {
     const [map, setMap] = useState(null);
     const [publicFacilities, setPublicFacilities] = useState(null);
     const icons = getIcons();
+    const router = useHistory();
 
     useEffect(() => {       
         getPublicFalcilities()
-            .then((res) => {
-                const groupedByTypology = groupBy(res.data.result, facility => facility.typology);                    
+            .then((groupedByTypology) => {                                 
                 setPublicFacilities(groupedByTypology);
             })
             .catch((error) => {console.log(error)});        
     }, []);
     
+    const handleChartClick = (_id, name) => {
+        setSelectedFacility({id: _id, name});
+        router.push('./chart');
+    }
 
     return (
         <MapContainer center={INITIAL_MAP_CONFIG.center} zoom={INITIAL_MAP_CONFIG.zoom} scrollWheelZoom={true} whenCreated={setMap}>
@@ -44,7 +48,12 @@ function Map() {
                     <LayersControl.Overlay key={index} checked name={typology.name}>
                         <LayerGroup>
                             {publicFacilities[typology.icon]?.map((publicFacility) => (                
-                                <CustomMarker key={publicFacility._id} publicFacility={publicFacility} icons={icons} />
+                                <CustomMarker 
+                                    key={publicFacility._id} 
+                                    publicFacility={publicFacility} 
+                                    icons={icons} 
+                                    handleChartClick={handleChartClick}
+                                />
                             ))}  
                         </LayerGroup>
                     </LayersControl.Overlay>

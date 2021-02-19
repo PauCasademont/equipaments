@@ -11,7 +11,7 @@ function getIconMarker(icon) {
     });
 }
 
-function CustomMarker({publicFacility, icons}) {
+function CustomMarker({publicFacility, icons, handleChartClick }) {
     const { _id, name, typology, coordinates, area } = publicFacility;
     
     return (
@@ -25,7 +25,7 @@ function CustomMarker({publicFacility, icons}) {
                 <Typography className='popup-info' variant='body1' >
                     Tipologia: {typology} <br /> {area ? <>{`Superficie: ${area} m`}<sup>2</sup></> : ''}
                 </Typography>
-                <IconButton className='icon-button'>
+                <IconButton className='icon-button' onClick={() => { handleChartClick(_id, name); }}>
                     <img className='icon' src={icons.consum} alt='icon_btn' />
                 </IconButton>
                 <IconButton className='icon-button'>
