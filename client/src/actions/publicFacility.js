@@ -34,3 +34,14 @@ export const getPublicFacilityDatasets = async (id) => {
         }
     }
 }
+
+export const getPublicFacilityName = async (id) => {
+    if(id){
+        try {
+            const res =  await api.req_getPublicFacilityName(id);
+            return res.data.result.name;
+        } catch (error) {
+            console.log(error);
+        }
+    }
+}
