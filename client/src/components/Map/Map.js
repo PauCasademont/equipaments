@@ -18,7 +18,7 @@ function getIcons() {
     return res;
 }
 
-function Map({ setSelectedFacility }) {
+function Map() {
     const [map, setMap] = useState(null);
     const [publicFacilities, setPublicFacilities] = useState(null);
     const icons = getIcons();
@@ -32,13 +32,17 @@ function Map({ setSelectedFacility }) {
             .catch((error) => {console.log(error)});        
     }, []);
     
-    const handleChartClick = (_id, name) => {
-        setSelectedFacility({id: _id, name});
-        router.push('./chart');
+    const handleChartClick = (_id, name) => {       
+        router.push(`./chart/${_id}`);
     }
 
     return (
-        <MapContainer center={INITIAL_MAP_CONFIG.center} zoom={INITIAL_MAP_CONFIG.zoom} scrollWheelZoom={true} whenCreated={setMap}>
+        <MapContainer 
+            center={INITIAL_MAP_CONFIG.center} 
+            zoom={INITIAL_MAP_CONFIG.zoom} 
+            scrollWheelZoom={true} 
+            whenCreated={setMap}
+        >
             <TileLayer
                 attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
                 url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"

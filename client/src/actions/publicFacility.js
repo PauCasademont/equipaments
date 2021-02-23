@@ -19,9 +19,12 @@ export const getPublicFacilityDatasets = async (id) => {
             
             result.data.map((year) => 
                 year.annual_data.map((conceptData) => datasets.push({
-                    label: `${year.year} ${conceptData.concept}`,
+                    label: `${conceptData.concept}`,
                     data: conceptData.consumption,
-                    borderColor: "#742774"
+                    borderColor: "#742774",
+                    hidden: false,
+                    fill: false,
+                    year: `${year.year}`
                 }))
             );
 
