@@ -6,7 +6,7 @@ import './ChartLegend.css';
 
 function ChartLegend({ data, setData }) {
 
-    const yearsDatasets = groupBy(data.datasets, dataset => dataset.year); 
+    const conceptGroupedDatasets = groupBy(data.datasets, dataset => dataset.concept); 
 
     const handleLegendClick = (dataset) => {
         const index = data.datasets.findIndex((d) => d == dataset);
@@ -19,16 +19,16 @@ function ChartLegend({ data, setData }) {
 
     return (
         <div className='chart-legend'>
-            { Object.keys(yearsDatasets).map((year, index) => (
+            { Object.keys(conceptGroupedDatasets).map((concept, index) => (
                 <Paper className='chart-legend-paper' key={index} elevation={3} >
                     <Typography variant='h5'>
-                        {year}
+                        {concept}
                     </Typography>
-                    { yearsDatasets[year].map((dataset, index) => (
+                    { conceptGroupedDatasets[concept].map((dataset, index) => (
                         <div className='chart-legend-item' key={index} onClick={() => handleLegendClick(dataset)}> 
                             <div style={{height: '15px', width: '40px', backgroundColor: dataset.borderColor, marginRight: '20px'}} />
                             <Typography variant='h6'>                                
-                                {dataset.hidden ? <strike>{dataset.label}</strike> : dataset.label}
+                                {dataset.hidden ? <strike>{dataset.year}</strike> : dataset.year}
                             </Typography>
                         </div>
                         
