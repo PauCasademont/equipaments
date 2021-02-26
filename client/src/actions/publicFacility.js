@@ -14,20 +14,22 @@ export const getPublicFalcilities =  async () => {
 export const getPublicFacilityDatasets = async (id) => {
     if(id){
         try {           
-            const { data: { result }} = await api.req_getPublicFacilityData(id);
+            const {data} = await api.req_getPublicFacilityData(id);
             let datasets = [];
-            
-            result.data.map((year) => 
-                year.annual_data.map((conceptData) => datasets.push({
-                    label: `${conceptData.concept}`,
-                    data: conceptData.consumption,
-                    borderColor: "#742774",
-                    hidden: false,
-                    fill: false,
-                    year: `${year.year}`
-                }))
-            );
 
+            Object.keys(data.result.data).map((year) => {
+                Object.keys(data.result.data[year]).map((concept) => {
+                    datasets.push({
+                        label: `${year} ${concept}`,
+                        data: data.result.data[year][concept].consumption.map(value => (value == 0 ? null : value)),
+                        borderColor: "#742774",
+                        hidden: false,
+                        fill: false,
+                        year: `${year}`
+                    })
+                })
+            });
+            
             return datasets
         } catch (error) {
             console.log(error);

@@ -1,4 +1,4 @@
-import { useEffect, useState, useRef } from 'react';
+import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { Line } from 'react-chartjs-2';
 import { Container } from '@material-ui/core';
@@ -9,9 +9,10 @@ import { labels } from '../../constants/chart';
 import ChartLegend from './ChartLegend/ChartLegend';
 
 function Chart() {
-    const [data, setData] = useState({});
+    const [data, setData] = useState({
+        labels: [], datasets: []
+    });
     const [title, setTitle] = useState('');   
-    const chartRef = useRef();
     const { id } = useParams(); 
     
 
@@ -19,27 +20,26 @@ function Chart() {
         getPublicFacilityDatasets(id)
             .then((datasets) => {
                 setData({labels, datasets});
-                })
+            })
             .catch((error) => console.log(error));
 
         getPublicFacilityName(id)
             .then((name)=> {
                 setTitle(`Consum d'energia ${name}`);
             })
-            .catch((error) => console.log(error));
+            .catch((error) => console.log(error));     
     }, []);
 
     return (
         <Container maxWidth='lg'>
             <div className='chart'>
-                <ChartLegend chartRef={chartRef} datasets={data.datasets}/>
+                <ChartLegend data={data} setData={setData} />
                 <Line 
-                    ref={chartRef}
-                    data={data} 
+                    data={data}                     
                     options={{
-                        legend: { display: false, position: 'bottom' },
-                        title: { display: true, text: title, fontSize: 30},
-                        responsive: true
+                        legend: { display: false },
+                        title: { display: true, text: title, fontSize: 30 },
+                        responsive: true                       
                     }} 
                 /> 
             </div>

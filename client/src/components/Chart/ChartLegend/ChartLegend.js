@@ -1,18 +1,20 @@
+import { useEffect } from 'react';
 import groupBy from 'lodash.groupby';
-import { Paper, Typography } from '@material-ui/core';
+import { Paper, Typography, CircularProgress } from '@material-ui/core';
 
 import './ChartLegend.css';
 
-function ChartLegend({ chartRef, datasets }) {
+function ChartLegend({ data, setData }) {
 
-    const yearsDatasets = groupBy(datasets, dataset => dataset.year);
+    const yearsDatasets = groupBy(data.datasets, dataset => dataset.year); 
 
-    const handleClick = (dataset) => {
-        let chartDataset = chartRef.current.props.data.datasets.filter(d => d == dataset)[0];
-        if (chartDataset){
-            chartDataset.hidden = !chartDataset.hidden;
-            chartRef.current.chartInstance.update();
-        }
+    const handleLegendClick = (dataset) => {
+        const index = data.datasets.findIndex((d) => d == dataset);
+        const datasetsCopy = data.datasets;
+        const dataCopy = datasetsCopy[index];
+        dataCopy.hidden = !dataCopy.hidden;
+        datasetsCopy[index] = dataCopy;
+        setData({ labels: data.labels, datasets: datasetsCopy });
     }
 
     return (
@@ -23,18 +25,17 @@ function ChartLegend({ chartRef, datasets }) {
                         {year}
                     </Typography>
                     { yearsDatasets[year].map((dataset, index) => (
-                        <div className='chart-legend-item' key={index} onClick={() => handleClick(dataset)}> 
+                        <div className='chart-legend-item' key={index} onClick={() => handleLegendClick(dataset)}> 
                             <div style={{height: '15px', width: '40px', backgroundColor: dataset.borderColor, marginRight: '20px'}} />
-                            <Typography variant='h6'>
-                                {dataset.label}
-                                {/* {dataset.hidden ? dataset.label : <strike>{dataset.label}</strike>} */}
+                            <Typography variant='h6'>                                
+                                {dataset.hidden ? <strike>{dataset.label}</strike> : dataset.label}
                             </Typography>
                         </div>
                         
                     ))}
                 </Paper>
             ))}
-        </div>
+        </div> 
     )
 }
     // <button onClick={getKeys()}>Click</button>

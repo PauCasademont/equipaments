@@ -31,7 +31,7 @@ function CustomMarker({publicFacility, icons, handleChartClick }) {
                 <IconButton className='icon-button'>
                     <img className='icon' src={icons.cost} alt='icon_btn' />
                 </IconButton>
-                {area && <IconButton className='icon-button'>
+                {area > 0 && <IconButton className='icon-button'>
                     <img className='icon' src={icons.indicadors} alt='icon_btn' />
                 </IconButton>}
             </Popup>
