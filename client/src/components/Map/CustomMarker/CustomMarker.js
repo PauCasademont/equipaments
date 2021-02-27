@@ -3,6 +3,7 @@ import { Typography, IconButton } from '@material-ui/core';
 import L from 'leaflet';
 
 import './CustomMarker.css';
+import { CONSUMPTION, PRICE} from '../../../constants/chart';
 
 function getIconMarker(icon) {
     return new L.icon({
@@ -11,9 +12,15 @@ function getIconMarker(icon) {
     });
 }
 
-function CustomMarker({publicFacility, icons, handleChartClick }) {
+function CustomMarker({publicFacility, icons, router }) {
     const { _id, name, typology, coordinates, area } = publicFacility;
     
+    const handleChartClick = (type) => {
+        router.push(`./${type}/${_id}`);
+    }
+
+   
+
     return (
         <Marker position={coordinates} key={_id} icon={getIconMarker(icons[typology])}>
             <Popup maxWidth='500'>
@@ -25,10 +32,10 @@ function CustomMarker({publicFacility, icons, handleChartClick }) {
                 <Typography className='popup-info' variant='body1' >
                     Tipologia: {typology} <br /> {area ? <>{`Superficie: ${area} m`}<sup>2</sup></> : ''}
                 </Typography>
-                <IconButton className='icon-button' onClick={() => { handleChartClick(_id, name); }}>
+                <IconButton className='icon-button' onClick={() => { handleChartClick(CONSUMPTION) }}>
                     <img className='icon' src={icons.consum} alt='icon_btn' />
                 </IconButton>
-                <IconButton className='icon-button'>
+                <IconButton className='icon-button' onClick={() => { handleChartClick(PRICE) }}>
                     <img className='icon' src={icons.cost} alt='icon_btn' />
                 </IconButton>
                 {area > 0 && <IconButton className='icon-button'>

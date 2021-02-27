@@ -3,6 +3,7 @@ import {BrowserRouter, Switch, Route } from 'react-router-dom';
 
 import Map from './components/Map/Map';
 import Chart from './components/Chart/Chart';
+import { CONSUMPTION, PRICE} from './constants/chart';
 
 function App() {
 
@@ -14,10 +15,14 @@ function App() {
           render={() => <Map />}
         />
         <Route
-          path="/chart/:id" exact
-          render={() => <Chart />}
+          path="/consumption/:id" exact
+          render={() => <Chart dataType={CONSUMPTION} />}
         />
-      </Switch>
+        <Route
+          path="/price/:id" exact
+          render={() => <Chart dataType={PRICE} />}
+        />
+      </Switch> 
     </BrowserRouter>
   );
 }

@@ -5,10 +5,10 @@ import { Container } from '@material-ui/core';
 
 import './Chart.css';
 import { getPublicFacilityDatasets, getPublicFacilityName } from '../../actions/publicFacility';
-import { labels } from '../../constants/chart';
+import { LABELS } from '../../constants/chart';
 import ChartLegend from './ChartLegend/ChartLegend';
 
-function Chart() {
+function Chart({ dataType }) {
     const [data, setData] = useState({
         labels: [], datasets: []
     });
@@ -17,9 +17,9 @@ function Chart() {
     
 
     useEffect(() => {   
-        getPublicFacilityDatasets(id)
+        getPublicFacilityDatasets(id, dataType)
             .then((datasets) => {
-                setData({labels, datasets});
+                setData({labels: LABELS, datasets });
             })
             .catch((error) => console.log(error));
 

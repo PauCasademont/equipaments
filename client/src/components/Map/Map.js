@@ -31,10 +31,6 @@ function Map() {
             })
             .catch((error) => {console.log(error)});        
     }, []);
-    
-    const handleChartClick = (_id, name) => {       
-        router.push(`./chart/${_id}`);
-    }
 
     return (
         <MapContainer 
@@ -56,7 +52,7 @@ function Map() {
                                     key={publicFacility._id} 
                                     publicFacility={publicFacility} 
                                     icons={icons} 
-                                    handleChartClick={handleChartClick}
+                                    router={router}
                                 />
                             ))}  
                         </LayerGroup>
