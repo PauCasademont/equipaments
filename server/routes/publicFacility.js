@@ -3,8 +3,7 @@ import express from 'express';
 import { 
     createPublicFacility, 
     getPublicFalcilities, 
-    getPublicFacilityData, 
-    getPublicFacilityName 
+    getPublicFacilityData 
 } from '../controllers/publicFacility.js';
 
 const router = express.Router();
@@ -12,6 +11,5 @@ const router = express.Router();
 router.post('/', createPublicFacility);
 router.get('/', getPublicFalcilities);
 router.get('/:id', getPublicFacilityData);
-router.get('/:id/name', getPublicFacilityName);
 
 export default router;

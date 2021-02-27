@@ -4,7 +4,7 @@ import { Line } from 'react-chartjs-2';
 import { Container } from '@material-ui/core';
 
 import './Chart.css';
-import { getPublicFacilityDatasets, getPublicFacilityName } from '../../actions/publicFacility';
+import { getPublicFacilityData } from '../../actions/publicFacility';
 import { LABELS } from '../../constants/chart';
 import ChartLegend from './ChartLegend/ChartLegend';
 
@@ -17,17 +17,14 @@ function Chart({ dataType }) {
     
 
     useEffect(() => {   
-        getPublicFacilityDatasets(id, dataType)
-            .then((datasets) => {
-                setData({labels: LABELS, datasets });
-            })
-            .catch((error) => console.log(error));
+        getPublicFacilityData(id, dataType)
 
-        getPublicFacilityName(id)
-            .then((name)=> {
-                setTitle(`Consum d'energia ${name}`);
+            .then((publicFacilityData) => {
+                setData({labels: LABELS, datasets: publicFacilityData.datasets });
+                setTitle(`Consum d'energia ${publicFacilityData.name}`);
             })
-            .catch((error) => console.log(error));     
+            .catch((error) => console.log(error));  
+
     }, []);
 
     return (

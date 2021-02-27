@@ -35,7 +35,7 @@ export const getPublicFacilityData = async (req, res) => {
     }
 
     try {
-        const result = await PublicFacilityModel.findById(id, 'name data');
+        const result = await PublicFacilityModel.findById(id);
         res.status(200).send({result});
     } catch (error) {
         res.status(500).send({ message: 'Could not get public facility data'});
@@ -43,18 +43,3 @@ export const getPublicFacilityData = async (req, res) => {
     }
 }
 
-export const getPublicFacilityName = async (req, res) => {
-    const { id } = req.params;
-
-    if(!mongoose.Types.ObjectId.isValid(id)){
-        return res.status(404).json({ message: `No valid public facility id: ${id}`});
-    }
-
-    try {
-        const result = await PublicFacilityModel.findById(id, 'name');
-        res.status(200).json({result});
-    } catch (error) {
-        res.status(500).json({ message: 'Could not get public facility data'});
-        console.log(error);
-    }
-}

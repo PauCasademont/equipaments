@@ -3,7 +3,7 @@ import {BrowserRouter, Switch, Route } from 'react-router-dom';
 
 import Map from './components/Map/Map';
 import Chart from './components/Chart/Chart';
-import { CONSUMPTION, PRICE} from './constants/chart';
+import { CONSUMPTION, PRICE, AREA} from './constants/chart';
 
 function App() {
 
@@ -21,6 +21,10 @@ function App() {
         <Route
           path="/price/:id" exact
           render={() => <Chart dataType={PRICE} />}
+        />
+         <Route
+          path="/area/:id" exact
+          render={() => <Chart dataType={AREA} />}
         />
       </Switch> 
     </BrowserRouter>
