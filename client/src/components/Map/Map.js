@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { MapContainer, TileLayer, LayersControl, LayerGroup } from 'react-leaflet';
 
 import './Map.css';
+import 'leaflet/dist/leaflet.css';
 import { getPublicFalcilities } from '../../actions/publicFacility';
 import CustomMarker from './CustomMarker/CustomMarker';
 import { typologies } from '../../constants/publicFacility.js';

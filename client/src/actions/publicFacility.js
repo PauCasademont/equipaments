@@ -2,7 +2,7 @@ import groupBy from 'lodash.groupby';
 import tinycolor from 'tinycolor2';
 
 import * as api from '../api/index.js';
-import { COLORS, AREA } from '../constants/chart.js';
+import { COLORS, AREA, CONSUMPTION } from '../constants/chart.js';
 
 export const getPublicFalcilities =  async () => {
     try {
@@ -18,7 +18,18 @@ export const getPublicFacilityData = async (id, dataType) => {
         try {           
             const {data} = await api.req_getPublicFacilityData(id);
             let datasets = [];
-            const area = dataType == AREA ? data.area : null;
+            let area = null;
+
+            if (dataType == AREA){
+                area = data.result.area;
+                dataType = CONSUMPTION;
+            } 
+
+            const getDatasetData = (concept, year) => {                
+                return data.result.data[concept][year][dataType].map(value => 
+                    (value == 0 ? null : (area ? value / area : value) )
+                );  
+            }
             
             Object.keys(data.result.data).map((concept, darkenAmount) => {
                 Object.keys(data.result.data[concept]).reverse().map((year, index) => {
@@ -26,7 +37,7 @@ export const getPublicFacilityData = async (id, dataType) => {
                     datasets.push({
                         label: `${year}${concept}`,
                         concept: `${concept}`,
-                        data: data.result.data[concept][year][dataType].map(value => (value == 0 ? null : value)),
+                        data: getDatasetData(concept, year),
                         borderColor: tinycolor(color).darken(darkenAmount*15),
                         hidden: false,
                         fill: false,

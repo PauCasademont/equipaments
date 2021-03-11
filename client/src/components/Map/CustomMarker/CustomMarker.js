@@ -3,7 +3,7 @@ import { Typography, IconButton } from '@material-ui/core';
 import L from 'leaflet';
 
 import './CustomMarker.css';
-import { CONSUMPTION, PRICE} from '../../../constants/chart';
+import { CONSUMPTION, PRICE, AREA} from '../../../constants/chart';
 
 function getIconMarker(icon) {
     return new L.icon({
@@ -38,7 +38,7 @@ function CustomMarker({publicFacility, icons, router }) {
                 <IconButton className='icon-button' onClick={() => { handleChartClick(PRICE) }}>
                     <img className='icon' src={icons.cost} alt='icon_btn' />
                 </IconButton>
-                {area > 0 && <IconButton className='icon-button'>
+                {area > 0 && <IconButton className='icon-button' onClick={() => { handleChartClick(AREA) }}>
                     <img className='icon' src={icons.indicadors} alt='icon_btn' />
                 </IconButton>}
             </Popup>
