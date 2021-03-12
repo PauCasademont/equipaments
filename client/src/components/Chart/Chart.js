@@ -12,9 +12,21 @@ function Chart({ dataType }) {
     const [data, setData] = useState({
         labels: [], datasets: []
     });
-    const [title, setTitle] = useState('');   
+    const [title, setTitle] = useState('');  
     const { id } = useParams(); 
-    
+
+    const options = {
+        legend: { display: false },
+        title: { display: true, text: title, fontSize: 30 },
+        scales: {
+            yAxes: [{
+                ticks: {
+                    beginAtZero: true
+                }
+            }]
+        },
+        responsive: true                       
+    }
 
     useEffect(() => {   
         getPublicFacilityData(id, dataType)
@@ -33,11 +45,7 @@ function Chart({ dataType }) {
                 <ChartLegend data={data} setData={setData} />
                 <Line 
                     data={data}                     
-                    options={{
-                        legend: { display: false },
-                        title: { display: true, text: title, fontSize: 30 },
-                        responsive: true                       
-                    }} 
+                    options={options} 
                 /> 
             </div>
         </Container>
