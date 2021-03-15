@@ -43,3 +43,29 @@ export const getPublicFacilityData = async (req, res) => {
     }
 }
 
+export const getTypologyAverage = async (req, res) => {
+    const { type, typology } = req.params;
+
+    try {
+        const { data } = await PublicFacilityModel.find({"typology": `${typology}`}, 'name data');
+        let result = {};
+        data.map(concept => {
+            let sumYears = Array(12).fill(0);
+            const nYears = Object.keys(concept).length;
+
+            concept.map(year => {
+                sumYears = sumYears.map((value,index) => (
+                    value + year[type][index]
+                ))
+            });
+
+            result[concept] = nYears == 0 ? 0 : sumYears.map(value => (value / sumYears))
+        })
+        // Mitjana 1 equipament per anys. 
+        res.status(200).send({result});
+    } catch (error) {
+        res.status(500).send({ message: `Could not get the consumtpion average for public facilities with typology: ${typology}` });
+        console.log(error);
+    }
+
+}
