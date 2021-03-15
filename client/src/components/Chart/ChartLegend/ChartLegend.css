@@ -9,12 +9,15 @@
 .chart-legend-paper {
     padding-left: 20px;
     padding-right: 20px;
-    margin-left: 30px;
+    width: 100%;
 }
 
 .chart-legend-item {
     margin-top: 5px;
     display: flex;
-    align-items: baseline;
+    align-items: center;
+}
+
+.chart-legend-checkbox {
     cursor: pointer;
 }

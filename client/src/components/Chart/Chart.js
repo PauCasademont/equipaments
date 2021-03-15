@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { Line } from 'react-chartjs-2';
-import { Container } from '@material-ui/core';
+import { Container, Paper } from '@material-ui/core';
 
 import './Chart.css';
 import { getPublicFacilityData } from '../../actions/publicFacility';
@@ -43,10 +43,12 @@ function Chart({ dataType }) {
         <Container maxWidth='lg'>
             <div className='chart'>
                 <ChartLegend data={data} setData={setData} />
-                <Line 
-                    data={data}                     
-                    options={options} 
-                /> 
+                <Paper elevation={3} className='chart-paper'>
+                    <Line 
+                        data={data}                     
+                        options={options} 
+                    /> 
+                </Paper>
             </div>
         </Container>
     )

@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 import groupBy from 'lodash.groupby';
-import { Paper, Typography, CircularProgress } from '@material-ui/core';
+import { Paper, Typography, Grid, Checkbox } from '@material-ui/core';
 
 import './ChartLegend.css';
 
@@ -17,27 +17,57 @@ function ChartLegend({ data, setData }) {
         setData({ labels: data.labels, datasets: datasetsCopy });
     }
 
-    return (
-        <div className='chart-legend'>
-            { Object.keys(conceptGroupedDatasets).map((concept, index) => (
-                <Paper className='chart-legend-paper' key={index} elevation={3} >
-                    <Typography variant='h5'>
-                        {concept}
-                    </Typography>
-                    { conceptGroupedDatasets[concept].map((dataset, index) => (
-                        <div className='chart-legend-item' key={index} onClick={() => handleLegendClick(dataset)}> 
-                            <div style={{height: '15px', width: '40px', backgroundColor: dataset.borderColor, marginRight: '20px'}} />
-                            <Typography variant='h6'>                                
-                                {dataset.hidden ? <strike>{dataset.year}</strike> : dataset.year}
-                            </Typography>
-                        </div>
+    // return (
+    //     <div className='chart-legend'>
+    //         { Object.keys(conceptGroupedDatasets).map((concept, index) => (
+    //             <Paper className='chart-legend-paper' key={index} elevation={3} >
+    //                 <Typography variant='h5'>
+    //                     {concept}
+    //                 </Typography>
+    //                 { conceptGroupedDatasets[concept].map((dataset, index) => (
+    //                     <div className='chart-legend-item' key={index} onClick={() => handleLegendClick(dataset)}> 
+    //                         <div style={{height: '15px', width: '40px', backgroundColor: dataset.borderColor, marginRight: '20px'}} />
+    //                         <Typography variant='h6'>                                
+    //                             {dataset.hidden ? <strike>{dataset.year}</strike> : dataset.year}
+    //                         </Typography>
+    //                     </div>
                         
+    //                 ))}
+    //             </Paper>
+    //         ))}
+    //     </div> 
+    // )
+    return (
+        <div className='chart-legend' >
+            <Paper className='chart-legend-paper' elevation={3}>
+                <h2>Titol</h2>
+                <Grid container spacing={3}>
+                    { Object.keys(conceptGroupedDatasets).map((concept, index) => (
+                        <Grid item xs={12} sm={6} md={3} key={index}>
+                            <Typography variant='h5'>
+                                {concept}
+                            </Typography>
+                            { conceptGroupedDatasets[concept].map((dataset, index) => (
+                                <div className='chart-legend-item' key={index} >
+                                    <Checkbox 
+                                        className='chart-legend-checkbox' 
+                                        defaultChecked
+                                        color='primary' 
+                                        onClick={() => handleLegendClick(dataset)}
+                                    />
+                                    <Typography variant='h6'>                                
+                                        {dataset.year}
+                                    </Typography>
+                                    <div style={{height: '15px', width: '40px', backgroundColor: dataset.borderColor, marginLeft: '20px'}} />
+                                </div>
+                            ))}
+                        </Grid>
                     ))}
-                </Paper>
-            ))}
-        </div> 
+                </Grid>
+            </Paper>
+        </div>
     )
 }
-    // <button onClick={getKeys()}>Click</button>
+
 
 export default ChartLegend
