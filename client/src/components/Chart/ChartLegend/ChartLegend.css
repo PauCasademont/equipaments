@@ -10,12 +10,24 @@
     padding-left: 20px;
     padding-right: 20px;
     width: 100%;
+    background-color:#EBF5FB !important;
+}
+
+.chart-legend-bar {
+    display: flex;
+    align-items: center;
+}
+
+.chart-legend-button {
+    max-height: 40px;
+    margin-left: 30px !important;
 }
 
 .chart-legend-item {
     margin-top: 5px;
     display: flex;
     align-items: center;
+    margin-left: -10px;
 }
 
 .chart-legend-checkbox {

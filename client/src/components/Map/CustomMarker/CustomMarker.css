@@ -13,13 +13,22 @@
     margin-left: 15px !important;
 }
 
-.icon-button {
+.popup-icon-button {
     width: 80px;
     height: 80px;
     margin-top: -10px !important;
 }
 
-.icon {
+.popup-icon {
     width: 90%;
     height: 90%;  
+}
+
+.popup-button {
+    background-color: lightgreen !important;
+}
+
+.popup-button-div {
+    display: flex;
+    justify-content: center;
 }

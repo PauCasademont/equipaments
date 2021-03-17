@@ -1,0 +1,17 @@
+
+.addFacilityHeader {
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    height: 100px;
+    max-height: 20%;
+    background-color:#EBF5FB;
+}
+
+.addFacilityHeader-button {
+    height: 50px;
+}
+
+.addFacilityHeader-icon {
+    margin-left: 10px;
+}

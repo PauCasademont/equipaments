@@ -1,12 +1,12 @@
 import { useState, useEffect } from 'react';
 import { MapContainer, TileLayer, LayersControl, LayerGroup } from 'react-leaflet';
+import { useHistory } from 'react-router-dom';
 
 import './Map.css';
 import 'leaflet/dist/leaflet.css';
 import { getPublicFalcilities } from '../../actions/publicFacility';
 import CustomMarker from './CustomMarker/CustomMarker';
 import { typologies } from '../../constants/publicFacility.js';
-import { useHistory } from 'react-router-dom';
 
 const INITIAL_MAP_CONFIG = {center: [41.98311,2.82493], zoom: 14}
 
@@ -19,8 +19,7 @@ function getIcons() {
     return res;
 }
 
-function Map() {
-    const [map, setMap] = useState(null);
+function Map({ ids = [] }) {
     const [publicFacilities, setPublicFacilities] = useState(null);
     const icons = getIcons();
     const router = useHistory();
@@ -38,7 +37,6 @@ function Map() {
             center={INITIAL_MAP_CONFIG.center} 
             zoom={INITIAL_MAP_CONFIG.zoom} 
             scrollWheelZoom={true} 
-            whenCreated={setMap}
         >
             <TileLayer
                 attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
@@ -51,7 +49,8 @@ function Map() {
                             {publicFacilities[typology.icon]?.map((publicFacility) => (                
                                 <CustomMarker 
                                     key={publicFacility._id} 
-                                    publicFacility={publicFacility} 
+                                    publicFacility={publicFacility}
+                                    ids={ids} 
                                     icons={icons} 
                                     router={router}
                                 />

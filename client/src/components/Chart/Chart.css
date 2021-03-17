@@ -1,5 +1,5 @@
 body {
-    background-color:lightsteelblue;
+    background-color:white;
 }
 .chart {
     width: 100%;
@@ -9,6 +9,7 @@ body {
 .chart-legend {
     width: 100px;
     height: 100px;
+    margin-left: -23px;
 }
 
 .chart-paper {

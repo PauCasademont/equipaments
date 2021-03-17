@@ -3,7 +3,7 @@ import {BrowserRouter, Switch, Route } from 'react-router-dom';
 
 import Map from './components/Map/Map';
 import Chart from './components/Chart/Chart';
-import { CONSUMPTION, PRICE, AREA} from './constants/chart';
+import AddFacilityHeader from './components/Map/AddFacilityHeader/AddFacilityHeader';
 
 function App() {
 
@@ -15,16 +15,17 @@ function App() {
           render={() => <Map />}
         />
         <Route
-          path="/consumption/:id" exact
-          render={() => <Chart dataType={CONSUMPTION} />}
+          path="/map/add_facility/:dataType" exact
+          render={(props) => 
+            <>
+              <AddFacilityHeader />
+              <Map ids={props.location.state.ids}/>
+            </>
+          }
         />
         <Route
-          path="/price/:id" exact
-          render={() => <Chart dataType={PRICE} />}
-        />
-         <Route
-          path="/area/:id" exact
-          render={() => <Chart dataType={AREA} />}
+          path="/chart/:dataType/:ids" exact
+          render={() => <Chart />}
         />
       </Switch> 
     </BrowserRouter>

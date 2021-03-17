@@ -8,12 +8,13 @@ import { getPublicFacilityData } from '../../actions/publicFacility';
 import { LABELS } from '../../constants/chart';
 import ChartLegend from './ChartLegend/ChartLegend';
 
-function Chart({ dataType }) {
+function Chart() {
     const [data, setData] = useState({
         labels: [], datasets: []
     });
     const [title, setTitle] = useState('');  
-    const { id } = useParams(); 
+    const { dataType, ids } = useParams(); 
+    const id = ids.split(',')[0];
 
     const options = {
         legend: { display: false },
@@ -42,13 +43,16 @@ function Chart({ dataType }) {
     return (
         <Container maxWidth='lg'>
             <div className='chart'>
-                <ChartLegend data={data} setData={setData} />
-                <Paper elevation={3} className='chart-paper'>
-                    <Line 
-                        data={data}                     
-                        options={options} 
-                    /> 
-                </Paper>
+                <ChartLegend 
+                    data={data} 
+                    setData={setData} 
+                    ids={ids.split(',')} 
+                    dataType={dataType} 
+                />
+                <Line 
+                    data={data}                     
+                    options={options} 
+                /> 
             </div>
         </Container>
     )
