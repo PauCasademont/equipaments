@@ -63,7 +63,7 @@ export const getPublicFacilitiesDatasets = async (ids, dataType) => {
     return datasets;
 }
 
-export const getPublicFacilityField = async (ids, field) => {
+export const getPublicFacilitiesField = async (ids, field) => {
     let names = [];
     
     try {

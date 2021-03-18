@@ -14,13 +14,13 @@ import {
     } from '@material-ui/core';
 
 import './ChartLegend.css';
-import { getPublicFacilityField } from '../../../actions/publicFacility';
+import { getPublicFacilitiesField } from '../../../actions/publicFacility';
 
 function ChartLegend({ data, setData, ids, dataType }) {
     const [publicFacilities, setPublicFacilities] = useState([]);
     const [selectedData, setSelectedData] = useState({
         publicFacility: '',
-        datasets: []
+        datasets: null
     });
     const router = useHistory();
 
@@ -34,13 +34,14 @@ function ChartLegend({ data, setData, ids, dataType }) {
     }
 
     useEffect(() => {
-        getPublicFacilityField(ids, 'name')
+        getPublicFacilitiesField(ids, 'name')
         .then((names) => {
             setPublicFacilities(names);
-            switchPublicFacility(names[0]);
+            switchPublicFacility(names[names.length-1]);
+            console.log('primer');
         });
         
-    }, []);
+    }, [data]);
 
     const getCircleStyles = (color = '#CACFD2') => ({
         height: '25px', 
@@ -96,6 +97,7 @@ function ChartLegend({ data, setData, ids, dataType }) {
                         Afegir Equipament
                     </Button>
                 </div>
+                { selectedData.datasets &&  !console.log('segon') &&
                 <Grid container spacing={3}>
                     { Object.keys(selectedData.datasets).map((concept, index) => (
                         <Grid item xs={12} sm={6} md={3} key={index}>
@@ -120,7 +122,7 @@ function ChartLegend({ data, setData, ids, dataType }) {
                             ))}
                         </Grid>
                     ))}
-                </Grid>
+                </Grid> }
             </Paper>
         </div>
     )

@@ -47,10 +47,11 @@ function CustomMarker({ publicFacility, ids, icons, router }) {
                     </IconButton>}
                 </>
                 : <div className='popup-button-div'>
+                    { !ids.includes(_id) && 
                     <Button className='popup-button' variant='outlined' onClick={() => { handleChartClick(dataType) }}>
                         Afegir
-                    </Button>
-                </div> }
+                    </Button> }
+                </div> } 
             </Popup>
         </Marker>
     )
