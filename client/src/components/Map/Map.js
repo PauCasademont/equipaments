@@ -6,7 +6,7 @@ import './Map.css';
 import 'leaflet/dist/leaflet.css';
 import { getPublicFalcilities } from '../../actions/publicFacility';
 import CustomMarker from './CustomMarker/CustomMarker';
-import { typologies } from '../../constants/publicFacility.js';
+import { TYPOLOGIES } from '../../constants';
 
 const INITIAL_MAP_CONFIG = {center: [41.98311,2.82493], zoom: 14}
 
@@ -43,7 +43,7 @@ function Map({ ids = [] }) {
                 url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
             />     
             <LayersControl position='topright'>
-                { publicFacilities && typologies.map((typology, index) => (                    
+                { publicFacilities && TYPOLOGIES.map((typology, index) => (                    
                     <LayersControl.Overlay key={index} checked name={typology.name}>
                         <LayerGroup>
                             {publicFacilities[typology.icon]?.map((publicFacility) => (                

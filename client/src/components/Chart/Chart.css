@@ -15,3 +15,9 @@ body {
 .chart-paper {
     padding: 50px;
 }
+
+.chart-bottom-bar {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 20px;
+}

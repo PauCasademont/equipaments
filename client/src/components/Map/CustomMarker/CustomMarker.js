@@ -4,7 +4,7 @@ import { useParams } from 'react-router-dom';
 import L from 'leaflet';
 
 import './CustomMarker.css';
-import { CONSUMPTION, PRICE, AREA} from '../../../constants/chart';
+import { CONSUMPTION, PRICE, AREA, SUPERSCRIPT_TWO} from '../../../constants';
 
 function getIconMarker(icon) {
     return new L.icon({
@@ -32,7 +32,7 @@ function CustomMarker({ publicFacility, ids, icons, router }) {
                     </Typography>
                 </div>
                 <Typography className='popup-info' variant='body1' >
-                    Tipologia: {typology} <br /> {area ? <>{`Superficie: ${area} m`}<sup>2</sup></> : ''}
+                    Tipologia: {typology} <br /> {area ? `Superficie: ${area} m${SUPERSCRIPT_TWO}` : ''}
                 </Typography>
                 { isHomePage ? 
                 <>

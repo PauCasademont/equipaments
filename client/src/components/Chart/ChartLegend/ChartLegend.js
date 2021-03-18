@@ -97,7 +97,7 @@ function ChartLegend({ data, setData, ids, dataType }) {
                         Afegir Equipament
                     </Button>
                 </div>
-                { selectedData.datasets &&  !console.log('segon') &&
+                { selectedData.datasets && 
                 <Grid container spacing={3}>
                     { Object.keys(selectedData.datasets).map((concept, index) => (
                         <Grid item xs={12} sm={6} md={3} key={index}>

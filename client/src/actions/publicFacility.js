@@ -2,7 +2,7 @@ import groupBy from 'lodash.groupby';
 import tinycolor from 'tinycolor2';
 
 import * as api from '../api/index.js';
-import { COLORS, AREA, CONSUMPTION } from '../constants/chart.js';
+import { COLORS, AREA, CONSUMPTION } from '../constants/index.js';
 
 export const getPublicFalcilities =  async () => {
     try {
