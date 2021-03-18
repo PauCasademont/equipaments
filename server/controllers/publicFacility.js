@@ -43,6 +43,22 @@ export const getPublicFacilityData = async (req, res) => {
     }
 }
 
+export const getPublicFacilityField = async (req, res) => {
+    const { id, field } = req.params;
+
+    if(!mongoose.Types.ObjectId.isValid(id)){
+        return res.status(404).send({ message: `No valid public facility id: ${id}`});
+    }
+
+    try {
+        const result = await PublicFacilityModel.findById(id, `${field}`);
+        res.status(200).send({result});
+    } catch (error) {
+        res.status(500).send({ message: 'Could not get public facility field'});
+        console.log(error);
+    }
+}
+
 export const getTypologyAverage = async (req, res) => {
     const { type, typology } = req.params;
 

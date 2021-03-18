@@ -1,12 +1,46 @@
+import { useEffect, useState } from 'react';
 import groupBy from 'lodash.groupby';
 import { useHistory } from 'react-router-dom';
-import { Paper, Typography, Grid, Checkbox, Button } from '@material-ui/core';
+import { 
+    Paper, 
+    Typography, 
+    Grid, 
+    Checkbox, 
+    Button,
+    Select,
+    MenuItem,
+    FormControl,
+    InputLabel
+    } from '@material-ui/core';
 
 import './ChartLegend.css';
+import { getPublicFacilityField } from '../../../actions/publicFacility';
 
 function ChartLegend({ data, setData, ids, dataType }) {
+    const [publicFacilities, setPublicFacilities] = useState([]);
+    const [selectedData, setSelectedData] = useState({
+        publicFacility: '',
+        datasets: []
+    });
     const router = useHistory();
-    const conceptGroupedDatasets = groupBy(data.datasets, dataset => dataset.concept); 
+
+    const switchPublicFacility = (name) => {
+        const filteredDatasets = data.datasets.filter((dataset) => dataset.publicFacility == name);
+        const groupedDatasets = groupBy(filteredDatasets, dataset => dataset.concept);
+        setSelectedData({
+            publicFacility: name,
+            datasets: groupedDatasets
+        });
+    }
+
+    useEffect(() => {
+        getPublicFacilityField(ids, 'name')
+        .then((names) => {
+            setPublicFacilities(names);
+            switchPublicFacility(names[0]);
+        });
+        
+    }, []);
 
     const getCircleStyles = (color = '#CACFD2') => ({
         height: '25px', 
@@ -38,7 +72,21 @@ function ChartLegend({ data, setData, ids, dataType }) {
         <div className='chart-legend' >
             <Paper className='chart-legend-paper' elevation={3}>
                 <div className='chart-legend-bar'>
-                    <h2>Titol</h2>
+                    <FormControl className='chart-legend-form'>
+                        <InputLabel id='publicFacility-select-label'>Equipament</InputLabel>
+                        <Select
+                            className='chart-legend-select'
+                            labelId='publicFacility-select-label'
+                            value={selectedData.publicFacility}
+                            onChange={(event) => switchPublicFacility(event.target.value)}
+                        >
+                            { publicFacilities.map((name, index) => (
+                                <MenuItem key={index} value={name}>
+                                    {name}
+                                </MenuItem>
+                            ))}
+                        </Select>
+                    </FormControl>
                     <Button 
                         className='chart-legend-button' 
                         onClick={() => handleAddFacility()}
@@ -49,16 +97,16 @@ function ChartLegend({ data, setData, ids, dataType }) {
                     </Button>
                 </div>
                 <Grid container spacing={3}>
-                    { Object.keys(conceptGroupedDatasets).map((concept, index) => (
+                    { Object.keys(selectedData.datasets).map((concept, index) => (
                         <Grid item xs={12} sm={6} md={3} key={index}>
                             <Typography variant='h5'>
                                 {concept}
                             </Typography>
-                            { conceptGroupedDatasets[concept].map((dataset, index) => (
+                            { selectedData.datasets[concept].map((dataset, index) => (
                                 <div className='chart-legend-item' key={index} >
                                     <Checkbox 
                                         className='chart-legend-checkbox' 
-                                        defaultChecked
+                                        checked={!dataset.hidden}
                                         color='primary' 
                                         onClick={() => handleLegendClick(dataset)}
                                     />

@@ -4,7 +4,7 @@ import { Line } from 'react-chartjs-2';
 import { Container, Paper } from '@material-ui/core';
 
 import './Chart.css';
-import { getPublicFacilityData } from '../../actions/publicFacility';
+import { getPublicFacilitiesDatasets } from '../../actions/publicFacility';
 import { LABELS } from '../../constants/chart';
 import ChartLegend from './ChartLegend/ChartLegend';
 
@@ -12,13 +12,12 @@ function Chart() {
     const [data, setData] = useState({
         labels: [], datasets: []
     });
-    const [title, setTitle] = useState('');  
     const { dataType, ids } = useParams(); 
-    const id = ids.split(',')[0];
+    const idsList = ids.split(',');
 
     const options = {
         legend: { display: false },
-        title: { display: true, text: title, fontSize: 30 },
+        // title: { display: true, text: title, fontSize: 30 },
         scales: {
             yAxes: [{
                 ticks: {
@@ -29,15 +28,14 @@ function Chart() {
         responsive: true                       
     }
 
-    useEffect(() => {   
-        getPublicFacilityData(id, dataType)
-
-            .then((publicFacilityData) => {
-                setData({labels: LABELS, datasets: publicFacilityData.datasets });
-                setTitle(`Consum d'energia ${publicFacilityData.name}`);
-            })
-            .catch((error) => console.log(error));  
-
+    useEffect(() => {  
+        getPublicFacilitiesDatasets(idsList, dataType)
+        .then((datasets) => {
+            setData({
+                labels: LABELS,
+                datasets 
+            });
+        })
     }, []);
 
     return (
@@ -46,7 +44,7 @@ function Chart() {
                 <ChartLegend 
                     data={data} 
                     setData={setData} 
-                    ids={ids.split(',')} 
+                    ids={idsList} 
                     dataType={dataType} 
                 />
                 <Line 

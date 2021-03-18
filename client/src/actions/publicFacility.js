@@ -13,10 +13,11 @@ export const getPublicFalcilities =  async () => {
     }
 }
 
-export const getPublicFacilityData = async (id, dataType) => {
+export const getPublicFacilityDatasets = async (id, dataType) => {
     if(id){
         try {           
             const {data} = await api.req_getPublicFacilityData(id);
+            const name = data.result.name;
             let datasets = [];
             let area = null;
 
@@ -35,21 +36,43 @@ export const getPublicFacilityData = async (id, dataType) => {
                 Object.keys(data.result.data[concept]).reverse().map((year, index) => {
                     const color = COLORS[ COLORS.length % (index + 1) ];
                     datasets.push({
-                        label: `${year}${concept}`,
+                        label: `${name}${year}${concept}`,
+                        publicFacility: `${name}`,
                         concept: `${concept}`,
+                        year: `${year}`,
                         data: getDatasetData(concept, year),
                         borderColor: tinycolor(color).darken(darkenAmount*15),
                         hidden: false,
-                        fill: false,
-                        year: `${year}`
+                        fill: false
                     })
                 })
             });
-            
-            return { datasets, name: data.result.name }
+            return datasets;
         } catch (error) {
             console.log(error);
         }
     }
 }
 
+export const getPublicFacilitiesDatasets = async (ids, dataType) => {
+    let datasets = [];
+    for (const id of ids) {
+        const newDatasets = await getPublicFacilityDatasets(id, dataType);
+        datasets = datasets.concat(newDatasets);
+    };
+    return datasets;
+}
+
+export const getPublicFacilityField = async (ids, field) => {
+    let names = [];
+    
+    try {
+        for (const id of ids) {
+            const res = await api.req_getPublicFacilityField(id, field);
+            names.push(res.data.result.name);
+        }
+        return names;
+    } catch (error){
+        console.log(error);
+    }
+}

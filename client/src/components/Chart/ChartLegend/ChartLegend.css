@@ -16,6 +16,17 @@
 .chart-legend-bar {
     display: flex;
     align-items: center;
+    margin-bottom: 30px;
+    margin-top: 20px;
+}
+
+.chart-legend-form {
+    width: 35%;
+    padding: 30px;
+}
+
+.chart-legend-select {
+    width: 300px;
 }
 
 .chart-legend-button {
