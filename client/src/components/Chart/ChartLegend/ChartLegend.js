@@ -49,7 +49,10 @@ function ChartLegend({ data, setData, ids, dataType }) {
         backgroundColor: color, 
         borderRadius:'50%', 
         marginLeft: '17px',
-        cursor: 'pointer'
+        cursor: 'pointer',
+        border: 'none',
+        outline: 'none',
+        zIndex: '5'
     }) 
 
     const handleLegendClick = (dataset) => {
@@ -115,6 +118,7 @@ function ChartLegend({ data, setData, ids, dataType }) {
                                     <Typography variant='h6'>                                
                                         {dataset.year}
                                     </Typography>
+                                    {/* <input type='color' style={getCircleStyles(dataset.borderColor)} value={dataset.borderColor}/> */}
                                     <div 
                                         style={getCircleStyles(dataset.borderColor)} 
                                     />
