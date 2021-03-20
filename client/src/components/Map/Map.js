@@ -19,7 +19,7 @@ function getIcons() {
     return res;
 }
 
-function Map({ ids = [] }) {
+function Map({ user = null, ids = [] }) {
     const [publicFacilities, setPublicFacilities] = useState(null);
     const icons = getIcons();
     const router = useHistory();

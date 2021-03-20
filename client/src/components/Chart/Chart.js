@@ -8,7 +8,7 @@ import { getPublicFacilitiesDatasets } from '../../actions/publicFacility';
 import { LABELS, CONSUMPTION, PRICE, SUPERSCRIPT_TWO } from '../../constants';
 import ChartLegend from './ChartLegend/ChartLegend';
 
-function Chart() {
+function Chart({ user }) {
     const [data, setData] = useState({
         labels: [], datasets: []
     });

@@ -27,14 +27,32 @@ export const signin = async (req, res) => {
 
     try {
         const user = await UserModel.findOne({ username });
-        if (!user) return res.status(404).json({ message: `User \'${username}\' does not exist`});
+        if (!user) {
+            return res.status(404).json({ 
+                message: `User \'${username}\' does not exist`,
+                clientMessage: `L'usuari \'${username}\' no existeix a la base de dades`
+            });
+        }
 
         const isPasswordCorrect = await bcrypt.compare(password, user.password);
-        if (!isPasswordCorrect) return res.status(400).json({ message: 'Invalid credentials'});
+        if (!isPasswordCorrect) {
+            return res.status(400).json({ 
+                message: 'Invalid credentials', 
+                clientMessage: 'La contrasenya no és correcte'
+            });
+        }
 
-        res.status(200).json({ result: user });
+        res.status(200).json({ 
+            result: {
+                id: user._id,
+                username: user.username,
+                publicFacilityId: user.public_facility_id
+            } 
+        });
     } catch (error) {
-        res.status(500).json({ message: 'Could not sing in'});
+        res.status(500).json({ 
+            message: 'Could not sing in'
+        });
         console.log(error);
     }
 }
