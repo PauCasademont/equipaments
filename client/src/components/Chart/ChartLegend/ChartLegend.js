@@ -14,7 +14,7 @@ import {
     } from '@material-ui/core';
 
 import './ChartLegend.css';
-import { getPublicFacilitiesField } from '../../../actions/publicFacility';
+import { getPublicFacilitiesNames } from '../../../actions/publicFacility';
 
 function ChartLegend({ data, setData, ids, dataType }) {
     const [publicFacilities, setPublicFacilities] = useState([]);
@@ -34,14 +34,12 @@ function ChartLegend({ data, setData, ids, dataType }) {
     }
 
     useEffect(() => {
-        getPublicFacilitiesField(ids, 'name')
-        .then((names) => {
-            setPublicFacilities(names);
-            switchPublicFacility(names[names.length-1]);
-            console.log('primer');
-        });
-        
-    }, [data]);
+        getPublicFacilitiesNames(ids)
+        .then((result) => {
+            setPublicFacilities(result);
+            switchPublicFacility(result[result.length-1].name);            
+        });     
+    }, []);
 
     const getCircleStyles = (color = '#CACFD2') => ({
         height: '25px', 
@@ -71,6 +69,13 @@ function ChartLegend({ data, setData, ids, dataType }) {
         });
     }
 
+    const handleRemoveFacility = () => {
+      const idToRemove = publicFacilities.filter((publicFacility) => publicFacility.name == selectedData.publicFacility)[0].id;
+      const index = ids.indexOf(idToRemove);
+      ids.splice(index, 1);
+      router.push(`/chart/${dataType}/${ids.join(',')}`);
+    }
+
   
     return (
         <div className='chart-legend' >
@@ -84,9 +89,9 @@ function ChartLegend({ data, setData, ids, dataType }) {
                             value={selectedData.publicFacility}
                             onChange={(event) => switchPublicFacility(event.target.value)}
                         >
-                            { publicFacilities.map((name, index) => (
-                                <MenuItem key={index} value={name}>
-                                    {name}
+                            { publicFacilities.map((publicFacility, index) => (
+                                <MenuItem key={index} value={publicFacility.name}>
+                                    {publicFacility.name}                                   
                                 </MenuItem>
                             ))}
                         </Select>
@@ -99,6 +104,15 @@ function ChartLegend({ data, setData, ids, dataType }) {
                     >
                         Afegir Equipament
                     </Button>
+                    { publicFacilities.length > 1 &&
+                    <Button 
+                        className='chart-legend-button' 
+                        onClick={() => handleRemoveFacility()}
+                        variant='contained' 
+                        color='secondary'
+                    >
+                        Treure Equipament
+                    </Button> }
                 </div>
                 { selectedData.datasets && 
                 <Grid container spacing={3}>

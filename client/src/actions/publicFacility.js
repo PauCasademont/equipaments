@@ -34,7 +34,7 @@ export const getPublicFacilityDatasets = async (id, dataType) => {
             
             Object.keys(data.result.data).map((concept, darkenAmount) => {
                 Object.keys(data.result.data[concept]).reverse().map((year, index) => {
-                    const color = COLORS[ COLORS.length % (index + 1) ];
+                    const color = COLORS[ index % COLORS.length ];
                     datasets.push({
                         label: `${name}${year}${concept}`,
                         publicFacility: `${name}`,
@@ -63,15 +63,19 @@ export const getPublicFacilitiesDatasets = async (ids, dataType) => {
     return datasets;
 }
 
-export const getPublicFacilitiesField = async (ids, field) => {
-    let names = [];
-    
+export const getPublicFacilitiesNames = async (ids) => {
+    let result = [];
+    const field = 'name';
+
     try {
         for (const id of ids) {
-            const res = await api.req_getPublicFacilityField(id, field);
-            names.push(res.data.result.name);
+            const { data } = await api.req_getPublicFacilityField(id, field);
+            result.push({
+                id: data.result._id,
+                name: data.result.name
+            });
         }
-        return names;
+        return result;
     } catch (error){
         console.log(error);
     }

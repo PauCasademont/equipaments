@@ -9,9 +9,7 @@ import { LABELS, CONSUMPTION, PRICE, SUPERSCRIPT_TWO } from '../../constants';
 import ChartLegend from './ChartLegend/ChartLegend';
 
 function Chart({ user }) {
-    const [data, setData] = useState({
-        labels: [], datasets: []
-    });
+    const [data, setData] = useState(null);
     const { dataType, ids } = useParams(); 
     const router = useHistory();
     const idsList = ids.split(',');
@@ -49,12 +47,12 @@ function Chart({ user }) {
     return (
         <Container maxWidth='lg'>
             <div className='chart'>
-                <ChartLegend 
+                {data && <ChartLegend 
                     data={data} 
                     setData={setData} 
                     ids={idsList} 
                     dataType={dataType} 
-                />
+                />}
                 <Line 
                     data={data}                     
                     options={options} 
