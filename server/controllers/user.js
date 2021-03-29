@@ -1,4 +1,5 @@
 import bcrypt from 'bcryptjs';
+import jwt from 'jsonwebtoken';
 
 import UserModel from '../models/user.js';
 
@@ -41,12 +42,13 @@ export const signin = async (req, res) => {
                 clientMessage: 'La contrasenya no és correcte'
             });
         }
-
+        
+        const token = jwt.sign({ userFacilityId: user.public_facility_id }, process.env.CLIENT_SECRET);
         res.status(200).json({ 
-            result: {
-                id: user._id,
+            result: {              
                 username: user.username,
-                publicFacilityId: user.public_facility_id
+                publicFacilityId: user.public_facility_id,
+                token
             } 
         });
     } catch (error) {
