@@ -19,8 +19,9 @@ function getIcons() {
     return res;
 }
 
-function Map({ user = null, ids = [] }) {
+function Map({ids = [] }) {
     const [publicFacilities, setPublicFacilities] = useState(null);
+    const [user, setUser] = useState(JSON.parse(localStorage.getItem('profile')))
     const icons = getIcons();
     const router = useHistory();
 
@@ -50,6 +51,7 @@ function Map({ user = null, ids = [] }) {
                                 <CustomMarker 
                                     key={publicFacility._id} 
                                     publicFacility={publicFacility}
+                                    userFacilityId={user.publicFacilityId}
                                     ids={ids} 
                                     icons={icons} 
                                     router={router}

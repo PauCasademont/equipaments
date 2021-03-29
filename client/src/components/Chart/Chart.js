@@ -8,7 +8,7 @@ import { getPublicFacilitiesDatasets } from '../../actions/publicFacility';
 import { LABELS, CONSUMPTION, PRICE, SUPERSCRIPT_TWO } from '../../constants';
 import ChartLegend from './ChartLegend/ChartLegend';
 
-function Chart({ user }) {
+function Chart() {
     const [data, setData] = useState(null);
     const { dataType, ids } = useParams(); 
     const router = useHistory();
@@ -45,14 +45,14 @@ function Chart({ user }) {
     }, []);
 
     return (
-        <Container maxWidth='lg'>
+        data && <Container maxWidth='lg'>
             <div className='chart'>
-                {data && <ChartLegend 
+                <ChartLegend 
                     data={data} 
                     setData={setData} 
                     ids={idsList} 
                     dataType={dataType} 
-                />}
+                />
                 <Line 
                     data={data}                     
                     options={options} 

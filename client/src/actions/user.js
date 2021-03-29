@@ -6,10 +6,10 @@ const createAlert = (title, text, icon="error", button="ok") => {
     swal({ title, text, icon, button });
 }
 
-export const signin =  async (form, setUser, router) => {
+export const signin =  async (form, router) => {
     try {
-        const { data } = await api.req_signin(form);
-        setUser(data.result);
+        const { data } = await api.req_signin(form); 
+        localStorage.setItem('profile', JSON.stringify(data.result))       
         router.push('/');
     } catch (error){       
         console.log(error);

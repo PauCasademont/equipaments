@@ -13,7 +13,7 @@ function getIconMarker(icon) {
     });
 }
 
-function CustomMarker({ publicFacility, ids, icons, router }) {
+function CustomMarker({ publicFacility, userFacilityId, ids, icons, router }) {
     const { _id, name, typology, coordinates, area } = publicFacility;
     const isHomePage = !ids.length;
     const { dataType } = useParams();
@@ -42,9 +42,14 @@ function CustomMarker({ publicFacility, ids, icons, router }) {
                     <IconButton className='popup-icon-button' onClick={() => { handleChartClick(PRICE) }}>
                         <img className='popup-icon' src={icons.cost} alt='icon_btn' />
                     </IconButton>
-                    {area > 0 && <IconButton className='popup-icon-button' onClick={() => { handleChartClick(AREA) }}>
+                    {area > 0 && 
+                    <IconButton className='popup-icon-button' onClick={() => { handleChartClick(AREA) }}>
                         <img className='popup-icon' src={icons.indicadors} alt='icon_btn' />
-                    </IconButton>}
+                    </IconButton> }
+                    {userFacilityId == _id && 
+                    <IconButton className='popup-icon-button' onClick={() => {}}>
+                        <img className='popup-icon' src={icons.editar} alt='icon_btn' />
+                    </IconButton> }
                 </>
                 : <div className='popup-button-div'>
                     { !ids.includes(_id) && 

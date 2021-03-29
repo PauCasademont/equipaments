@@ -7,14 +7,13 @@ import AddFacilityHeader from './components/Map/AddFacilityHeader/AddFacilityHea
 import Auth from './components/Auth/Auth';
 
 function App() {
-  const [user, setUser] = useState(null);
 
   return (
     <BrowserRouter>
       <Switch>
         <Route
           path="/" exact
-          render={() => <Map user={user}/>}
+          render={() => <Map/>}
         />
         <Route
           path="/map/add_facility/:dataType" exact
@@ -27,11 +26,11 @@ function App() {
         />
         <Route
           path="/chart/:dataType/:ids" exact
-          render={() => <Chart user={user}/>}
+          render={() => <Chart/>}
         />
         <Route 
           path="/admin" exact
-          render={() => <Auth setUser={setUser}/>}
+          render={() => <Auth/>}
         />
       </Switch> 
     </BrowserRouter>

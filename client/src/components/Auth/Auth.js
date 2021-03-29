@@ -6,7 +6,7 @@ import { useHistory } from 'react-router-dom';
 import './Auth.css';
 import { signin } from '../../actions/user';
 
-function Auth({ setUser }) {
+function Auth() {
     const [showPassword, setShowPassword] = useState(false);
     const [form, setForm] = useState({
         username: '',
@@ -43,7 +43,7 @@ function Auth({ setUser }) {
 
     const handleSubmit = (event) => {
         event.preventDefault();
-        signin(form, setUser, router);
+        signin(form, router);
     }
 
     return (
