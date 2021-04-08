@@ -89,3 +89,7 @@ export const getPublicFacilitiesNames = async (ids) => {
         console.log(error);
     }
 }
+
+export const updatePublicFacility = async (id, data_type, concept, year, new_values) => {
+
+}

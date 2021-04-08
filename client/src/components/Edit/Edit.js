@@ -12,39 +12,38 @@ function Edit() {
     const currentYear = new Date().getFullYear();
     const [dataType, setDataType] = useState(DATA_TYPES[CONSUMPTION]);
     const [year, setYear] = useState(currentYear);
-    const [facilityName, setFacilityName] = useState('');
     const [formValues, setFormValues] = useState(null);
-    const [data, setData] = useState(null);
+    const [publicFacility, setPublicFacility] = useState(null);
     const { facilityId } = useParams();
     const router = useHistory();
     
     useEffect(() => {
         getPublicFacilityData(facilityId)
-        .then((facilityData) => {
-            setFacilityName(facilityData.name);
-            setData(facilityData.data);
+        .then((facilityData) => {            
+            setPublicFacility(facilityData);
         });
     },[]);
     
     useEffect(() => {
-       if(data){
+       if(publicFacility){
            let newFormValues = Array(12).fill(0);
 
            if (dataType == DATA_TYPES[AREA]){
-               newFormValues = [data.area];
+               console.log('dins', publicFacility);
+               newFormValues = [publicFacility.area];
            }
 
-           else if (data[concept] && data[concept][year]){
+           else if (publicFacility.data[concept] && publicFacility.data[concept][year]){
                if (dataType == DATA_TYPES[CONSUMPTION]){
-                   newFormValues = data[concept][year]?.consumption;
+                   newFormValues = publicFacility.data[concept][year].consumption || newFormValues;
                }
                else{
-                newFormValues = data[concept][year]?.price;
+                newFormValues = publicFacility.data[concept][year].price || newFormValues;
                }
-            }            
+            }  
             setFormValues(newFormValues);
        }
-    },[dataType, concept, year, data]);
+    },[dataType, concept, year, publicFacility]);
 
     const handleSubmit = () => {
 
@@ -69,10 +68,11 @@ function Edit() {
     }
 
     return (
+        publicFacility &&
         <Grid container spacing={2}>
             <Grid item className='edit-div edit-title' xs={12}>
                 <Typography variant='h3' color='primary'>
-                    Dades {facilityName}
+                    Dades {publicFacility.name}
                 </Typography>
             </Grid>
             <Grid item className='edit-div' xs={12}>
