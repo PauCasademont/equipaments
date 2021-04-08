@@ -47,7 +47,7 @@ function Edit() {
     },[dataType, concept, year, data]);
 
     const handleSubmit = () => {
-        
+
     }
 
     const getYearsList = () => {
@@ -109,7 +109,7 @@ function Edit() {
                 <Paper elevation={3} className='edit-paper'>
                     <Grid container spacing={3}>
                         { formValues && 
-                            Object.values(formValues).map((_, index) => (
+                            formValues.map((_, index) => (
                                 <Grid 
                                     item 
                                     key={index}

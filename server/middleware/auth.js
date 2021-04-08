@@ -1,7 +1,9 @@
 import jwt from 'jsonwebtoken'
 import dotenv from 'dotenv'
 
-export const auth = async (req, res, next) => {
+dotenv.config();
+
+const auth = async (req, res, next) => {
     try {
         const token = req.headers.authorization?.split(' ')[1];
         if (token == null) return res.status(401).send({ message: 'No valid access'});
@@ -15,3 +17,5 @@ export const auth = async (req, res, next) => {
         console.log(error)
     }
 } 
+
+export default auth;

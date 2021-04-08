@@ -27,6 +27,40 @@ export const getPublicFalcilities = async (req, res) => {
     }
 }
 
+export const updatePublicFaility = async (req, res) => {
+    const { id } = req.params;
+
+    if(!req.user) {
+        return res.status(401).send({ message: 'User unauthenticated'});
+    }
+
+    if(!mongoose.Types.ObjectId.isValid(id)){
+        return res.status(404).send({ message: `No valid public facility id: ${id}`});
+    }
+
+    try {
+        const publicFacility = await PublicFacilityModel.findById(id);
+        const { data_type, new_values, concept, year } = req.body;
+
+        if (data_type == 'area') {
+            publicFacility.area = new_values[0];
+        }
+
+        else {
+            if (!publicFacility.data[concept]) publicFacility.data[concept] = {};
+            if (!publicFacility.data[concept][year]) publicFacility.data[concept][year] = {};
+            publicFacility.data[concept][year][data_type] = new_values;
+        }
+
+        await PublicFacilityModel.findByIdAndUpdate(id, publicFacility, { new: true });
+        res.status(200).json({ message: 'Public facility updated successfully'});
+    } catch (error) {
+        res.status(500).json({ message: 'Could not update public facility'});
+        console.log(error);
+    }
+
+}
+
 export const getPublicFacilityData = async (req, res) => {
     const { id } = req.params;
 
