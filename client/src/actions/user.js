@@ -1,10 +1,5 @@
-import swal from 'sweetalert';
-
 import * as api from '../api/index.js';
-
-const createAlert = (title, text, icon="error", button="ok") => {
-    swal({ title, text, icon, button });
-}
+import { createAlert } from './utils';
 
 export const signin =  async (form, router) => {
     try {

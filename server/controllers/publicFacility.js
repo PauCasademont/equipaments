@@ -52,8 +52,8 @@ export const updatePublicFaility = async (req, res) => {
             publicFacility.data[concept][year][data_type] = new_values;
         }
 
-        await PublicFacilityModel.findByIdAndUpdate(id, publicFacility, { new: true });
-        res.status(200).json({ message: 'Public facility updated successfully'});
+        const result = await PublicFacilityModel.findByIdAndUpdate(id, publicFacility, { new: true });
+        res.status(200).json({result});
     } catch (error) {
         res.status(500).json({ message: 'Could not update public facility'});
         console.log(error);

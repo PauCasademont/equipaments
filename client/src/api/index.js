@@ -1,10 +1,17 @@
 import axios from 'axios';
 
-const url = 'http://localhost:5000';
+const API = axios.create({ baseURL: 'http://localhost:5000' });
 
-export const req_getPublicFacilities = () => axios.get(`${url}/public_facility`);
-export const req_getPublicFacilityData = (id) => axios.get(`${url}/public_facility/${id}`);
-export const req_updatePublicFacility = (id, body) => axios.patch(`${url}/public_facility/${id}`, body); 
-export const req_getPublicFacilityField = (id, field) => axios.get(`${url}/public_facility/${id}/${field}`);
+API.interceptors.request.use((req) => {
+    if (localStorage.getItem('profile')) {
+        req.headers.Authorization = `Bearer ${JSON.parse(localStorage.getItem('profile')).token}`;
+    }
+    return req;
+})
 
-export const req_signin = (form) => axios.post(`${url}/user/signin`, form);
+export const req_getPublicFacilities = () => API.get('/public_facility');
+export const req_getPublicFacilityData = (id) => API.get(`/public_facility/${id}`);
+export const req_updatePublicFacility = (id, body) => API.patch(`/public_facility/${id}`, body); 
+export const req_getPublicFacilityField = (id, field) => API.get(`/public_facility/${id}/${field}`);
+
+export const req_signin = (form) => API.post('/user/signin', form);

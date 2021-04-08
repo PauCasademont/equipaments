@@ -2,7 +2,8 @@ import groupBy from 'lodash.groupby';
 import tinycolor from 'tinycolor2';
 
 import * as api from '../api/index.js';
-import { COLORS, AREA, CONSUMPTION } from '../constants/index.js';
+import { createAlert } from './utils';
+import { COLORS, AREA, CONSUMPTION, PRICE, DATA_TYPES } from '../constants/index.js';
 
 export const getPublicFalcilities =  async () => {
     try {
@@ -90,6 +91,23 @@ export const getPublicFacilitiesNames = async (ids) => {
     }
 }
 
-export const updatePublicFacility = async (id, data_type, concept, year, new_values) => {
+export const updatePublicFacility = async (id, dataType, concept, year, newValues) => {
+    let dbDataType = CONSUMPTION;
+    if (DATA_TYPES[PRICE] == dataType) dbDataType = PRICE;
+    else if (DATA_TYPES[AREA] == dataType) dbDataType = AREA;
 
+    const body = {
+        data_type: dbDataType,
+        concept,
+        year,
+        new_values: newValues
+    };
+    try {
+        const updatedPublicFacility = await api.req_updatePublicFacility(id, body);
+        createAlert('L\'equipament s\'ha actualitzat correctament', '', 'success');
+        return updatedPublicFacility.data.result;
+    } catch (error) {
+        createAlert('Error a l\'actualitzar l\'equipament');
+        console.log(error);
+    }
 }

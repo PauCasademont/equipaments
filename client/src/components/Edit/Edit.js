@@ -3,7 +3,7 @@ import { Paper, Typography, TextField, Grid, Button, InputAdornment } from '@mat
 import { useParams, useHistory } from 'react-router-dom';
 
 import './Edit.css';
-import { getPublicFacilityData } from '../../actions/publicFacility';
+import { getPublicFacilityData, updatePublicFacility } from '../../actions/publicFacility';
 import { CONCEPTS, LABELS, DATA_TYPES, CONSUMPTION, AREA, PRICE, SUPERSCRIPT_TWO } from '../../constants';
 import DropDownBox from './DropDownBox/DropDownBox';
 
@@ -46,7 +46,11 @@ function Edit() {
     },[dataType, concept, year, publicFacility]);
 
     const handleSubmit = () => {
-
+        updatePublicFacility(facilityId, dataType, concept, year, formValues)
+        .then((updatedPublicFacility) => {
+            setPublicFacility(updatedPublicFacility);
+            console.log('updated: ', updatedPublicFacility);
+        });
     }
 
     const getYearsList = () => {
