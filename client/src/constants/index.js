@@ -6,6 +6,13 @@ export const CONSUMPTION = 'consumption';
 export const PRICE = 'price';
 export const AREA = 'area';
 
+export const CONCEPTS = ['Total', 'Gas', 'Electricitat', 'Biomassa'];
+export const DATA_TYPES = {
+    [CONSUMPTION]: 'Consum',
+    [PRICE]: 'Preu',
+    [AREA]: 'Superfície'
+};
+
 export const TYPOLOGIES = [
     {name:'Oficina', icon:'oficina'},
     {name:'Educació', icon:'educacio'},

@@ -1,0 +1,26 @@
+.edit-div {
+    display: flex;
+    justify-content: center;     
+}
+
+.edit-title {
+    margin-top: 3vh !important;
+}
+
+.edit-paper {
+    margin-top: 2vh !important;
+    background-color:#eeeeee !important;
+    padding: 1vw;
+    max-width: 700px;
+    padding-top: 40px;
+    padding-bottom: 40px;
+}
+
+.edit-button {
+    margin-top: 2vh !important;
+}
+
+.edit-save {
+    margin-right: 10vw !important;
+    
+}

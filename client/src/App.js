@@ -4,6 +4,7 @@ import {BrowserRouter, Switch, Route } from 'react-router-dom';
 import Map from './components/Map/Map';
 import Chart from './components/Chart/Chart';
 import AddFacilityHeader from './components/Map/AddFacilityHeader/AddFacilityHeader';
+import Edit from './components/Edit/Edit';
 import Auth from './components/Auth/Auth';
 
 function App() {
@@ -28,6 +29,10 @@ function App() {
           path="/chart/:dataType/:ids" exact
           render={() => <Chart/>}
         />
+        <Route 
+          path="/edit/:facilityId"
+          render={() => <Edit/>}
+        /> 
         <Route 
           path="/admin" exact
           render={() => <Auth/>}

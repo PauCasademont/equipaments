@@ -23,6 +23,10 @@ function CustomMarker({ publicFacility, userFacilityId, ids, icons, router }) {
         router.push(`/chart/${type}/${idsString}`);
     }
 
+    const handleEditClick = () => {
+        router.push(`edit/${_id}`);
+    }
+
     return (
         <Marker position={coordinates} key={_id} icon={getIconMarker(icons[typology])}>
             <Popup maxWidth='500'>
@@ -47,7 +51,7 @@ function CustomMarker({ publicFacility, userFacilityId, ids, icons, router }) {
                         <img className='popup-icon' src={icons.indicadors} alt='icon_btn' />
                     </IconButton> }
                     {userFacilityId == _id && 
-                    <IconButton className='popup-icon-button' onClick={() => {}}>
+                    <IconButton className='popup-icon-button' onClick={() => { handleEditClick() }}>
                         <img className='popup-icon' src={icons.editar} alt='icon_btn' />
                     </IconButton> }
                 </>

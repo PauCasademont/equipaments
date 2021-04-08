@@ -43,7 +43,7 @@ export const signin = async (req, res) => {
             });
         }
         
-        const token = jwt.sign({ userFacilityId: user.public_facility_id }, process.env.CLIENT_SECRET);
+        const token = jwt.sign({ userFacilityId: user.public_facility_id }, process.env.CLIENT_SECRET, { expiresIn: '1h'});
         res.status(200).json({ 
             result: {              
                 username: user.username,

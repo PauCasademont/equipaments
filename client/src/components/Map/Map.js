@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { MapContainer, TileLayer, LayersControl, LayerGroup } from 'react-leaflet';
-import { useHistory } from 'react-router-dom';
+import { useHistory, useLocation } from 'react-router-dom';
+import decode from 'jwt-decode';
 
 import './Map.css';
 import 'leaflet/dist/leaflet.css';
@@ -24,14 +25,25 @@ function Map({ids = [] }) {
     const [user, setUser] = useState(JSON.parse(localStorage.getItem('profile')))
     const icons = getIcons();
     const router = useHistory();
+    const location = useLocation();
 
-    useEffect(() => {       
+    useEffect(() => {  
+        console.log(JSON.parse(localStorage.getItem('profile')));  
         getPublicFalcilities()
             .then((groupedByTypology) => {                                 
                 setPublicFacilities(groupedByTypology);
             })
             .catch((error) => {console.log(error)});        
     }, []);
+
+    useEffect(() => {
+        const token = user?.token;
+
+        if (token) {
+            const decodedToken = decode(token);
+            if (decodedToken.exp - (Date.now() / 1000) < 0) setUser(null);
+        }
+    },[location])
 
     return (
         <MapContainer 
@@ -51,7 +63,7 @@ function Map({ids = [] }) {
                                 <CustomMarker 
                                     key={publicFacility._id} 
                                     publicFacility={publicFacility}
-                                    userFacilityId={user.publicFacilityId}
+                                    userFacilityId={user?.publicFacilityId}
                                     ids={ids} 
                                     icons={icons} 
                                     router={router}

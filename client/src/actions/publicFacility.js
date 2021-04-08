@@ -13,6 +13,15 @@ export const getPublicFalcilities =  async () => {
     }
 }
 
+export const getPublicFacilityData = async (id) => {
+    try {
+        const { data } = await api.req_getPublicFacilityData(id);
+        return data.result;  
+    } catch (error) {
+        console.log(error);
+    }
+}
+
 export const getPublicFacilityDatasets = async (id, dataType) => {
     if(id){
         try {           
