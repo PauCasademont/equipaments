@@ -49,7 +49,6 @@ function Edit() {
         updatePublicFacility(facilityId, dataType, concept, year, formValues)
         .then((updatedPublicFacility) => {
             setPublicFacility(updatedPublicFacility);
-            console.log('updated: ', updatedPublicFacility);
         });
     }
 

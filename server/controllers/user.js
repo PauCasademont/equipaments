@@ -4,19 +4,21 @@ import jwt from 'jsonwebtoken';
 import UserModel from '../models/user.js';
 
 export const signup = async (req, res) => {
+
     const { username, public_facility_id, password } = req.body;
 
     try {
         const oldUser = await UserModel.findOne({ username });
-        if (oldUser) res.status(400).json({ message: `User \'${username}\' already exist`});
+        if (oldUser) return res.status(400).json({ message: `User \'${username}\' already exist`});
 
         const hashedPassword = await bcrypt.hash(password, 12);
         const result = await UserModel.create({
             username,
             public_facility_id,
+            is_admin: false,
             password: hashedPassword
         });
-        res.status(201).json({ result });        
+        return res.status(201).json({ result });        
     } catch (error) {
         res.status(500).json({ message: 'Could not sing up'});
         console.log(error);
@@ -43,11 +45,17 @@ export const signin = async (req, res) => {
             });
         }
         
-        const token = jwt.sign({ publicFacilityId: user.public_facility_id }, process.env.CLIENT_SECRET, { expiresIn: '1h'});
+        const tokenData = {
+            public_facility_id: user.public_facility_id,
+            is_admin: user.is_admin
+        };
+        const token = jwt.sign(tokenData, process.env.CLIENT_SECRET, { expiresIn: '1h'});
+
         res.status(200).json({ 
             result: {              
                 username: user.username,
                 publicFacilityId: user.public_facility_id,
+                isAdmin: user.is_admin,
                 token
             } 
         });

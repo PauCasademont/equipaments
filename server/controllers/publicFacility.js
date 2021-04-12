@@ -38,6 +38,10 @@ export const updatePublicFaility = async (req, res) => {
         return res.status(404).send({ message: `No valid public facility id: ${id}`});
     }
 
+    if(id != req.user.public_facility_id && !req.user.is_admin){
+        return res.status(404).send({ message: 'Permission denied'});
+    }
+
     try {
         const publicFacility = await PublicFacilityModel.findById(id);
         const { data_type, new_values, concept, year } = req.body;

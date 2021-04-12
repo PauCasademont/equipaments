@@ -25,7 +25,7 @@ function Map({ids = [] }) {
     const [user, setUser] = useState(JSON.parse(localStorage.getItem('profile')))
     const icons = getIcons();
     const router = useHistory();
-    const location = useLocation();
+    const location = useLocation(); 
 
     useEffect(() => {  
         console.log(JSON.parse(localStorage.getItem('profile')));  
@@ -63,7 +63,7 @@ function Map({ids = [] }) {
                                 <CustomMarker 
                                     key={publicFacility._id} 
                                     publicFacility={publicFacility}
-                                    userFacilityId={user?.publicFacilityId}
+                                    userFacilityId={user?.isAdmin ? 'ALL' : user?.publicFacilityId}
                                     ids={ids} 
                                     icons={icons} 
                                     router={router}

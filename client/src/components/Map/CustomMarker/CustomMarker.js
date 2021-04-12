@@ -50,7 +50,7 @@ function CustomMarker({ publicFacility, userFacilityId, ids, icons, router }) {
                     <IconButton className='popup-icon-button' onClick={() => { handleChartClick(AREA) }}>
                         <img className='popup-icon' src={icons.indicadors} alt='icon_btn' />
                     </IconButton> }
-                    {userFacilityId == _id && 
+                    { (userFacilityId == _id || userFacilityId == 'ALL') && 
                     <IconButton className='popup-icon-button' onClick={() => { handleEditClick() }}>
                         <img className='popup-icon' src={icons.editar} alt='icon_btn' />
                     </IconButton> }
