@@ -28,8 +28,7 @@ function Edit() {
        if(publicFacility){
            let newFormValues = Array(12).fill(0);
 
-           if (dataType == DATA_TYPES[AREA]){
-               console.log('dins', publicFacility);
+           if (dataType == DATA_TYPES[AREA]){              
                newFormValues = [publicFacility.area];
            }
 
