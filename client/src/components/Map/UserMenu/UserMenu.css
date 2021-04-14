@@ -1,0 +1,28 @@
+.userMenu-div{
+    display: flex;
+    justify-content: flex-end;
+    margin-right: 2vw;
+    margin-top: 2vh;
+}
+
+.userMenu-btn {
+    position: absolute;
+    z-index: 999;     
+}
+
+.userMenu-avatar {
+    width: 50px !important;
+    height: 50px !important;
+    border-style: solid;
+    border-width: 2px;
+}
+
+.userMenu-username-div {
+    display: flex;
+    justify-content: center;
+    background-color: #eeeeee;
+}
+
+.userMenu-username {
+    margin: 5px 10px 5px 10px !important;
+}
