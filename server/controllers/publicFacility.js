@@ -57,7 +57,7 @@ export const updatePublicFaility = async (req, res) => {
         }
 
         const result = await PublicFacilityModel.findByIdAndUpdate(id, publicFacility, { new: true });
-        res.status(200).json({result});
+        res.status(204).json({result});
     } catch (error) {
         res.status(500).json({ message: 'Could not update public facility'});
         console.log(error);
@@ -97,29 +97,32 @@ export const getPublicFacilityField = async (req, res) => {
     }
 }
 
-export const getTypologyAverage = async (req, res) => {
-    const { type, typology } = req.params;
+export const importData = async (req, res) => {
+    const { name, year, typology, area, concept, consumption, price } = req.body;
 
     try {
-        const { data } = await PublicFacilityModel.find({"typology": `${typology}`}, 'name data');
-        let result = {};
-        data.map(concept => {
-            let sumYears = Array(12).fill(0);
-            const nYears = Object.keys(concept).length;
+        let publicFacility = await PublicFacilityModel.findOne({ name });
 
-            concept.map(year => {
-                sumYears = sumYears.map((value,index) => (
-                    value + year[type][index]
-                ))
+        if (!publicFacility) {
+            publicFacility = await PublicFacilityModel.create({
+                name,
+                typology,
+                area: area ? area : 0,
+                coordinates: [],
+                data: {}
             });
+        }
 
-            result[concept] = nYears == 0 ? 0 : sumYears.map(value => (value / sumYears))
-        })
-        // Mitjana 1 equipament per anys. 
-        res.status(200).send({result});
+        if(!publicFacility.data[concept]) publicFacility.data[concept] = {};
+        if(!publicFacility.data[concept][year]) {
+            publicFacility.data[concept][year] = {consumption, price};
+            await PublicFacilityModel.findByIdAndUpdate(publicFacility._id, publicFacility, { new: true });
+        }
+
+        res.status(200).send({ message: 'Updated successfully'});
+        
     } catch (error) {
-        res.status(500).send({ message: `Could not get the consumtpion average for public facilities with typology: ${typology}` });
+        res.status(500).send({ message: 'Something went wrong'});
         console.log(error);
     }
-
 }

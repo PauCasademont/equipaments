@@ -36,6 +36,7 @@ export const importDataFromCSV = async (strFile) => {
                 name: values[1],
                 typology: values[2],
                 concept: values[0],
+                area: values[3],
                 consumption: arrayStringToFloat(values.slice(5, 17)),
                 price: arrayStringToFloat(values.slice(17)),
             }

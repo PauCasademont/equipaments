@@ -7,7 +7,7 @@ import {
     getPublicFalcilities, 
     getPublicFacilityData,
     getPublicFacilityField,
-    getTypologyAverage
+    importData
 } from '../controllers/publicFacility.js';
 
 const router = express.Router();
@@ -17,6 +17,6 @@ router.get('/', getPublicFalcilities);
 router.patch('/:id', auth, updatePublicFaility);
 router.get('/:id', getPublicFacilityData);
 router.get('/:id/:field', getPublicFacilityField);
-router.get('/average/:type/:typology', getTypologyAverage);
+router.post('/import', importData);
 
 export default router;
