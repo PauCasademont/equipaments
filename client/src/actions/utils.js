@@ -10,3 +10,11 @@ export const arrayStringToFloat = (arr) => {
         return float ? float : 0;
     });
 }
+
+export const inRangeLatitude = (num) => {
+    return num >= -90 && num <= 90
+}
+
+export const inRangeLongitude = (num) => {
+    return num >= -180 && num <= 180
+}

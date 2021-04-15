@@ -134,3 +134,31 @@ export const importData = async (req, res) => {
         console.log(error);
     }
 }
+
+export const updateCoordinates = async (req, res) => {
+    
+    if(!req.user) {
+        return res.status(401).send({ message: 'User unauthenticated'});
+    }
+
+    if(!req.user.is_admin){
+        return res.status(404).send({ message: 'Permission denied'});
+    }
+
+    const { newCoords } = req.body;
+    const { id } = req.params;
+
+    if(!mongoose.Types.ObjectId.isValid(id)){
+        return res.status(404).send({ message: `No valid public facility id: ${id}`});
+    }
+
+    try {
+        let publicFacility = await PublicFacilityModel.findById(id);
+        publicFacility.coordinates = newCoords;
+        await PublicFacilityModel.findByIdAndUpdate(id, publicFacility, { new: true });
+        res.status(200).send({ message: 'Updated successfully'});
+    } catch (error) {
+        res.status(500).send({ message: 'Something went wrong'});
+        console.log(error);
+    }
+}

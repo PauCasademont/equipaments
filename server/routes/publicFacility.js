@@ -7,13 +7,15 @@ import {
     getPublicFalcilities, 
     getPublicFacilityData,
     getPublicFacilityField,
-    importData
+    importData,
+    updateCoordinates
 } from '../controllers/publicFacility.js';
 
 const router = express.Router();
 
 router.post('/', createPublicFacility);
 router.get('/', getPublicFalcilities);
+router.patch('/coordinates/:id', auth, updateCoordinates);
 router.patch('/:id', auth, updatePublicFaility);
 router.get('/:id', getPublicFacilityData);
 router.get('/:id/:field', getPublicFacilityField);

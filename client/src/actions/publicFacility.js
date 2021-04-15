@@ -3,7 +3,7 @@ import tinycolor from 'tinycolor2';
 import swal from 'sweetalert';
 
 import * as api from '../api/index.js';
-import { createAlert, arrayStringToFloat } from './utils';
+import { createAlert, arrayStringToFloat, inRangeLatitude, inRangeLongitude } from './utils';
 import { COLORS, AREA, CONSUMPTION, PRICE, DATA_TYPES } from '../constants/index.js';
 
 export const getMapPublicFalcilities =  async () => {
@@ -94,6 +94,22 @@ export const getPublicFacilitiesNames = async (ids) => {
     }
 }
 
+export const getInvisibleFacilities = async () => {
+    try {
+        const res = await api.req_getPublicFacilities();
+        const invisibleFacilities = res.data.result.filter(facility => facility.coordinates.length == 0);
+        return invisibleFacilities.reduce((result, facility) => {
+            result[facility._id] = {
+                name: facility.name,
+                coordinates: facility.coordinates
+            };
+            return result;
+        }, {});     
+    } catch (error){
+        console.log(error);
+    }
+}
+
 export const updatePublicFacility = async (id, dataType, concept, year, newValues) => {
     let dbDataType = CONSUMPTION;
     if (DATA_TYPES[PRICE] == dataType) dbDataType = PRICE;
@@ -118,9 +134,10 @@ export const updatePublicFacility = async (id, dataType, concept, year, newValue
 const importCSV_row = async (row, year) => {
     if (row != '' && row[0] != ';'){
         const values = row.split(';');
+        const typology = values[2].charAt(0).toLowerCase() + values[2].slice(1);
         const newData = {
             name: values[1],
-            typology: values[2],
+            typology,
             concept: values[0],
             year,
             area: values[3],
@@ -166,4 +183,20 @@ export const importDataFromCSV = async (strFile, fileName) => {
             }
         }
     });
+}
+
+export const updateCoordinates = async (id, newCoords) => {
+    if(!newCoords[0] || !newCoords[1] || !inRangeLatitude(newCoords[0]) || !inRangeLongitude(newCoords[0])){
+        createAlert('Coordenades no vàlides');
+        console.log('False');
+        return false;
+    } 
+    try {
+        await api.req_updateCoordinates(id, { newCoords });
+        createAlert('Canvis guardats correctament', '', 'success');
+        return true;
+    } catch (error) {
+        createAlert('Les coordenades no s\'han pogut actualitzar');
+        console.log(error);
+    }
 }

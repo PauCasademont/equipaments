@@ -1,12 +1,11 @@
-import swal from 'sweetalert';
-
 import * as api from '../api/index.js';
 import { createAlert } from './utils';
+import { USER_STORAGE } from '../constants';
 
 export const signin =  async (form, router) => {
     try {
         const { data } = await api.req_signin(form); 
-        localStorage.setItem('profile', JSON.stringify(data.result))       
+        localStorage.setItem(USER_STORAGE, JSON.stringify(data.result))       
         router.push('/');
     } catch (error){       
         console.log(error);

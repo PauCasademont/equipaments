@@ -25,4 +25,6 @@ export const TYPOLOGIES = [
     {name:'Altres', icon:'altres'}
 ];
 
+export const USER_STORAGE = 'profile';
+
 export const SUPERSCRIPT_TWO = '\u00B2';

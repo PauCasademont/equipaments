@@ -8,7 +8,7 @@ import UserMenu from './UserMenu/UserMenu';
 import 'leaflet/dist/leaflet.css';
 import { getMapPublicFalcilities } from '../../actions/publicFacility';
 import CustomMarker from './CustomMarker/CustomMarker';
-import { TYPOLOGIES } from '../../constants';
+import { TYPOLOGIES, USER_STORAGE } from '../../constants';
 
 const INITIAL_MAP_CONFIG = { center: [41.98311, 2.82493], zoom: 14 }
 
@@ -23,7 +23,7 @@ function getIcons() {
 
 function Map({ ids = [] }) {
     const [publicFacilities, setPublicFacilities] = useState(null);
-    const [user, setUser] = useState(JSON.parse(localStorage.getItem('profile')));
+    const [user, setUser] = useState(JSON.parse(localStorage.getItem(USER_STORAGE)));
     const icons = getIcons();
     const router = useHistory();
     const location = useLocation();

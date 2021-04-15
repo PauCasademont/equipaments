@@ -4,12 +4,13 @@ import ReactFileReader from 'react-file-reader';
 
 import './UserMenu.css';
 import { importDataFromCSV } from '../../../actions/publicFacility';
+import { USER_STORAGE } from '../../../constants';
 
 function UserMenu({ user }) {
     const [anchorUserMenu, setAnchorUserMenu] = useState(null);
 
     const handleLogout = () => {
-        localStorage.removeItem('profile');
+        localStorage.removeItem(USER_STORAGE);
         window.location.reload(false);
     };
 

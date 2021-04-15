@@ -6,6 +6,7 @@ import Chart from './components/Chart/Chart';
 import AddFacilityHeader from './components/Map/AddFacilityHeader/AddFacilityHeader';
 import Edit from './components/Edit/Edit';
 import Auth from './components/Auth/Auth';
+import InvisibleFacilities from './components/Admin/InvisibleFacilities/InvisibleFacilities';
 
 function App() {
 
@@ -36,6 +37,10 @@ function App() {
         <Route 
           path="/admin" exact
           render={() => <Auth/>}
+        />
+        <Route
+          path="/invisible_facilities" exact
+          render={() => <InvisibleFacilities/>}
         />
       </Switch> 
     </BrowserRouter>
