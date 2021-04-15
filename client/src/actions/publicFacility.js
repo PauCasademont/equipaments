@@ -1,14 +1,17 @@
 import groupBy from 'lodash.groupby';
 import tinycolor from 'tinycolor2';
+import swal from 'sweetalert';
 
 import * as api from '../api/index.js';
-import { createAlert } from './utils';
+import { createAlert, arrayStringToFloat } from './utils';
 import { COLORS, AREA, CONSUMPTION, PRICE, DATA_TYPES } from '../constants/index.js';
 
-export const getPublicFalcilities =  async () => {
+export const getMapPublicFalcilities =  async () => {
     try {
         const res = await api.req_getPublicFacilities();
-        return groupBy(res.data.result, facility => facility.typology);
+        const visiblePublicFacilities = res.data.result.filter(facility => facility.coordinates.length > 0);        
+        const typologyGrouped = groupBy(visiblePublicFacilities, facility => facility.typology);
+        return typologyGrouped;
     } catch (error){
         console.log(error);
     }
@@ -110,4 +113,57 @@ export const updatePublicFacility = async (id, dataType, concept, year, newValue
         createAlert('Error a l\'actualitzar l\'equipament');
         console.log(error);
     }
+}
+
+const importCSV_row = async (row, year) => {
+    if (row != '' && row[0] != ';'){
+        const values = row.split(';');
+        const newData = {
+            name: values[1],
+            typology: values[2],
+            concept: values[0],
+            year,
+            area: values[3],
+            consumption: arrayStringToFloat(values.slice(5, 17)),
+            price: arrayStringToFloat(values.slice(17)),
+        }
+        await api.req_importData(newData);
+    }
+}
+
+export const importDataFromCSV = async (strFile, fileName) => {
+
+    const year = parseInt(fileName.substring(fileName.length - 8, fileName.length - 4));
+    if(!year){
+        createAlert('Error', 'L\'any del fitxer no és numèric.\nRevisa que el format del nom sigui correcte');
+        return;
+    }
+
+    const startIndex = strFile.indexOf('\n');
+
+    const nColumns = strFile.slice(0, startIndex).split(';').length;
+    if (nColumns != 29){
+        createAlert('Error a l\'importar dades', 'El format del fitxer no és correcte');
+        return;
+    }
+
+    swal({
+        title: `Les dades del fitxer corresponen a l\'any ${year}?`, 
+        text: 'Si l\'any és erroni revisa el format del nom del fitxer', 
+        icon: 'info',
+        buttons: ['No', 'Si'] 
+    }).then( async (isYearCorrect) => {
+        if(isYearCorrect){
+            try {
+                const rows = strFile.slice(startIndex + 1).split('\n');
+                for (const row of rows){
+                    await importCSV_row(row, year);
+                }
+                createAlert('Les dades s\'han actualitzat correctament', '', 'success');
+            } catch (error) {
+                createAlert('Error a l\'importar les dades');
+                console.log(error);
+            }
+        }
+    });
 }

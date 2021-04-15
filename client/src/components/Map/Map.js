@@ -6,7 +6,7 @@ import decode from 'jwt-decode';
 import './Map.css';
 import UserMenu from './UserMenu/UserMenu';
 import 'leaflet/dist/leaflet.css';
-import { getPublicFalcilities } from '../../actions/publicFacility';
+import { getMapPublicFalcilities } from '../../actions/publicFacility';
 import CustomMarker from './CustomMarker/CustomMarker';
 import { TYPOLOGIES } from '../../constants';
 
@@ -29,7 +29,7 @@ function Map({ ids = [] }) {
     const location = useLocation();
 
     useEffect(() => {
-        getPublicFalcilities()
+        getMapPublicFalcilities()
             .then((groupedByTypology) => {
                 setPublicFacilities(groupedByTypology);
             })

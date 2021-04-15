@@ -98,8 +98,16 @@ export const getPublicFacilityField = async (req, res) => {
 }
 
 export const importData = async (req, res) => {
-    const { name, year, typology, area, concept, consumption, price } = req.body;
 
+    if(!req.user) {
+        return res.status(401).send({ message: 'User unauthenticated'});
+    }
+
+    if(!req.user.is_admin){
+        return res.status(404).send({ message: 'Permission denied'});
+    }
+
+    const { name, year, typology, area, concept, consumption, price } = req.body;
     try {
         let publicFacility = await PublicFacilityModel.findOne({ name });
 

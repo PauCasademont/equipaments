@@ -17,6 +17,6 @@ router.get('/', getPublicFalcilities);
 router.patch('/:id', auth, updatePublicFaility);
 router.get('/:id', getPublicFacilityData);
 router.get('/:id/:field', getPublicFacilityField);
-router.post('/import', importData);
+router.post('/import', auth, importData);
 
 export default router;

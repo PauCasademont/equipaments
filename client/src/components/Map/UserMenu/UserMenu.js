@@ -3,7 +3,7 @@ import { IconButton, Avatar, Menu, Typography, MenuItem  } from '@material-ui/co
 import ReactFileReader from 'react-file-reader';
 
 import './UserMenu.css';
-import { importDataFromCSV } from '../../../actions/user';
+import { importDataFromCSV } from '../../../actions/publicFacility';
 
 function UserMenu({ user }) {
     const [anchorUserMenu, setAnchorUserMenu] = useState(null);
@@ -14,12 +14,11 @@ function UserMenu({ user }) {
     };
 
     const handleFile = (files) => {
-        var reader = new FileReader();
-
+        const reader = new FileReader();
         reader.onload = () => {
             const strFile = reader.result.replaceAll('\"', '');
-            importDataFromCSV(strFile);
-        }
+            importDataFromCSV(strFile, files[0].name);
+        };
         
         reader.readAsText(files[0]);
     };
