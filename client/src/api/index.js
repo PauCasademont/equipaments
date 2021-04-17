@@ -14,7 +14,6 @@ API.interceptors.request.use((req) => {
 export const req_getPublicFacilities = () => API.get('/public_facility');
 export const req_getPublicFacilityData = (id) => API.get(`/public_facility/${id}`);
 export const req_updatePublicFacility = (id, body) => API.patch(`/public_facility/${id}`, body); 
-export const req_getPublicFacilityField = (id, field) => API.get(`/public_facility/${id}/${field}`);
 export const req_importData = (body) => API.post('/public_facility/import', body);
 export const req_updateCoordinates = (id, body) =>  API.patch(`/public_facility/coordinates/${id}`, body);
 

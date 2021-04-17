@@ -50,6 +50,7 @@ export const getPublicFacilityDatasets = async (id, dataType) => {
                     const color = COLORS[ index % COLORS.length ];
                     datasets.push({
                         label: `${name}${year}${concept}`,
+                        id,
                         publicFacility: `${name}`,
                         concept: `${concept}`,
                         year: `${year}`,
@@ -74,24 +75,6 @@ export const getPublicFacilitiesDatasets = async (ids, dataType) => {
         datasets = datasets.concat(newDatasets);
     };
     return datasets;
-}
-
-export const getPublicFacilitiesNames = async (ids) => {
-    let result = [];
-    const field = 'name';
-
-    try {
-        for (const id of ids) {
-            const { data } = await api.req_getPublicFacilityField(id, field);
-            result.push({
-                id: data.result._id,
-                name: data.result.name
-            });
-        }
-        return result;
-    } catch (error){
-        console.log(error);
-    }
 }
 
 export const getInvisibleFacilities = async () => {
@@ -188,7 +171,6 @@ export const importDataFromCSV = async (strFile, fileName) => {
 export const updateCoordinates = async (id, newCoords) => {
     if(!newCoords[0] || !newCoords[1] || !inRangeLatitude(newCoords[0]) || !inRangeLongitude(newCoords[0])){
         createAlert('Coordenades no vàlides');
-        console.log('False');
         return false;
     } 
     try {

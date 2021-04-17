@@ -77,7 +77,7 @@ function Map({ ids = [] }) {
                     </LayersControl.Overlay>
                 ))}
             </LayersControl>   
-            { user && <UserMenu user={user} /> }
+            { user && <UserMenu user={user} router={router}/> }
         </MapContainer>
     )
 }

@@ -6,7 +6,7 @@ import './UserMenu.css';
 import { importDataFromCSV } from '../../../actions/publicFacility';
 import { USER_STORAGE } from '../../../constants';
 
-function UserMenu({ user }) {
+function UserMenu({ user, router }) {
     const [anchorUserMenu, setAnchorUserMenu] = useState(null);
 
     const handleLogout = () => {
@@ -46,10 +46,13 @@ function UserMenu({ user }) {
                     <Typography className='userMenu-username' variant='body1'>{user.username}</Typography>
                 </div>
                 <MenuItem onClick={handleLogout}>Tancar Sessió</MenuItem> 
+                { user.isAdmin &&                    
+                        <ReactFileReader handleFiles={handleFile} fileTypes={'.csv'}>
+                            <MenuItem>Importar Dades CSV</MenuItem>
+                        </ReactFileReader>                    
+                }
                 { user.isAdmin && 
-                    <ReactFileReader handleFiles={handleFile} fileTypes={'.csv'}>
-                        <MenuItem>Importar Dades CSV</MenuItem>
-                    </ReactFileReader>
+                    <MenuItem onClick={() => router.push('/invisible_facilities')}>Equipaments sense coordenades</MenuItem>
                 }
             </Menu>
         </div>  

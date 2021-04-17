@@ -6,7 +6,6 @@ import {
     updatePublicFaility,
     getPublicFalcilities, 
     getPublicFacilityData,
-    getPublicFacilityField,
     importData,
     updateCoordinates
 } from '../controllers/publicFacility.js';
@@ -18,7 +17,6 @@ router.get('/', getPublicFalcilities);
 router.patch('/coordinates/:id', auth, updateCoordinates);
 router.patch('/:id', auth, updatePublicFaility);
 router.get('/:id', getPublicFacilityData);
-router.get('/:id/:field', getPublicFacilityField);
 router.post('/import', auth, importData);
 
 export default router;

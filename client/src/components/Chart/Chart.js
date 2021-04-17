@@ -45,7 +45,8 @@ function Chart() {
     }, []);
 
     return (
-        data && <Container maxWidth='lg'>
+        data && 
+        <Container maxWidth='lg'>
             <div className='chart'>
                 <ChartLegend 
                     data={data} 

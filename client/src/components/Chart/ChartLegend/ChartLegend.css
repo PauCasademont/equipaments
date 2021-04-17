@@ -7,10 +7,14 @@
 }
 
 .chart-legend-paper {
-    padding-left: 20px;
-    padding-right: 20px;
+    padding: 0 20px 20px 20px;
     width: 100%;
     background-color:#EBF5FB !important;
+}
+
+.chart-legend-remove-btn {
+    color: crimson !important;
+    margin-top: -13px !important;
 }
 
 .chart-legend-bar {
