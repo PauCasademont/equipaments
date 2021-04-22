@@ -4,7 +4,7 @@ import { Line } from 'react-chartjs-2';
 import { Container, Button } from '@material-ui/core';
 
 import './Chart.css';
-import { getPublicFacilitiesDatasets } from '../../actions/publicFacility';
+import { getPublicFacilitiesDatasets, getTypologyAverageDatasets, getPublicFacilityField } from '../../actions/publicFacility';
 import { LABELS, CONSUMPTION, PRICE, SUPERSCRIPT_TWO } from '../../constants';
 import ChartLegend from './ChartLegend/ChartLegend';
 
@@ -34,14 +34,15 @@ function Chart() {
         responsive: true                       
     }
 
-    useEffect(() => {  
-        getPublicFacilitiesDatasets(idsList, dataType)
-        .then((datasets) => {
-            setData({
-                labels: LABELS,
-                datasets 
-            });
-        })
+    useEffect(async () => {  
+        const facilitiesDatasets = await getPublicFacilitiesDatasets(idsList, dataType);
+        const typology = await getPublicFacilityField(idsList[0], 'typology')
+        const typologyAverageDatasets = await getTypologyAverageDatasets(typology, dataType);
+        setData({
+            labels: LABELS,
+            datasets: facilitiesDatasets.concat(typologyAverageDatasets)
+        });
+        
     }, []);
 
     return (

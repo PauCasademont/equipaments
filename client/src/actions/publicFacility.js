@@ -1,10 +1,9 @@
 import groupBy from 'lodash.groupby';
-import tinycolor from 'tinycolor2';
 import swal from 'sweetalert';
 
 import * as api from '../api/index.js';
-import { createAlert, arrayStringToFloat, inRangeLatitude, inRangeLongitude } from './utils';
-import { COLORS, AREA, CONSUMPTION, PRICE, DATA_TYPES } from '../constants/index.js';
+import { createAlert, arrayStringToFloat, inRangeLatitude, inRangeLongitude, getObjectDatasets } from './utils';
+import { AREA, CONSUMPTION, PRICE, DATA_TYPES } from '../constants/index.js';
 
 export const getMapPublicFalcilities =  async () => {
     try {
@@ -26,12 +25,11 @@ export const getPublicFacilityData = async (id) => {
     }
 }
 
-export const getPublicFacilityDatasets = async (id, dataType) => {
+export const getPublicFacilityDatasets = async (id, dataType, firstDataset) => {
     if(id){
-        try {           
-            const {data} = await api.req_getPublicFacilityData(id);
-            const name = data.result.name;
-            let datasets = [];
+        try {            
+            const { data } = await api.req_getPublicFacilityData(id);
+            const name = data.result.name;           
             let area = null;
 
             if (dataType == AREA){
@@ -39,29 +37,17 @@ export const getPublicFacilityDatasets = async (id, dataType) => {
                 dataType = CONSUMPTION;
             } 
 
-            const getDatasetData = (concept, year) => {                
-                return data.result.data[concept][year][dataType].map(value => 
-                    (value == 0 ? null : (area ? value / area : value) )
-                );  
-            }
-            
-            Object.keys(data.result.data).map((concept, darkenAmount) => {
-                Object.keys(data.result.data[concept]).reverse().map((year, index) => {
-                    const color = COLORS[ index % COLORS.length ];
-                    datasets.push({
-                        label: `${name}${year}${concept}`,
-                        id,
-                        publicFacility: `${name}`,
-                        concept: `${concept}`,
-                        year: `${year}`,
-                        data: getDatasetData(concept, year),
-                        borderColor: tinycolor(color).darken(darkenAmount*15),
-                        hidden: false,
-                        fill: false
-                    })
-                })
-            });
-            return datasets;
+            const dataInfo = { 
+                name, 
+                id,
+                area, 
+                dataType, 
+                firstDataset, 
+                isAverage: false 
+            };
+
+            return getObjectDatasets(data.result.data, dataInfo);
+           
         } catch (error) {
             console.log(error);
         }
@@ -70,11 +56,30 @@ export const getPublicFacilityDatasets = async (id, dataType) => {
 
 export const getPublicFacilitiesDatasets = async (ids, dataType) => {
     let datasets = [];
+    let firstDataset = true;
     for (const id of ids) {
-        const newDatasets = await getPublicFacilityDatasets(id, dataType);
+        const newDatasets = await getPublicFacilityDatasets(id, dataType, firstDataset);
         datasets = datasets.concat(newDatasets);
+        if(firstDataset) firstDataset = false;
     };
     return datasets;
+}
+
+export const getTypologyAverageDatasets = async (typology, dataType) => {
+    try {
+        const { data } = await api.req_getTypologyAverage(dataType, typology);
+        const dataInfo = {
+            name: `TIPOLOGIA: ${typology.toUpperCase()}`,
+            id: typology,
+            area: null,
+            dataType: null,
+            firstDataset: false,
+            isAverage: true
+        };
+        return getObjectDatasets(data.result, dataInfo);
+    } catch (error) {
+        console.log(error)
+    }
 }
 
 export const getPublicFacilityField = async (id, field) => {
@@ -191,3 +196,4 @@ export const updateCoordinates = async (id, newCoords) => {
         console.log(error);
     }
 }
+

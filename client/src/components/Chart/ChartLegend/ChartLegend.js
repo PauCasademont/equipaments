@@ -18,9 +18,6 @@ function ChartLegend({ data, setData, ids, dataType }) {
             groupedFacilities[facility] = groupBy(groupedFacilities[facility], dataset => dataset.concept);
         });
         setLegendFacilities(groupedFacilities);
-
-        getPublicFacilityField(facilitiesIds[0], 'typology')
-        .then(typology => console.log(typology));
     },[]);
 
     const handleLegendClick = (dataset) => {
@@ -51,10 +48,15 @@ function ChartLegend({ data, setData, ids, dataType }) {
     };
 
     const removeFacilityId = (id) => {
-        let facilitiesIdsCopy = facilitiesIds;
-        const index = facilitiesIdsCopy.indexOf(id);
-        if(index > -1) facilitiesIdsCopy.splice(index, 1);
-        setFacilitiesIds(facilitiesIdsCopy);
+        const index = facilitiesIds.indexOf(id);
+        if(index > -1) {
+            let facilitiesIdsCopy = facilitiesIds;
+            facilitiesIdsCopy.splice(index, 1);
+            setFacilitiesIds(facilitiesIdsCopy);
+
+            const strIds = facilitiesIds.join(',');
+            router.push(`/chart/consumption/${strIds}`);
+        }
     }
 
     const handleRemoveFacility = (event, facility) => {
@@ -84,7 +86,7 @@ function ChartLegend({ data, setData, ids, dataType }) {
                         key={index}
                         facilityName={facility}
                         facilities={legendFacilities[facility]}
-                        canRemove={Object.keys(legendFacilities).length > 1}
+                        canRemove={facilitiesIds.length > 1 || index > 0}
                         handleRemoveFacility={handleRemoveFacility}
                         handleLegendClick={handleLegendClick}
                     />
