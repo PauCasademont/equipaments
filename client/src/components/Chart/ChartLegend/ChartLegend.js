@@ -1,21 +1,11 @@
 import { useEffect, useState } from 'react';
 import groupBy from 'lodash.groupby';
 import { useHistory } from 'react-router-dom';
-import { ExpandMore, RemoveCircleOutline } from '@material-ui/icons'; 
-import {
-    Paper, 
-    Typography, 
-    Grid, 
-    Checkbox, 
-    Button,
-    Accordion,
-    AccordionSummary,
-    AccordionDetails,
-    IconButton
-    } from '@material-ui/core';
+import { Paper, Button } from '@material-ui/core';
 
 import './ChartLegend.css';
 import CustomAccordion from './CustomAccordion/CustomAccordion';
+import { getPublicFacilityField } from '../../../actions/publicFacility';
 
 function ChartLegend({ data, setData, ids, dataType }) {
     const [legendFacilities, setLegendFacilities] = useState({});
@@ -28,6 +18,9 @@ function ChartLegend({ data, setData, ids, dataType }) {
             groupedFacilities[facility] = groupBy(groupedFacilities[facility], dataset => dataset.concept);
         });
         setLegendFacilities(groupedFacilities);
+
+        getPublicFacilityField(facilitiesIds[0], 'typology')
+        .then(typology => console.log(typology));
     },[]);
 
     const handleLegendClick = (dataset) => {

@@ -7,16 +7,22 @@ import {
     getPublicFalcilities, 
     getPublicFacilityData,
     importData,
-    updateCoordinates
+    updateCoordinates,
+    getPublicFacilityField,
+    getTypologyAverage
 } from '../controllers/publicFacility.js';
 
 const router = express.Router();
 
-router.post('/', createPublicFacility);
 router.get('/', getPublicFalcilities);
-router.patch('/coordinates/:id', auth, updateCoordinates);
-router.patch('/:id', auth, updatePublicFaility);
 router.get('/:id', getPublicFacilityData);
+router.get('/:id/:field', getPublicFacilityField);
+router.get('/average/:data_type/:typology', getTypologyAverage);
+
+router.post('/', createPublicFacility);
 router.post('/import', auth, importData);
+
+router.patch('/:id', auth, updatePublicFaility);
+router.patch('/coordinates/:id', auth, updateCoordinates);
 
 export default router;

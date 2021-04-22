@@ -6,7 +6,7 @@ export const CONSUMPTION = 'consumption';
 export const PRICE = 'price';
 export const AREA = 'area';
 
-export const CONCEPTS = ['Total', 'Gas', 'Electricitat', 'Biomassa'];
+export const CONCEPTS = ['Total', 'Gas', 'Electricitat', 'Gasoil-Biomassa'];
 export const DATA_TYPES = {
     [CONSUMPTION]: 'Consum',
     [PRICE]: 'Preu',

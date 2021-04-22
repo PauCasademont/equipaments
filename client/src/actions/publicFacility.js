@@ -77,6 +77,15 @@ export const getPublicFacilitiesDatasets = async (ids, dataType) => {
     return datasets;
 }
 
+export const getPublicFacilityField = async (id, field) => {
+    try {
+        const { data } = await api.req_getPublicFacilityField(id, field);
+        return data.result[field];
+    } catch (error) {
+        console.log(error);
+    }
+}
+
 export const getInvisibleFacilities = async () => {
     try {
         const res = await api.req_getPublicFacilities();

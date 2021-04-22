@@ -12,11 +12,6 @@
     background-color:#EBF5FB !important;
 }
 
-.chart-legend-remove-btn {
-    color: crimson !important;
-    margin-top: -13px !important;
-}
-
 .chart-legend-bar {
     display: flex;
     align-items: center;
@@ -38,13 +33,5 @@
     margin-left: 30px !important;
 }
 
-.chart-legend-item {
-    margin-top: 5px;
-    display: flex;
-    align-items: center;
-    margin-left: -10px;
-}
 
-.chart-legend-checkbox {
-    cursor: pointer;
-}
+

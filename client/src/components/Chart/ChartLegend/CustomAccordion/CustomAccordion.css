@@ -1,0 +1,15 @@
+.chart-legend-checkbox {
+    cursor: pointer;
+}
+
+.chart-legend-item {
+    margin-top: 5px;
+    display: flex;
+    align-items: center;
+    margin-left: -10px;
+}
+
+.chart-legend-remove-btn {
+    color: crimson !important;
+    margin-top: -13px !important;
+}
