@@ -15,9 +15,11 @@ import {
     } from '@material-ui/core';
 
 import './ChartLegend.css';
+import CustomAccordion from './CustomAccordion/CustomAccordion';
 
 function ChartLegend({ data, setData, ids, dataType }) {
     const [legendFacilities, setLegendFacilities] = useState({});
+    const [facilitiesIds, setFacilitiesIds] = useState(ids);
     const router = useHistory();
 
     useEffect(() => {
@@ -28,18 +30,6 @@ function ChartLegend({ data, setData, ids, dataType }) {
         setLegendFacilities(groupedFacilities);
     },[]);
 
-    const getCircleStyles = (color = '#CACFD2') => ({
-        height: '25px', 
-        width: '25px', 
-        backgroundColor: color, 
-        borderRadius:'50%', 
-        marginLeft: '17px',
-        cursor: 'pointer',
-        border: 'none',
-        outline: 'none',
-        zIndex: '5'
-    });
-
     const handleLegendClick = (dataset) => {
         const index = data.datasets.findIndex((d) => d == dataset);
         let datasetsCopy = data.datasets;
@@ -49,22 +39,37 @@ function ChartLegend({ data, setData, ids, dataType }) {
         setData({ labels: data.labels, datasets: datasetsCopy });
     };
 
-    const handleAddFacility = () => {
+    const handleAddFacility = () => {     
         router.push({
             pathname: `/map/add_facility/${dataType}`,
-            state: { ids }
+            state: { facilitiesIds }
         });
     };
+
+    const removeFacilityData = (id) => {
+        const newDatasets = data.datasets.filter(dataset => dataset.id != id);
+        setData({ labels: data.labels, datasets: newDatasets });
+    };
+
+    const removeFacilityLegend = (facility) => {
+        let legendFacilitiesCopy = legendFacilities;
+        delete legendFacilitiesCopy[facility];
+        setLegendFacilities(legendFacilitiesCopy);
+    };
+
+    const removeFacilityId = (id) => {
+        let facilitiesIdsCopy = facilitiesIds;
+        const index = facilitiesIdsCopy.indexOf(id);
+        if(index > -1) facilitiesIdsCopy.splice(index, 1);
+        setFacilitiesIds(facilitiesIdsCopy);
+    }
 
     const handleRemoveFacility = (event, facility) => {
         event.stopPropagation();
         const id = data.datasets.find(dataset => dataset.publicFacility == facility).id;
-        const index = ids.indexOf(id);
-        let newIds = ids;
-        newIds.splice(index, 1);
-        const idsString = newIds.join(',');
-        router.push(`/chart/${dataType}/${idsString}`);
-        window.location.reload(false);
+        removeFacilityData(id);
+        removeFacilityLegend(facility);
+        removeFacilityId(id);
     };
 
     return (
@@ -82,44 +87,14 @@ function ChartLegend({ data, setData, ids, dataType }) {
                    
                 </div>
                 { Object.keys(legendFacilities).map((facility, index) => (
-                    <Accordion key={index}>
-                        <AccordionSummary expandIcon={<ExpandMore/>}>
-                            <Typography variant='body1'>
-                                {facility}
-                            </Typography>
-                            <IconButton 
-                                className='chart-legend-remove-btn' 
-                                onClick={(event) => handleRemoveFacility(event, facility)}
-                            >
-                                <RemoveCircleOutline />
-                            </IconButton>
-                        </AccordionSummary>
-                        <AccordionDetails>
-                            <Grid container spacing={3}>
-                                { Object.keys(legendFacilities[facility]).map((concept, conceptIndex) => (
-                                    <Grid item xs={12} sm={6} md={3} key={conceptIndex}>
-                                        <Typography variant='h5'>
-                                            {concept}
-                                        </Typography>
-                                        { legendFacilities[facility][concept].map((dataset, datasetIndex) => (
-                                            <div className='chart-legend-item' key={datasetIndex}>
-                                                <Checkbox
-                                                    className='chart-legend-checkbox'
-                                                    checked={!dataset.hidden}
-                                                    color='primary'
-                                                    onClick={() => handleLegendClick(dataset)}
-                                                />
-                                                <Typography variant='h6'>
-                                                    {dataset.year}
-                                                </Typography>
-                                                <div style={getCircleStyles(dataset.borderColor)}/>
-                                            </div>
-                                        ))}
-                                    </Grid>
-                                ))}
-                            </Grid>
-                        </AccordionDetails>
-                    </Accordion>
+                    <CustomAccordion
+                        key={index}
+                        facilityName={facility}
+                        facilities={legendFacilities[facility]}
+                        canRemove={Object.keys(legendFacilities).length > 1}
+                        handleRemoveFacility={handleRemoveFacility}
+                        handleLegendClick={handleLegendClick}
+                    />
                 ))}
             </Paper>
         </div>

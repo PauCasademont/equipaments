@@ -22,7 +22,7 @@ function App() {
           render={(props) => 
             <>
               <AddFacilityHeader />
-              <Map ids={props.location.state.ids}/>
+              <Map ids={props.location.state.facilitiesIds}/>
             </>
           }
         />
