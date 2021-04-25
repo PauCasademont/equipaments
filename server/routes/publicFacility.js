@@ -10,15 +10,15 @@ import {
     updateCoordinates,
     getPublicFacilityField,
     getTypologyAverage,
-    getPublicFacilityYears
+    getInvisiblePublicFacilities
 } from '../controllers/publicFacility.js';
 
 const router = express.Router();
 
 router.get('/', getMapPublicFalcilities);
+router.get('/invisible', getInvisiblePublicFacilities);
 router.get('/:id', getPublicFacilityData);
-router.get('/years/:id', getPublicFacilityYears);
-router.get('/:id/:field', getPublicFacilityField);
+router.get('/:id/:fields', getPublicFacilityField);
 router.get('/average/:data_type/:typology', getTypologyAverage);
 
 router.post('/', createPublicFacility);

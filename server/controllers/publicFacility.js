@@ -55,30 +55,6 @@ const getPublicYearsFromData = (data) => {
     return years;
 }
 
-export const getPublicFacilityYears = async (req, res) => {
-    const { id } = req.params;
-
-    if(!mongoose.Types.ObjectId.isValid(id)){
-        return res.status(404).send({ message: `No valid public facility id: ${id}`});
-    }
-
-    try { 
-        let years = []
-        const publicFacility = await PublicFacilityModel.findById(id);
-        Object.keys(publicFacility.data).forEach(concept => {
-            Object.keys(publicFacility.data[concept]).forEach(year => {
-                if(!years.includes(year)){
-                    years.push(year);
-                }
-            });
-        });
-        res.status(200).json({ result: years }); 
-    } catch (error) {
-        res.status(500).json({ message: 'Could not get public facility years'});
-        console.log(error);
-    }
-}
-
 export const updatePublicFaility = async (req, res) => {
     const { id } = req.params;
 
@@ -109,9 +85,9 @@ export const updatePublicFaility = async (req, res) => {
         }
 
         const result = await PublicFacilityModel.findByIdAndUpdate(id, publicFacility, { new: true });
-        res.status(204).json({result});
+        res.status(200).send({result});
     } catch (error) {
-        res.status(500).json({ message: 'Could not update public facility'});
+        res.status(500).send({ message: 'Could not update public facility'});
         console.log(error);
     }
 
@@ -126,6 +102,16 @@ export const getPublicFacilityData = async (req, res) => {
 
     try {
         const result = await PublicFacilityModel.findById(id);
+        res.status(200).send({result});
+    } catch (error) {
+        res.status(500).send({ message: 'Could not get public facility data'});
+        console.log(error);
+    }
+}
+
+export const getInvisiblePublicFacilities = async (req, res) => {
+    try {
+        const result = await PublicFacilityModel.find({ coordinates: [] },'name coordinates');
         res.status(200).send({result});
     } catch (error) {
         res.status(500).send({ message: 'Could not get public facility data'});
@@ -200,14 +186,14 @@ export const updateCoordinates = async (req, res) => {
 }
 
 export const getPublicFacilityField = async (req, res) => {
-    const { id, field } = req.params;
-
+    const { id, fields } = req.params;
+    const separatedFields = fields.split(';').join(' ');
     if(!mongoose.Types.ObjectId.isValid(id)){
         return res.status(404).send({ message: `No valid public facility id: ${id}`});
     }
 
     try {
-        const result = await PublicFacilityModel.findById(id, `${field}`);
+        const result = await PublicFacilityModel.findById(id, `${separatedFields}`);
         res.status(200).send({result});
     } catch (error) {
         res.status(500).send({ message: 'Could not get public facility field'});

@@ -64,3 +64,8 @@ export const getObjectDatasets = (object, dataInfo) => {
     });
     return datasets;
 }
+
+export const replaceAccentsAndCapitals = (word) => {
+    let result = word.charAt(0).toLowerCase() + word.slice(1);
+    return result.replace('à','a').replace('è','e').replace('é','e').replace('í','i').replace('ò','o').replace('ó','o').replace('ú','u');
+}

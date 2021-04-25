@@ -4,7 +4,7 @@ import { ExpandMore } from '@material-ui/icons';
 import './FilterControl.css';
 import { TYPOLOGIES, YEARS_LIST } from '../../../constants';
 
-function FilterControl({ filters, setFilters }) {
+function FilterControl({ filters, setFilters, satelliteView, setSatelliteView }) {
 
     const handleFilterClick = (field, value) => {
         if(filters[field].includes(value)){
@@ -67,6 +67,27 @@ function FilterControl({ filters, setFilters }) {
                                 </Typography>
                             </div>
                         ))}
+                    </AccordionDetails>
+                </Accordion>
+                <Accordion>
+                    <AccordionSummary expandIcon={<ExpandMore/>}>
+                        <div className='map-filter-title-div'>
+                            <Typography variant='h6'>
+                                Mapa Base
+                            </Typography>
+                        </div>
+                    </AccordionSummary>
+                    <AccordionDetails className='map-filter-accordion-details'>
+                        <div className='map-filter-item'>
+                            <Checkbox               
+                                color='primary'
+                                checked={satelliteView}
+                                onClick={() => setSatelliteView(prevState => !prevState)}
+                            />
+                            <Typography variant='body1'>
+                                Satèl·lit
+                            </Typography>
+                        </div>
                     </AccordionDetails>
                 </Accordion>
             </div>

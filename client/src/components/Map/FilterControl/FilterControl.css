@@ -1,16 +1,16 @@
 .map-filter-control {
     display: flex;
     justify-content: flex-end;
-    margin-top: 100px;
+    margin-top: 10px;
     width: 100%;
 }
 
 .map-filter-paper {
     position: absolute;
-    margin-right: 25px;
+    margin-right: 20px;
     padding: 10px;
     z-index: 999;
-    max-width: 150px;
+    max-width: 175px;
 }
 
 .map-filter-title-div {

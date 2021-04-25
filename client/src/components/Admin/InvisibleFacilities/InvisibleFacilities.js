@@ -12,9 +12,10 @@ import {
     TableBody,
     TableRow
     } from '@material-ui/core';
+import { ArrowBack } from '@material-ui/icons';
 
 import './InvisibleFacilities.css'
-import { getInvisibleFacilities, updateCoordinates } from '../../../actions/publicFacility';
+import { getInvisiblePublicFacilities, updateCoordinates } from '../../../actions/publicFacility';
 import { USER_STORAGE } from '../../../constants';
 
 function InvisibleFacilities() {
@@ -23,7 +24,7 @@ function InvisibleFacilities() {
     const router = useHistory();
 
     useEffect(() => {
-        getInvisibleFacilities()
+        getInvisiblePublicFacilities()
         .then(invisibleFacilities => {
             setPublicFacilities(invisibleFacilities);
         });
@@ -62,6 +63,12 @@ function InvisibleFacilities() {
                 <Typography  variant='h4'>
                     Equipaments sense coordenades
                 </Typography>
+            </Grid>
+            <Grid item xs={4}>
+                <Button color='primary' onClick={() => router.push('/')}>
+                    <ArrowBack/>
+                    &nbsp; Pàgina principal
+                </Button>
             </Grid>
             <Grid item xs={12} md={8}>
                 <TableContainer component={Paper}>
@@ -104,11 +111,6 @@ function InvisibleFacilities() {
                         </TableBody>
                     </Table>
                 </TableContainer>
-            </Grid>
-            <Grid item xs={4}>
-                <Button color='primary' onClick={() => router.push('/')}>
-                    Pàgina principal
-                </Button>
             </Grid>
         </Grid> 
         : <div>Accessible només per usuaris administradors</div>

@@ -1,7 +1,14 @@
 import swal from 'sweetalert';
 
 import * as api from '../api/index.js';
-import { createAlert, arrayStringToFloat, inRangeLatitude, inRangeLongitude, getObjectDatasets } from './utils';
+import { 
+    createAlert, 
+    arrayStringToFloat, 
+    inRangeLatitude, 
+    inRangeLongitude, 
+    getObjectDatasets, 
+    replaceAccentsAndCapitals 
+} from './utils';
 import { AREA, CONSUMPTION, PRICE, DATA_TYPES } from '../constants/index.js';
 
 export const getMapPublicFalcilities =  async () => {
@@ -9,15 +16,6 @@ export const getMapPublicFalcilities =  async () => {
         const { data } = await api.req_getPublicFacilities();
         return data.result;
     } catch (error){
-        console.log(error);
-    }
-}
-
-export const getPublicFacilityYears = async (id) => {
-    try {
-        const { data } = await api.req_getPublicFacilityYears(id);
-        return data.result;  
-    } catch (error) {
         console.log(error);
     }
 }
@@ -97,18 +95,17 @@ export const getPublicFacilityField = async (id, field) => {
     }
 }
 
-export const getInvisibleFacilities = async () => {
+export const getInvisiblePublicFacilities = async () => {
     try {
-        const res = await api.req_getPublicFacilities();
-        const invisibleFacilities = res.data.result.filter(facility => facility.coordinates.length == 0);
-        return invisibleFacilities.reduce((result, facility) => {
+        const { data } = await api.req_getInvisiblePublicFacilities();
+        return data.result.reduce((result, facility) => {
             result[facility._id] = {
                 name: facility.name,
                 coordinates: facility.coordinates
             };
             return result;
-        }, {});     
-    } catch (error){
+        }, {});
+    } catch (error) {
         console.log(error);
     }
 }
@@ -137,9 +134,10 @@ export const updatePublicFacility = async (id, dataType, concept, year, newValue
 const importCSV_row = async (row, year) => {
     if (row != '' && row[0] != ';'){
         const values = row.split(';');
-        const typology = values[2].charAt(0).toLowerCase() + values[2].slice(1);
+        console.log(values[1]);
+        const typology = replaceAccentsAndCapitals(values[2])
         const newData = {
-            name: values[1],
+            name: values[1].toUpperCase(),
             typology,
             concept: values[0],
             year,

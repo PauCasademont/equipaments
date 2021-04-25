@@ -15,8 +15,10 @@
 .chart-legend-bar {
     display: flex;
     align-items: center;
+    justify-content: space-between;
     margin-bottom: 30px;
     margin-top: 20px;
+    width: 100%;
 }
 
 .chart-legend-form {
@@ -28,9 +30,12 @@
     width: 300px;
 }
 
-.chart-legend-button {
-    max-height: 40px;
-    margin-left: 30px !important;
+.chart-legend-add-btn {
+    margin-left: 20px !important;
+}
+
+.chart-legend-return-btn {
+    right: 20px !important;
 }
 
 

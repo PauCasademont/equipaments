@@ -2,10 +2,10 @@ import { useEffect, useState } from 'react';
 import groupBy from 'lodash.groupby';
 import { useHistory } from 'react-router-dom';
 import { Paper, Button } from '@material-ui/core';
+import { ArrowBack } from '@material-ui/icons';
 
 import './ChartLegend.css';
 import CustomAccordion from './CustomAccordion/CustomAccordion';
-import { getPublicFacilityField } from '../../../actions/publicFacility';
 
 function ChartLegend({ data, setData, ids, dataType }) {
     const [legendFacilities, setLegendFacilities] = useState({});
@@ -72,14 +72,22 @@ function ChartLegend({ data, setData, ids, dataType }) {
             <Paper className='chart-legend-paper' elevation={3}>
                 <div className='chart-legend-bar'>
                     <Button 
-                        className='chart-legend-button' 
+                        className='chart-legend-add-btn' 
                         onClick={() => handleAddFacility()}
                         variant='contained' 
                         color='primary'
                     >
                         Afegir Equipament
                     </Button>
-                   
+                    <Button 
+                        className='chart-legend-return-btn' 
+                        variant='outlined' 
+                        color='primary' 
+                        onClick={() => router.push('/')}
+                    >
+                        <ArrowBack/>
+                        &nbsp; Torna al mapa
+                    </Button>                   
                 </div>
                 { Object.keys(legendFacilities).map((facility, index) => (
                     <CustomAccordion

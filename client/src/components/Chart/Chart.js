@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
-import { useParams, useHistory } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import { Line } from 'react-chartjs-2';
-import { Container, Button } from '@material-ui/core';
+import { Container } from '@material-ui/core';
 
 import './Chart.css';
 import { getPublicFacilitiesDatasets, getTypologyAverageDatasets, getPublicFacilityField } from '../../actions/publicFacility';
@@ -11,7 +11,6 @@ import ChartLegend from './ChartLegend/ChartLegend';
 function Chart() {
     const [data, setData] = useState(null);
     const { dataType, ids } = useParams(); 
-    const router = useHistory();
     const idsList = ids.split(',');
 
     const options = {
@@ -59,11 +58,6 @@ function Chart() {
                     data={data}                     
                     options={options} 
                 /> 
-            </div>
-            <div className='chart-bottom-bar'>
-                <Button variant='contained' color='primary' onClick={() => router.push('/')}>
-                    TORNA AL MAPA
-                </Button>
             </div>
         </Container>
     )

@@ -138,21 +138,21 @@ function Edit() {
                 </Paper>
             </Grid>
             <Grid item className='edit-div' xs={12}>
-                <Button 
-                    className='edit-button edit-save'
-                    variant='contained' 
-                    color='primary'
-                    onClick={() => handleSubmit()}
-                >
-                    Guardar
-                </Button>
                 <Button
-                    className='edit-button'
-                    variant='contained'
-                    color='primary'
+                    className='edit-button edit-goBack-button'
+                    variant='outlined'
+                    color='secondary'
                     onClick={() => router.push('/')}
                 >
                     Tornar
+                </Button>
+                <Button 
+                    className='edit-button'
+                    variant='contained' 
+                    color='secondary'
+                    onClick={() => handleSubmit()}
+                >
+                    Guardar
                 </Button>
             </Grid>
         </Grid>
