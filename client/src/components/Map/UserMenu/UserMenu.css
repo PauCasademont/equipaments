@@ -1,8 +1,8 @@
 .userMenu-div{
     display: flex;
     justify-content: flex-end;
-    margin-right: 2vw;
-    margin-top: 2vh;
+    margin-right: 10px;
+    margin-top: 10px;
 }
 
 .userMenu-btn {

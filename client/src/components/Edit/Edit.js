@@ -4,14 +4,22 @@ import { useParams, useHistory } from 'react-router-dom';
 
 import './Edit.css';
 import { getPublicFacilityData, updatePublicFacility } from '../../actions/publicFacility';
-import { CONCEPTS, LABELS, DATA_TYPES, CONSUMPTION, AREA, PRICE, SUPERSCRIPT_TWO } from '../../constants';
+import { 
+    CONCEPTS, 
+    LABELS, DATA_TYPES, 
+    CONSUMPTION, 
+    AREA, 
+    PRICE, 
+    SUPERSCRIPT_TWO,  
+    CURRENT_YEAR, 
+    YEARS_LIST
+} from '../../constants';
 import DropDownBox from './DropDownBox/DropDownBox';
 
 function Edit() {
     const [concept, setConcept] = useState(CONCEPTS[0]);
-    const currentYear = new Date().getFullYear();
     const [dataType, setDataType] = useState(DATA_TYPES[CONSUMPTION]);
-    const [year, setYear] = useState(currentYear);
+    const [year, setYear] = useState(CURRENT_YEAR);
     const [formValues, setFormValues] = useState(null);
     const [publicFacility, setPublicFacility] = useState(null);
     const { facilityId } = useParams();
@@ -49,11 +57,6 @@ function Edit() {
         .then((updatedPublicFacility) => {
             setPublicFacility(updatedPublicFacility);
         });
-    }
-
-    const getYearsList = () => {
-        const firstYear = 2013
-        return Array(currentYear - firstYear + 1).fill().map((_, index) => firstYear + index); 
     }
 
     const handleChange = (value, valueIndex) => {
@@ -98,7 +101,7 @@ function Edit() {
                         </Grid>
                         <Grid item className='edit-div' xs={12} sm={4}>
                             <DropDownBox 
-                                values={getYearsList()}
+                                values={YEARS_LIST}
                                 selectedValue={year}
                                 setValue={setYear}
                                 name={'Any'}

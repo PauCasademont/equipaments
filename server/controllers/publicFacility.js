@@ -2,7 +2,12 @@ import mongoose from 'mongoose';
 
 import PublicFacilityModel from '../models/publicFacility.js';
 
-export const CONCEPTS = ['Total', 'Electricitat', 'Gas', 'Gasoil-Biomassa'];
+const CONCEPTS = ['Total', 'Electricitat', 'Gas', 'Gasoil-Biomassa'];
+const DATA_TYPES = {
+    consumption: 'consumption',
+    price: 'price',
+    area: 'area'
+};
 
 export const createPublicFacility = async (req, res) => {
     const { name } = req.body;
@@ -19,12 +24,57 @@ export const createPublicFacility = async (req, res) => {
     }
 }
 
-export const getPublicFalcilities = async (req, res) => {
+export const getMapPublicFalcilities = async (req, res) => {
     try { 
-        const result = await PublicFacilityModel.find({}, 'name typology coordinates area');
+        const facilities = await PublicFacilityModel.find({ coordinates: { $ne: [] }});
+        const result = facilities.map(facility => ({
+            id: facility._id,
+            name: facility.name,
+            typology: facility.typology,
+            coordinates: facility.coordinates,
+            area: facility.area,
+            years: getPublicYearsFromData(facility.data)
+        }));
         res.status(200).json({result});
     } catch (error) {
         res.status(500).json({ message: 'Could not get public facilities'});
+        console.log(error);
+    }
+}
+
+const getPublicYearsFromData = (data) => {
+    let years = []
+    Object.keys(data).forEach(concept => {
+        Object.keys(data[concept]).forEach(strYear => {
+            const year = parseInt(strYear);
+            if(!years.includes(year)){
+                years.push(year);
+            }
+        });
+    });
+    return years;
+}
+
+export const getPublicFacilityYears = async (req, res) => {
+    const { id } = req.params;
+
+    if(!mongoose.Types.ObjectId.isValid(id)){
+        return res.status(404).send({ message: `No valid public facility id: ${id}`});
+    }
+
+    try { 
+        let years = []
+        const publicFacility = await PublicFacilityModel.findById(id);
+        Object.keys(publicFacility.data).forEach(concept => {
+            Object.keys(publicFacility.data[concept]).forEach(year => {
+                if(!years.includes(year)){
+                    years.push(year);
+                }
+            });
+        });
+        res.status(200).json({ result: years }); 
+    } catch (error) {
+        res.status(500).json({ message: 'Could not get public facility years'});
         console.log(error);
     }
 }
@@ -48,7 +98,7 @@ export const updatePublicFaility = async (req, res) => {
         const publicFacility = await PublicFacilityModel.findById(id);
         const { data_type, new_values, concept, year } = req.body;
 
-        if (data_type == 'area') {
+        if (data_type == DATA_TYPES.area) {
             publicFacility.area = new_values[0];
         }
 
@@ -188,12 +238,21 @@ const objectIsEmpty = (object) => {
     return Object.keys(object).length == 0;
 }
 
+const facilityHasValues = (facility, concept, year, dataType) => {
+    if(facility.data[concept] && facility.data[concept][year]){
+        if(dataType != DATA_TYPES.area) return true;
+        return facility.area;
+    }
+    return false;
+}
+
 const getConceptYearArrays = (facilities, concept, year, dataType) => {
     const result = [];
+    const valueType = dataType == DATA_TYPES.area ? DATA_TYPES.consumption : dataType;
     facilities.forEach(facility => {
-        if(facility.data[concept] && facility.data[concept][year]){
-            let newArray = facility.data[concept][year][dataType];
-            if(dataType == 'area'){
+        if(facilityHasValues(facility, concept, year, dataType)){
+            let newArray = facility.data[concept][year][valueType];
+            if(dataType == DATA_TYPES.area){
                 newArray = newArray.map(value => value / facility.area);
             }
             result.push(newArray);

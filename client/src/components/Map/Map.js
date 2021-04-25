@@ -6,9 +6,10 @@ import decode from 'jwt-decode';
 import './Map.css';
 import UserMenu from './UserMenu/UserMenu';
 import 'leaflet/dist/leaflet.css';
-import { getMapPublicFalcilities } from '../../actions/publicFacility';
+import { getMapPublicFalcilities, getPublicFacilityYears } from '../../actions/publicFacility';
 import CustomMarker from './CustomMarker/CustomMarker';
-import { TYPOLOGIES, USER_STORAGE } from '../../constants';
+import FilterControl from './FilterControl/FilterControl';
+import { TYPOLOGIES, USER_STORAGE, YEARS_LIST } from '../../constants';
 
 const INITIAL_MAP_CONFIG = { center: [41.98311, 2.82493], zoom: 14 }
 
@@ -23,6 +24,10 @@ function getIcons() {
 
 function Map({ ids = [] }) {
     const [publicFacilities, setPublicFacilities] = useState(null);
+    const [filters, setFilters] = useState({
+        typologies: TYPOLOGIES.map(typology => typology.icon),
+        years: YEARS_LIST
+    })
     const [user, setUser] = useState(JSON.parse(localStorage.getItem(USER_STORAGE)));
     const icons = getIcons();
     const router = useHistory();
@@ -30,8 +35,8 @@ function Map({ ids = [] }) {
 
     useEffect(() => {
         getMapPublicFalcilities()
-            .then((groupedByTypology) => {
-                setPublicFacilities(groupedByTypology);
+            .then((facilities) => {
+                setPublicFacilities(facilities);
             })
             .catch((error) => { console.log(error) });
     }, []);
@@ -44,6 +49,15 @@ function Map({ ids = [] }) {
             if (decodedToken.exp - (Date.now() / 1000) < 0) setUser(null);
         }
     }, [location]);
+
+    const hasFilteredYear = (years) => {
+        for (const year of years) {            
+            if(filters.years.includes(year)) {
+                return true;
+            }
+        };
+        return false;
+    }
 
     return (
         <MapContainer
@@ -59,25 +73,21 @@ function Map({ ids = [] }) {
                 attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
                 url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
             /> 
-            <LayersControl position='bottomright'>
-                {publicFacilities && TYPOLOGIES.map((typology, index) => (
-                    <LayersControl.Overlay key={index} checked name={typology.name}>
-                        <LayerGroup>
-                            {publicFacilities[typology.icon]?.map((publicFacility) => (
-                                <CustomMarker
-                                    key={publicFacility._id}
-                                    publicFacility={publicFacility}
-                                    userFacilityId={user?.isAdmin ? 'ALL' : user?.publicFacilityId}
-                                    ids={ids}
-                                    icons={icons}
-                                    router={router}
-                                />
-                            ))}
-                        </LayerGroup>
-                    </LayersControl.Overlay>
-                ))}
-            </LayersControl>   
+           
+            { publicFacilities && publicFacilities.map(publicFacility => (
+                filters.typologies.includes(publicFacility.typology) &&
+                hasFilteredYear(publicFacility.years) &&
+                <CustomMarker
+                    key={publicFacility.id}
+                    publicFacility={publicFacility}
+                    userFacilityId={user?.isAdmin ? 'ALL' : user?.publicFacilityId}
+                    ids={ids}
+                    icons={icons}
+                    router={router}
+                />
+            ))}
             { user && <UserMenu user={user} router={router}/> }
+            <FilterControl filters={filters} setFilters={setFilters}/>
         </MapContainer>
     )
 }

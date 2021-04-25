@@ -47,7 +47,7 @@ export const getObjectDatasets = (object, dataInfo) => {
             const color = COLORS[ index % COLORS.length ];
 
             datasets.push({
-                label: `${dataInfo.name}${year}${concept}`,
+                label: `${dataInfo.name} ${concept} ${year}`,
                 id: dataInfo.id,
                 publicFacility: `${dataInfo.name}`,
                 concept: `${concept}`,

@@ -1,0 +1,36 @@
+.map-filter-control {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 100px;
+    width: 100%;
+}
+
+.map-filter-paper {
+    position: absolute;
+    margin-right: 25px;
+    padding: 10px;
+    z-index: 999;
+    max-width: 150px;
+}
+
+.map-filter-title-div {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+}
+
+.map-filter-item {
+    display: flex;
+    align-items: center;
+    margin-bottom: -10px;
+}
+
+.map-filter-divider {
+    margin-top: 7px !important;
+}
+
+.map-filter-accordion-details {
+    display: flex;
+    flex-direction: column;
+    margin-top: -30px;
+}

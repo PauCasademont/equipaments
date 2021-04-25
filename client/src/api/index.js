@@ -12,6 +12,7 @@ API.interceptors.request.use((req) => {
 })
 
 export const req_getPublicFacilities = () => API.get('/public_facility');
+export const req_getPublicFacilityYears = (id) => API.get(`/public_facility/years/${id}`);
 export const req_getPublicFacilityData = (id) => API.get(`/public_facility/${id}`);
 export const req_getPublicFacilityField = (id, field) => API.get(`/public_facility/${id}/${field}`);
 export const req_getTypologyAverage = (dataType, typology) => API.get(`/public_facility/average/${dataType}/${typology}`);

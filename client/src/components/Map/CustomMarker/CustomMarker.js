@@ -14,21 +14,22 @@ function getIconMarker(icon) {
 }
 
 function CustomMarker({ publicFacility, userFacilityId, ids, icons, router }) {
-    const { _id, name, typology, coordinates, area } = publicFacility;
+    const { id, name, typology, coordinates, area } = publicFacility;
     const isHomePage = !ids.length;
     const { dataType } = useParams();
 
     const handleChartClick = (type) => {
-        const idsString = ids.concat([_id]).join(',');
+        const idsString = ids.concat([id]).join(',');
         router.push(`/chart/${type}/${idsString}`);
     }
 
     const handleEditClick = () => {
-        router.push(`edit/${_id}`);
+        router.push(`edit/${id}`);
     }
 
     return (
-        <Marker position={coordinates} key={_id} icon={getIconMarker(icons[typology])}>
+        icons[typology] ?
+        <Marker position={coordinates} icon={getIconMarker(icons[typology])}>
             <Popup maxWidth='500'>
                 <div className='popup-title-div'>
                     <Typography className='popup-title-text' variant='h6' gutterBottom aling='center'>
@@ -50,19 +51,20 @@ function CustomMarker({ publicFacility, userFacilityId, ids, icons, router }) {
                     <IconButton className='popup-icon-button' onClick={() => { handleChartClick(AREA) }}>
                         <img className='popup-icon' src={icons.indicadors} alt='icon_btn' />
                     </IconButton> }
-                    { (userFacilityId == _id || userFacilityId == 'ALL') && 
+                    { (userFacilityId == id || userFacilityId == 'ALL') && 
                     <IconButton className='popup-icon-button' onClick={() => { handleEditClick() }}>
                         <img className='popup-icon' src={icons.editar} alt='icon_btn' />
                     </IconButton> }
                 </>
                 : <div className='popup-button-div'>
-                    { !ids.includes(_id) && 
+                    { !ids.includes(id) && 
                     <Button className='popup-button' variant='outlined' onClick={() => { handleChartClick(dataType) }}>
                         Afegir
                     </Button> }
                 </div> } 
             </Popup>
         </Marker>
+        : null
     )
 }
 

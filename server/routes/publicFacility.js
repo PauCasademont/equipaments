@@ -4,18 +4,20 @@ import auth from '../middleware/auth.js';
 import { 
     createPublicFacility, 
     updatePublicFaility,
-    getPublicFalcilities, 
+    getMapPublicFalcilities, 
     getPublicFacilityData,
     importData,
     updateCoordinates,
     getPublicFacilityField,
-    getTypologyAverage
+    getTypologyAverage,
+    getPublicFacilityYears
 } from '../controllers/publicFacility.js';
 
 const router = express.Router();
 
-router.get('/', getPublicFalcilities);
+router.get('/', getMapPublicFalcilities);
 router.get('/:id', getPublicFacilityData);
+router.get('/years/:id', getPublicFacilityYears);
 router.get('/:id/:field', getPublicFacilityField);
 router.get('/average/:data_type/:typology', getTypologyAverage);
 

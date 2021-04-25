@@ -28,3 +28,7 @@ export const TYPOLOGIES = [
 export const USER_STORAGE = 'profile';
 
 export const SUPERSCRIPT_TWO = '\u00B2';
+
+export const FIRST_YEAR = 2013;
+export const CURRENT_YEAR = new Date().getFullYear();
+export const YEARS_LIST = Array(CURRENT_YEAR - FIRST_YEAR + 1).fill().map((_, index) => FIRST_YEAR + index); 

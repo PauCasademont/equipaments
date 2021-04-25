@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { IconButton, Avatar, Menu, Typography, MenuItem  } from '@material-ui/core';
+import { IconButton, Avatar, Menu, Typography, MenuItem } from '@material-ui/core';
 import ReactFileReader from 'react-file-reader';
 
 import './UserMenu.css';

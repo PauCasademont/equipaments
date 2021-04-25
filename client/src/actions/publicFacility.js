@@ -1,4 +1,3 @@
-import groupBy from 'lodash.groupby';
 import swal from 'sweetalert';
 
 import * as api from '../api/index.js';
@@ -7,11 +6,18 @@ import { AREA, CONSUMPTION, PRICE, DATA_TYPES } from '../constants/index.js';
 
 export const getMapPublicFalcilities =  async () => {
     try {
-        const res = await api.req_getPublicFacilities();
-        const visiblePublicFacilities = res.data.result.filter(facility => facility.coordinates.length > 0);        
-        const typologyGrouped = groupBy(visiblePublicFacilities, facility => facility.typology);
-        return typologyGrouped;
+        const { data } = await api.req_getPublicFacilities();
+        return data.result;
     } catch (error){
+        console.log(error);
+    }
+}
+
+export const getPublicFacilityYears = async (id) => {
+    try {
+        const { data } = await api.req_getPublicFacilityYears(id);
+        return data.result;  
+    } catch (error) {
         console.log(error);
     }
 }
