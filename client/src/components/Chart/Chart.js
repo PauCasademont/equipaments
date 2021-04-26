@@ -5,17 +5,18 @@ import { Container } from '@material-ui/core';
 
 import './Chart.css';
 import { getPublicFacilitiesDatasets, getTypologyAverageDatasets, getPublicFacilityField } from '../../actions/publicFacility';
-import { LABELS, CONSUMPTION, PRICE, SUPERSCRIPT_TWO } from '../../constants';
+import { LABELS, CONSUMPTION, PRICE, SUPERSCRIPT_TWO, DATA_TYPES, AREA } from '../../constants';
 import ChartLegend from './ChartLegend/ChartLegend';
 
 function Chart() {
     const [data, setData] = useState(null);
     const { dataType, ids } = useParams(); 
     const idsList = ids.split(',');
+    const title = 'Gràfic ' + (dataType == AREA ? 'Consum per m' + SUPERSCRIPT_TWO : DATA_TYPES[dataType]);
 
     const options = {
         legend: { display: false },
-        // title: { display: true, text: title, fontSize: 30 },
+        title: { display: true, text: title, fontSize: 30 },
         scales: {
             yAxes: [{
                 ticks: {
@@ -47,7 +48,6 @@ function Chart() {
     return (
         data && 
         <Container maxWidth='lg'>
-            <div>
                 <ChartLegend 
                     data={data} 
                     setData={setData} 
@@ -59,7 +59,6 @@ function Chart() {
                     options={options} 
                     height={133}
                 /> 
-            </div>
         </Container>
     )
 }

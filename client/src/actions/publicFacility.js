@@ -13,7 +13,7 @@ import { AREA, CONSUMPTION, PRICE, DATA_TYPES } from '../constants/index.js';
 
 export const getMapPublicFalcilities =  async () => {
     try {
-        const { data } = await api.req_getPublicFacilities();
+        const { data } = await api.req_getMapPublicFacilities();
         return data.result;
     } catch (error){
         console.log(error);
@@ -96,6 +96,8 @@ export const getPublicFacilityField = async (id, field) => {
 }
 
 export const getInvisiblePublicFacilities = async () => {
+    //Return: { facilityId1: { name: String, coordinates: Array() } ... facilityIdN: {...}}
+
     try {
         const { data } = await api.req_getInvisiblePublicFacilities();
         return data.result.reduce((result, facility) => {
@@ -131,8 +133,12 @@ export const updatePublicFacility = async (id, dataType, concept, year, newValue
     }
 }
 
+const hasValuesCSV_row = (row) => {
+    return row != '' && row[0] != ';'
+}
+
 const importCSV_row = async (row, year) => {
-    if (row != '' && row[0] != ';'){
+    if (hasValuesCSV_row(row)){
         const values = row.split(';');
         console.log(values[1]);
         const typology = replaceAccentsAndCapitals(values[2])
@@ -150,6 +156,8 @@ const importCSV_row = async (row, year) => {
 }
 
 export const importDataFromCSV = async (strFile, fileName) => {
+    //Note1: file name has to end with the year of the data e.g. consum-2021.csv
+    //Note2: every row of the file has to contain 29 columns. Concept, Name, Typology, Area, Users, Consumption value x12, Price value x12.
 
     const year = parseInt(fileName.substring(fileName.length - 8, fileName.length - 4));
     if(!year){

@@ -18,7 +18,7 @@ const router = express.Router();
 router.get('/', getMapPublicFalcilities);
 router.get('/invisible', getInvisiblePublicFacilities);
 router.get('/:id', getPublicFacilityData);
-router.get('/:id/:fields', getPublicFacilityField);
+router.get('/:id/:field', getPublicFacilityField);
 router.get('/average/:data_type/:typology', getTypologyAverage);
 
 router.post('/', createPublicFacility);

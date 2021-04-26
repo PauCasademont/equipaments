@@ -129,8 +129,8 @@ export const importData = async (req, res) => {
         return res.status(404).send({ message: 'Permission denied'});
     }
 
-    const { name, year, typology, area, concept, consumption, price } = req.body;
     try {
+        const { name, year, typology, area, concept, consumption, price } = req.body;
         let publicFacility = await PublicFacilityModel.findOne({ name });
 
         if (!publicFacility) {
@@ -186,14 +186,13 @@ export const updateCoordinates = async (req, res) => {
 }
 
 export const getPublicFacilityField = async (req, res) => {
-    const { id, fields } = req.params;
-    const separatedFields = fields.split(';').join(' ');
+    const { id, field } = req.params;
     if(!mongoose.Types.ObjectId.isValid(id)){
         return res.status(404).send({ message: `No valid public facility id: ${id}`});
     }
 
     try {
-        const result = await PublicFacilityModel.findById(id, `${separatedFields}`);
+        const result = await PublicFacilityModel.findById(id, field);
         res.status(200).send({result});
     } catch (error) {
         res.status(500).send({ message: 'Could not get public facility field'});
@@ -224,8 +223,8 @@ const objectIsEmpty = (object) => {
     return Object.keys(object).length == 0;
 }
 
-const facilityHasValues = (facility, concept, year, dataType) => {
-    if(facility.data[concept] && facility.data[concept][year]){
+const facilityHasValues = (facility, concept, year, dataType, valueType) => {
+    if(facility.data[concept] && facility.data[concept][year] && facility.data[concept][year][valueType]){
         if(dataType != DATA_TYPES.area) return true;
         return facility.area;
     }
@@ -236,7 +235,7 @@ const getConceptYearArrays = (facilities, concept, year, dataType) => {
     const result = [];
     const valueType = dataType == DATA_TYPES.area ? DATA_TYPES.consumption : dataType;
     facilities.forEach(facility => {
-        if(facilityHasValues(facility, concept, year, dataType)){
+        if(facilityHasValues(facility, concept, year, dataType, valueType)){
             let newArray = facility.data[concept][year][valueType];
             if(dataType == DATA_TYPES.area){
                 newArray = newArray.map(value => value / facility.area);

@@ -17,22 +17,18 @@ function Auth() {
     const getInputProps = (isPassword) => ({
         startAdornment: (            
             <InputAdornment position='start'>
-                { isPassword ? 
-                    <LockOutlined fontSize='large' variant='outlined'/> :
-                    <PersonOutline fontSize='large' variant='outlined'/>                
-                }                
+                { isPassword ? <LockOutlined fontSize='large' variant='outlined'/> 
+                : <PersonOutline fontSize='large' variant='outlined'/> }                
             </InputAdornment>
         ),
         endAdornment: ( isPassword ?
             <InputAdornment position='end'>
                 <IconButton onClick={() => setShowPassword(!showPassword)}>
-                    { showPassword ? 
-                        <VisibilityOff fontSize='large'/> : 
-                        <Visibility fontSize='large'/> 
-                    }
+                    { showPassword ? <VisibilityOff fontSize='large'/>  
+                    : <Visibility fontSize='large'/> }
                 </IconButton>
-            </InputAdornment> :
-            null
+            </InputAdornment> 
+            : null
         ),
         style: {fontSize: 20}  
     });
@@ -60,7 +56,9 @@ function Auth() {
                         <Grid container spacing={3} justify='center'>
                             <div className='auth-header'>
                                 <AccountCircle className='auth-avatar'/>
-                                <Typography className='auth-title' variant='h2'>Login</Typography>
+                                <Typography className='auth-title' variant='h2'>
+                                    Login
+                                </Typography>
                             </div>
                             <Grid item xs={12}>
                                 <TextField  

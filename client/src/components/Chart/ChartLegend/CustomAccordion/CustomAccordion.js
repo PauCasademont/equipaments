@@ -19,7 +19,8 @@ function CustomAccordion({ facilityName, facilities, canRemove, handleRemoveFaci
         width:'25px', 
         marginLeft: '17px',
         borderRadius: '50%',
-        cursor: 'pointer'
+        cursor: 'pointer',
+        border: '1px solid black'
     })
 
     return (

@@ -45,14 +45,25 @@ function UserMenu({ user, router }) {
                 <div className='userMenu-username-div'>
                     <Typography className='userMenu-username' variant='body1'>{user.username}</Typography>
                 </div>
-                <MenuItem onClick={handleLogout}>Tancar Sessió</MenuItem> 
+                { !user.isAdmin &&
+                    <MenuItem onClick={() => router.push(`/edit/${user.publicFacilityId}`)}>
+                        Editar Equipament
+                    </MenuItem>
+                }
+                <MenuItem onClick={handleLogout}>
+                    Tancar Sessió
+                </MenuItem> 
                 { user.isAdmin &&                    
                         <ReactFileReader handleFiles={handleFile} fileTypes={'.csv'}>
-                            <MenuItem>Importar Dades CSV</MenuItem>
+                            <MenuItem>
+                                Importar Dades CSV
+                            </MenuItem>
                         </ReactFileReader>                    
                 }
                 { user.isAdmin && 
-                    <MenuItem onClick={() => router.push('/invisible_facilities')}>Equipaments sense coordenades</MenuItem>
+                    <MenuItem onClick={() => router.push('/invisible_facilities')}>
+                        Equipaments sense coordenades
+                    </MenuItem>
                 }
             </Menu>
         </div>  

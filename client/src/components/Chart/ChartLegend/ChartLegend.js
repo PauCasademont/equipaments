@@ -13,7 +13,7 @@ function ChartLegend({ data, setData, ids, dataType }) {
     const router = useHistory();
 
     useEffect(() => {
-        let groupedFacilities = groupBy(data.datasets, dataset => dataset.publicFacility);
+        let groupedFacilities = groupBy(data.datasets, dataset => dataset.name);
         Object.keys(groupedFacilities).forEach(facility => {
             groupedFacilities[facility] = groupBy(groupedFacilities[facility], dataset => dataset.concept);
         });
@@ -70,7 +70,7 @@ function ChartLegend({ data, setData, ids, dataType }) {
 
     const handleRemoveFacility = (event, facility) => {
         event.stopPropagation();
-        const id = data.datasets.find(dataset => dataset.publicFacility == facility).id;
+        const id = data.datasets.find(dataset => dataset.name == facility).id;
         removeFacilityData(id);
         removeFacilityLegend(facility);
         removeFacilityId(id);

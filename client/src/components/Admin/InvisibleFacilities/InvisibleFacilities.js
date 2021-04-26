@@ -111,6 +111,11 @@ function InvisibleFacilities() {
                         </TableBody>
                     </Table>
                 </TableContainer>
+                { Object.keys(publicFacilities).length > 0 &&
+                    <Typography variant='h6'>
+                        Tots els equipaments tenen coordenades assignades
+                    </Typography>
+                }
             </Grid>
         </Grid> 
         : <div>Accessible només per usuaris administradors</div>

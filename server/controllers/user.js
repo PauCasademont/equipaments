@@ -33,7 +33,7 @@ export const signin = async (req, res) => {
         if (!user) {
             return res.status(404).json({ 
                 message: `User \'${username}\' does not exist`,
-                clientMessage: `L'usuari \'${username}\' no existeix a la base de dades`
+                clientMessage: `L'usuari \'${username}\' no existeix`
             });
         }
 

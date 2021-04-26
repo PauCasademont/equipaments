@@ -55,13 +55,16 @@ function Edit() {
     const handleSubmit = () => {
         updatePublicFacility(facilityId, dataType, concept, year, formValues)
         .then((updatedPublicFacility) => {
-            setPublicFacility(updatedPublicFacility);
+            if(updatedPublicFacility){
+                setPublicFacility(updatedPublicFacility);
+            } else router.push('/');
         });
     }
 
     const handleChange = (value, valueIndex) => {
+        const newValue = value < 0 ? 0 : value;
         const formValuesCopy = formValues.map((valueCopy, index) => {
-            return valueIndex == index ? value : valueCopy;
+            return valueIndex == index ? newValue : valueCopy;
         });
         setFormValues(formValuesCopy);
     }
