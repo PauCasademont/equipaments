@@ -36,6 +36,15 @@ function ChartLegend({ data, setData, ids, dataType }) {
         });
     };
 
+    const handleChangeColor = (label, color) => {
+        let datasetsCopy = data.datasets;
+        const indexDataset = datasetsCopy.findIndex(dataset => dataset.label == label);
+        if(indexDataset > -1){
+            datasetsCopy[indexDataset].borderColor = color;
+            setData({ labels: data.labels, datasets: datasetsCopy });
+        }
+    }
+
     const removeFacilityData = (id) => {
         const newDatasets = data.datasets.filter(dataset => dataset.id != id);
         setData({ labels: data.labels, datasets: newDatasets });
@@ -97,6 +106,7 @@ function ChartLegend({ data, setData, ids, dataType }) {
                         canRemove={facilitiesIds.length > 1 || index > 0}
                         handleRemoveFacility={handleRemoveFacility}
                         handleLegendClick={handleLegendClick}
+                        handleChangeColor={handleChangeColor}
                     />
                 ))}
             </Paper>

@@ -47,7 +47,7 @@ function Chart() {
     return (
         data && 
         <Container maxWidth='lg'>
-            <div className='chart'>
+            <div>
                 <ChartLegend 
                     data={data} 
                     setData={setData} 
@@ -57,6 +57,7 @@ function Chart() {
                 <Line 
                     data={data}                     
                     options={options} 
+                    height={133}
                 /> 
             </div>
         </Container>

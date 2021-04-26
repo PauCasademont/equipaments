@@ -13,3 +13,7 @@
     color: crimson !important;
     margin-top: -13px !important;
 }
+
+.chart-legend-input-color {
+    visibility: hidden;
+}

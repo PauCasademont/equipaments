@@ -53,7 +53,7 @@ export const getObjectDatasets = (object, dataInfo) => {
                 concept: `${concept}`,
                 year: `${year}`,
                 data: getDatasetData(object[concept][year], dataInfo),
-                borderColor: tinycolor(color).darken(darkenAmount*15),
+                borderColor: tinycolor(color).darken(darkenAmount*12),
                 hidden: hiddenLine,
                 fill: false,
                 borderDash: dataInfo.isAverage ? [10,5] : null

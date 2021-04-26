@@ -11,19 +11,16 @@ import { ExpandMore, RemoveCircleOutline } from '@material-ui/icons';
 
 import './CustomAccordion.css';
 
-function CustomAccordion({ facilityName, facilities, canRemove, handleRemoveFacility, handleLegendClick}) {
+function CustomAccordion({ facilityName, facilities, canRemove, handleRemoveFacility, handleLegendClick, handleChangeColor}) {
 
     const getCircleStyles = (color = '#CACFD2') => ({
+        background: color, 
         height: '25px', 
-        width: '25px', 
-        backgroundColor: color, 
-        borderRadius:'50%', 
+        width:'25px', 
         marginLeft: '17px',
-        cursor: 'pointer',
-        border: 'none',
-        outline: 'none',
-        zIndex: '5'
-    });
+        borderRadius: '50%',
+        cursor: 'pointer'
+    })
 
     return (
         <Accordion>
@@ -58,7 +55,13 @@ function CustomAccordion({ facilityName, facilities, canRemove, handleRemoveFaci
                                     <Typography variant='h6'>
                                         {dataset.year}
                                     </Typography>
-                                    <div style={getCircleStyles(dataset.borderColor)}/>
+                                    <label style={getCircleStyles(dataset.borderColor)}>
+                                        <input 
+                                            className='chart-legend-input-color' 
+                                            type='color' 
+                                            onChange={(e) => handleChangeColor(dataset.label, e.target.value)}
+                                        />
+                                    </label>
                                 </div>
                             ))}
                         </Grid>
