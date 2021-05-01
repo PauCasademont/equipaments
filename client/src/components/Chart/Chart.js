@@ -8,15 +8,22 @@ import { getPublicFacilitiesDatasets, getTypologyAverageDatasets, getPublicFacil
 import { LABELS, CONSUMPTION, PRICE, SUPERSCRIPT_TWO, DATA_TYPES, AREA } from '../../constants';
 import ChartLegend from './ChartLegend/ChartLegend';
 
-function Chart() {
+function Chart({ facilityName }) {
     const [data, setData] = useState(null);
     const { dataType, ids } = useParams(); 
     const idsList = ids.split(',');
-    const title = 'Gràfic ' + (dataType == AREA ? 'Consum per m' + SUPERSCRIPT_TWO : DATA_TYPES[dataType]);
+
+    const getChartTitle = () => {
+        let tipusGrafic = DATA_TYPES[dataType];
+        if(dataType == AREA) tipusGrafic= 'Consum per m' + SUPERSCRIPT_TWO;
+
+        if(idsList.length > 1) return `Gràfic ${tipusGrafic}`;
+        return `${tipusGrafic} ${facilityName}`;
+    }
 
     const options = {
         legend: { display: false },
-        title: { display: true, text: title, fontSize: 30 },
+        title: { display: true, text: getChartTitle(), fontSize: 30 },
         scales: {
             yAxes: [{
                 ticks: {

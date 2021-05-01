@@ -27,7 +27,7 @@ function App() {
         />
         <Route
           path="/chart/:dataType/:ids" exact
-          render={() => <Chart/>}
+          render={(props) => <Chart facilityName={props.location.state?.name}/>}
         />
         <Route 
           path="/edit/:facilityId"

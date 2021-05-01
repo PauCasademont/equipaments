@@ -5,16 +5,17 @@ import {
     Typography, 
     AccordionDetails, 
     Grid, 
-    Checkbox 
+    Checkbox
     } from '@material-ui/core';
-import { ExpandMore, RemoveCircleOutline } from '@material-ui/icons'; 
+import { ExpandMore, DeleteOutline } from '@material-ui/icons'; 
 
 import './CustomAccordion.css';
 
-function CustomAccordion({ facilityName, facilities, canRemove, handleRemoveFacility, handleLegendClick, handleChangeColor}) {
+function CustomAccordion({ facilityName, facility, canRemove, handleRemoveFacility, handleLegendClick, handleChangeColor}) {
 
-    const getCircleStyles = (color = '#CACFD2') => ({
-        background: color, 
+
+    const getCircleStyles = (color = '#CACFD2', isFacility) => ({
+        background: isFacility ? color : `repeating-linear-gradient(90deg, ${color}, white 5px, ${color} 5px)`, 
         height: '25px', 
         width:'25px', 
         marginLeft: '17px',
@@ -24,7 +25,7 @@ function CustomAccordion({ facilityName, facilities, canRemove, handleRemoveFaci
     })
 
     return (
-        <Accordion>
+        <Accordion className='chart-legend-accordion'>
             <AccordionSummary expandIcon={<ExpandMore/>}>
                 <Typography variant='body1'>
                     {facilityName}
@@ -34,18 +35,18 @@ function CustomAccordion({ facilityName, facilities, canRemove, handleRemoveFaci
                         className='chart-legend-remove-btn' 
                         onClick={(event) => handleRemoveFacility(event, facilityName)}
                     >
-                        <RemoveCircleOutline />
+                        <DeleteOutline />
                     </IconButton>
                 }
             </AccordionSummary>
             <AccordionDetails>
                 <Grid container spacing={3}>
-                    { Object.keys(facilities).map((concept, conceptIndex) => (
+                    { Object.keys(facility).map((concept, conceptIndex) => (
                         <Grid item xs={12} sm={6} md={3} key={conceptIndex}>
                             <Typography variant='h5'>
                                 {concept}
                             </Typography>
-                            { facilities[concept].map((dataset, datasetIndex) => (
+                            { facility[concept].map((dataset, datasetIndex) => (
                                 <div className='chart-legend-item' key={datasetIndex}>
                                     <Checkbox
                                         className='chart-legend-checkbox'
@@ -56,7 +57,7 @@ function CustomAccordion({ facilityName, facilities, canRemove, handleRemoveFaci
                                     <Typography variant='h6'>
                                         {dataset.year}
                                     </Typography>
-                                    <label style={getCircleStyles(dataset.borderColor)}>
+                                    <label style={getCircleStyles(dataset.borderColor, dataset.borderDash == null)}>
                                         <input 
                                             className='chart-legend-input-color' 
                                             type='color' 

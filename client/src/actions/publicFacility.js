@@ -73,7 +73,7 @@ export const getTypologyAverageDatasets = async (typology, dataType) => {
     try {
         const { data } = await api.req_getTypologyAverage(dataType, typology);
         const dataInfo = {
-            name: `TIPOLOGIA: ${typology.toUpperCase()}`,
+            name: `MITJANA EQUIPAMENTS DE TIPOLOGIA ${typology.toUpperCase()}`,
             id: typology,
             area: null,
             dataType: null,

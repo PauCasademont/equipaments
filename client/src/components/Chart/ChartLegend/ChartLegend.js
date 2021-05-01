@@ -102,8 +102,8 @@ function ChartLegend({ data, setData, ids, dataType }) {
                     <CustomAccordion
                         key={index}
                         facilityName={facility}
-                        facilities={legendFacilities[facility]}
-                        canRemove={facilitiesIds.length > 1 || index > 0}
+                        facility={legendFacilities[facility]}
+                        canRemove={index > 0}
                         handleRemoveFacility={handleRemoveFacility}
                         handleLegendClick={handleLegendClick}
                         handleChangeColor={handleChangeColor}

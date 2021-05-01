@@ -20,7 +20,10 @@ function CustomMarker({ publicFacility, userFacilityId, ids, icons, router }) {
 
     const handleChartClick = (type) => {
         const idsString = ids.concat([id]).join(',');
-        router.push(`/chart/${type}/${idsString}`);
+        router.push({
+            pathname: `/chart/${type}/${idsString}`,
+            state: {name}
+        });
     }
 
     const handleEditClick = () => {
