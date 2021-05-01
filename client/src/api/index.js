@@ -2,7 +2,7 @@ import axios from 'axios';
 
 import { USER_STORAGE } from '../constants';
 
-const API = axios.create({ baseURL: 'http://localhost:5000' });
+const API = axios.create({ baseURL: 'https://consum-equipaments-publics.herokuapp.com' });
 
 API.interceptors.request.use((req) => {
     if (localStorage.getItem(USER_STORAGE)) {
