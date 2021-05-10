@@ -6,8 +6,7 @@ import {
     createAlert, 
     arrayStringToFloat, 
     inRangeLatitude, 
-    inRangeLongitude, 
-    getObjectDatasets, 
+    inRangeLongitude,  
     replaceAccentsAndCapitals,
     getFacilityDatasetData,
     getAverageDatasets
@@ -84,22 +83,6 @@ export const getPublicFacilitiesDatasets = async (ids, dataType) => {
     return datasets;
 }
 
-// export const getTypologyAverageDatasets = async (typology, dataType) => {
-//     try {
-//         const { data } = await api.req_getTypologyAverage(dataType, typology);
-//         const dataInfo = {
-//             name: `MITJANA EQUIPAMENTS DE TIPOLOGIA ${typology.toUpperCase()}`,
-//             id: typology,
-//             area: null,
-//             dataType: null,
-//             firstDataset: false,
-//             isAverage: true
-//         };
-//         return getObjectDatasets(data.result, dataInfo);
-//     } catch (error) {
-//         console.log(error)
-//     }
-// }
 
 export const getTypologyAverageDatasets = async (typology, dataType) => {
     try {
