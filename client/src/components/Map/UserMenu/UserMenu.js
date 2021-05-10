@@ -17,7 +17,7 @@ function UserMenu({ user, router }) {
     const handleFile = (files) => {
         const reader = new FileReader();
         reader.onload = () => {
-            const strFile = reader.result.replaceAll('\"', '');
+            const strFile = reader.result.replaceAll('\"', '').replaceAll('.','');
             importDataFromCSV(strFile, files[0].name);
         };
         

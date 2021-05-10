@@ -27,14 +27,22 @@ function Chart({ facilityName }) {
         scales: {
             yAxes: [{
                 ticks: {
-                    beginAtZero: true,
+                    beginAtZero: true,                   
                     callback: (value) => {
                         let unit = '';
-                        if (dataType==CONSUMPTION) unit = 'Kw';
+                        if (dataType==CONSUMPTION) unit = 'kWh';
                         else if (dataType==PRICE) unit = '€';
-                        else unit = `Kw/m${SUPERSCRIPT_TWO}`
+                        else unit = `kWh/m${SUPERSCRIPT_TWO}`
                         return `${value} ${unit}`;
                     }
+                },
+                gridLines: {
+                    z: 99
+                }
+            }],
+            xAxes: [{
+                gridLines: {
+                    z: 99
                 }
             }]
         },
@@ -45,6 +53,7 @@ function Chart({ facilityName }) {
         const facilitiesDatasets = await getPublicFacilitiesDatasets(idsList, dataType);
         const typology = await getPublicFacilityField(idsList[0], 'typology')
         const typologyAverageDatasets = await getTypologyAverageDatasets(typology, dataType);
+        console.log(typologyAverageDatasets);
         setData({
             labels: LABELS,
             datasets: facilitiesDatasets.concat(typologyAverageDatasets)

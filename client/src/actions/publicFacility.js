@@ -1,4 +1,5 @@
 import swal from 'sweetalert';
+import tinycolor from 'tinycolor2';
 
 import * as api from '../api/index.js';
 import { 
@@ -7,9 +8,11 @@ import {
     inRangeLatitude, 
     inRangeLongitude, 
     getObjectDatasets, 
-    replaceAccentsAndCapitals 
+    replaceAccentsAndCapitals,
+    getFacilityDatasetData,
+    getAverageDatasets
 } from './utils';
-import { AREA, CONSUMPTION, PRICE, DATA_TYPES } from '../constants/index.js';
+import { AREA, CONSUMPTION, PRICE, DATA_TYPES, COLORS } from '../constants/index.js';
 
 export const getMapPublicFalcilities =  async () => {
     try {
@@ -33,25 +36,33 @@ export const getPublicFacilityDatasets = async (id, dataType, firstDataset) => {
     if(id){
         try {            
             const { data } = await api.req_getPublicFacilityData(id);
-            const name = data.result.name;           
-            let area = null;
+            const { name, area } = data.result; 
+            const facilityData = data.result.data;  
+            const dataValue = dataType == AREA ? CONSUMPTION : dataType;        
+            let datasets = [];
 
-            if (dataType == AREA){
-                area = data.result.area;
-                dataType = CONSUMPTION;
-            } 
 
-            const dataInfo = { 
-                name, 
-                id,
-                area, 
-                dataType, 
-                firstDataset, 
-                isAverage: false 
-            };
+            Object.keys(facilityData).map((concept, darkenAmount) => {
+                Object.keys(facilityData[concept]).reverse().map((year, index) => {
+                    const color = COLORS[ index % COLORS.length ];
+                    if(facilityData[concept][year][dataType]){
+                        datasets.push({
+                            label: `${name} ${concept} ${year}`,
+                            id,
+                            name: `${name}`,
+                            concept: `${concept}`,
+                            year: `${year}`,
+                            data: getFacilityDatasetData(facilityData[concept][year], dataValue, dataType, area),
+                            borderColor: tinycolor(color).darken(darkenAmount*12),
+                            hidden: !firstDataset,
+                            fill: false
+                        });
 
-            return getObjectDatasets(data.result.data, dataInfo);
-           
+                        if(firstDataset) firstDataset = false;
+                    }
+                });
+            });
+            return datasets;
         } catch (error) {
             console.log(error);
         }
@@ -69,20 +80,29 @@ export const getPublicFacilitiesDatasets = async (ids, dataType) => {
     return datasets;
 }
 
+// export const getTypologyAverageDatasets = async (typology, dataType) => {
+//     try {
+//         const { data } = await api.req_getTypologyAverage(dataType, typology);
+//         const dataInfo = {
+//             name: `MITJANA EQUIPAMENTS DE TIPOLOGIA ${typology.toUpperCase()}`,
+//             id: typology,
+//             area: null,
+//             dataType: null,
+//             firstDataset: false,
+//             isAverage: true
+//         };
+//         return getObjectDatasets(data.result, dataInfo);
+//     } catch (error) {
+//         console.log(error)
+//     }
+// }
+
 export const getTypologyAverageDatasets = async (typology, dataType) => {
     try {
-        const { data } = await api.req_getTypologyAverage(dataType, typology);
-        const dataInfo = {
-            name: `MITJANA EQUIPAMENTS DE TIPOLOGIA ${typology.toUpperCase()}`,
-            id: typology,
-            area: null,
-            dataType: null,
-            firstDataset: false,
-            isAverage: true
-        };
-        return getObjectDatasets(data.result, dataInfo);
+        const { data } = await api.req_getTypologyFacilities(typology);
+        return getAverageDatasets(data.result, dataType, typology);
     } catch (error) {
-        console.log(error)
+        console.log(error);
     }
 }
 

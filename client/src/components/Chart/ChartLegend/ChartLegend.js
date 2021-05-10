@@ -20,12 +20,25 @@ function ChartLegend({ data, setData, ids, dataType }) {
         setLegendFacilities(groupedFacilities);
     },[]);
 
+    const isDeviationMax = (dataset) => {
+        return 'isDeviation' in dataset && dataset.isDeviation == 'max';
+    }
+
     const handleLegendClick = (dataset) => {
         const index = data.datasets.findIndex((d) => d == dataset);
+
         let datasetsCopy = data.datasets;
         let dataCopy = datasetsCopy[index];
         dataCopy.hidden = !dataCopy.hidden;
         datasetsCopy[index] = dataCopy;
+
+        if(isDeviationMax(dataset)){
+            datasetsCopy = data.datasets;
+            dataCopy = datasetsCopy[index + 1];
+            dataCopy.hidden = !dataCopy.hidden;
+            datasetsCopy[index + 1] = dataCopy;
+        }
+
         setData({ labels: data.labels, datasets: datasetsCopy });
     };
 

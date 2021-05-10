@@ -10,7 +10,8 @@ import {
     updateCoordinates,
     getPublicFacilityField,
     getTypologyAverage,
-    getInvisiblePublicFacilities
+    getInvisiblePublicFacilities,
+    getTypologyFacilities
 } from '../controllers/publicFacility.js';
 
 const router = express.Router();
@@ -18,6 +19,7 @@ const router = express.Router();
 router.get('/', getMapPublicFalcilities);
 router.get('/invisible', getInvisiblePublicFacilities);
 router.get('/:id', getPublicFacilityData);
+router.get('/typology/:typology', getTypologyFacilities);
 router.get('/:id/:field', getPublicFacilityField);
 router.get('/average/:data_type/:typology', getTypologyAverage);
 

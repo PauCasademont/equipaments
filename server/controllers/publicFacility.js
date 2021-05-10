@@ -271,3 +271,15 @@ export const getTypologyAverage = async (req, res) => {
         console.log(error);
     }
 }
+
+export const getTypologyFacilities = async (req, res) => {
+    const { typology } = req.params;
+
+    try {
+        const result = await PublicFacilityModel.find({ typology }, 'data area');    
+        res.status(200).send({ result });
+    } catch (error) {
+        res.status(500).send({ message: 'Could not get typology facilities'});
+        console.log(error);
+    }
+}

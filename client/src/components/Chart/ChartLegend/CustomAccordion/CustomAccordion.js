@@ -24,6 +24,10 @@ function CustomAccordion({ facilityName, facility, canRemove, handleRemoveFacili
         border: '1px solid black'
     })
 
+    const isMinDeviation = (dataset) => {
+        return 'isDeviation' in dataset && dataset.isDeviation == 'min';
+    }
+
     return (
         <Accordion className='chart-legend-accordion'>
             <AccordionSummary expandIcon={<ExpandMore/>}>
@@ -41,12 +45,13 @@ function CustomAccordion({ facilityName, facility, canRemove, handleRemoveFacili
             </AccordionSummary>
             <AccordionDetails>
                 <Grid container spacing={3}>
-                    { Object.keys(facility).map((concept, conceptIndex) => (
+                    { Object.keys(facility).map((concept, conceptIndex) => (                        
                         <Grid item xs={12} sm={6} md={3} key={conceptIndex}>
                             <Typography variant='h5'>
                                 {concept}
                             </Typography>
                             { facility[concept].map((dataset, datasetIndex) => (
+                                !isMinDeviation(dataset) &&
                                 <div className='chart-legend-item' key={datasetIndex}>
                                     <Checkbox
                                         className='chart-legend-checkbox'
