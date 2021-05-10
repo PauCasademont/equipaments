@@ -115,6 +115,15 @@ export const getPublicFacilityField = async (id, field) => {
     }
 }
 
+export const getPublicFacilitiesNames = async (ids) => {
+    let names = [];
+    for (const id of ids) {
+        const name = await getPublicFacilityField(id, 'name');
+        if(name) names.push({ id, name });
+    };
+    return names;
+}
+
 export const getInvisiblePublicFacilities = async () => {
     //Return: { facilityId1: { name: String, coordinates: Array() } ... facilityIdN: {...}}
 

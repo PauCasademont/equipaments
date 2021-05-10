@@ -13,7 +13,7 @@ function getIconMarker(icon) {
     });
 }
 
-function CustomMarker({ publicFacility, userFacilityId, ids, icons, router }) {
+function CustomMarker({ publicFacility, userFacilityIds, ids, icons, router }) {
     const { id, name, typology, coordinates, area } = publicFacility;
     const isHomePage = !ids.length;
     const { dataType } = useParams();
@@ -28,6 +28,12 @@ function CustomMarker({ publicFacility, userFacilityId, ids, icons, router }) {
 
     const handleEditClick = () => {
         router.push(`edit/${id}`);
+    }
+
+    const userCanEdit = () => {
+        if(!userFacilityIds) return false;
+        if(userFacilityIds == 'ALL') return true;
+        return userFacilityIds.includes(id);
     }
 
     return (
@@ -54,7 +60,7 @@ function CustomMarker({ publicFacility, userFacilityId, ids, icons, router }) {
                     <IconButton className='popup-icon-button' onClick={() => { handleChartClick(AREA) }}>
                         <img className='popup-icon' src={icons.indicadors} alt='icon_btn' />
                     </IconButton> }
-                    { (userFacilityId == id || userFacilityId == 'ALL') && 
+                    { userCanEdit() && 
                     <IconButton className='popup-icon-button' onClick={() => { handleEditClick() }}>
                         <img className='popup-icon' src={icons.editar} alt='icon_btn' />
                     </IconButton> }

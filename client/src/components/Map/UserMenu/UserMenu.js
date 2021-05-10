@@ -1,13 +1,19 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { IconButton, Avatar, Menu, Typography, MenuItem } from '@material-ui/core';
 import ReactFileReader from 'react-file-reader';
 
 import './UserMenu.css';
-import { importDataFromCSV } from '../../../actions/publicFacility';
+import { importDataFromCSV, getPublicFacilitiesNames } from '../../../actions/publicFacility';
 import { USER_STORAGE } from '../../../constants';
 
 function UserMenu({ user, router }) {
     const [anchorUserMenu, setAnchorUserMenu] = useState(null);
+    const [userFacilities, setUserFacilities] = useState([]);
+
+    useEffect(() => {
+        getPublicFacilitiesNames(user.publicFacilityIds)
+        .then(names => setUserFacilities(names));
+    },[]);
 
     const handleLogout = () => {
         localStorage.removeItem(USER_STORAGE);
@@ -46,9 +52,11 @@ function UserMenu({ user, router }) {
                     <Typography className='userMenu-username' variant='body1'>{user.username}</Typography>
                 </div>
                 { !user.isAdmin &&
-                    <MenuItem onClick={() => router.push(`/edit/${user.publicFacilityId}`)}>
-                        Editar Equipament
-                    </MenuItem>
+                    userFacilities.map(facility => (
+                        <MenuItem onClick={() => router.push(`/edit/${facility.id}`)}>
+                            Editar {facility.name}
+                        </MenuItem>
+                    ))
                 }
                 <MenuItem onClick={handleLogout}>
                     Tancar Sessió

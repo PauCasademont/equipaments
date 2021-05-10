@@ -5,8 +5,7 @@ import UserModel from '../models/user.js';
 
 export const signup = async (req, res) => {
 
-    const { username, public_facility_id, password } = req.body;
-
+    const { username, public_facility_ids, password } = req.body;
     try {
         const oldUser = await UserModel.findOne({ username });
         if (oldUser) return res.status(400).json({ message: `User \'${username}\' already exist`});
@@ -14,7 +13,7 @@ export const signup = async (req, res) => {
         const hashedPassword = await bcrypt.hash(password, 12);
         const result = await UserModel.create({
             username,
-            public_facility_id,
+            public_facility_ids,
             is_admin: false,
             password: hashedPassword
         });
@@ -46,7 +45,7 @@ export const signin = async (req, res) => {
         }
         
         const tokenData = {
-            public_facility_id: user.public_facility_id,
+            public_facility_ids: user.public_facility_ids,
             is_admin: user.is_admin
         };
         const token = jwt.sign(tokenData, process.env.CLIENT_SECRET, { expiresIn: '1h'});
@@ -54,7 +53,7 @@ export const signin = async (req, res) => {
         res.status(200).json({ 
             result: {              
                 username: user.username,
-                publicFacilityId: user.public_facility_id,
+                publicFacilityIds: user.public_facility_ids,
                 isAdmin: user.is_admin,
                 token
             } 

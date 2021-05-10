@@ -85,7 +85,7 @@ function Map({ ids = [] }) {
                 <CustomMarker
                     key={publicFacility.id}
                     publicFacility={publicFacility}
-                    userFacilityId={user?.isAdmin ? 'ALL' : user?.publicFacilityId}
+                    userFacilityIds={user?.isAdmin ? 'ALL' : user?.publicFacilityIds}
                     ids={ids}
                     icons={icons}
                     router={router}
