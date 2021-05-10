@@ -111,7 +111,7 @@ function InvisibleFacilities() {
                         </TableBody>
                     </Table>
                 </TableContainer>
-                { Object.keys(publicFacilities).length > 0 &&
+                { Object.keys(publicFacilities).length == 0 &&
                     <Typography variant='h6'>
                         Tots els equipaments tenen coordenades assignades
                     </Typography>

@@ -9,7 +9,6 @@ import {
     importData,
     updateCoordinates,
     getPublicFacilityField,
-    getTypologyAverage,
     getInvisiblePublicFacilities,
     getTypologyFacilities
 } from '../controllers/publicFacility.js';
@@ -21,7 +20,6 @@ router.get('/invisible', getInvisiblePublicFacilities);
 router.get('/:id', getPublicFacilityData);
 router.get('/typology/:typology', getTypologyFacilities);
 router.get('/:id/:field', getPublicFacilityField);
-router.get('/average/:data_type/:typology', getTypologyAverage);
 
 router.post('/', createPublicFacility);
 router.post('/import', auth, importData);

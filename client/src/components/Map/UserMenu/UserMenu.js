@@ -11,8 +11,10 @@ function UserMenu({ user, router }) {
     const [userFacilities, setUserFacilities] = useState([]);
 
     useEffect(() => {
-        getPublicFacilitiesNames(user.publicFacilityIds)
-        .then(names => setUserFacilities(names));
+        if(!user.isAdmin){
+            getPublicFacilitiesNames(user.publicFacilityIds)
+            .then(names => setUserFacilities(names));
+        }
     },[]);
 
     const handleLogout = () => {

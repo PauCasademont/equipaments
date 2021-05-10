@@ -57,8 +57,8 @@ const getPublicYearsFromData = (data) => {
 
 const hasValuesYear = (data, concept, year) => {
     return (
-        !data[concept][year][DATA_TYPES.consumption].every(value => value == 0) ||
-        !data[concept][year][DATA_TYPES.price].every(value => value == 0) 
+        !data[concept][year][DATA_TYPES.consumption]?.every(value => value == 0) ||
+        !data[concept][year][DATA_TYPES.price]?.every(value => value == 0) 
     );
 }
 
@@ -150,11 +150,10 @@ export const importData = async (req, res) => {
             });
         }
 
-        if(!publicFacility.data[concept]) publicFacility.data[concept] = {};
-        if(!publicFacility.data[concept][year]) {
-            publicFacility.data[concept][year] = {consumption, price};
-            await PublicFacilityModel.findByIdAndUpdate(publicFacility._id, publicFacility, { new: true });
-        }
+        if(!publicFacility.data[concept]) publicFacility.data[concept] = {};    
+        publicFacility.data[concept][year] = {consumption, price};
+        await PublicFacilityModel.findByIdAndUpdate(publicFacility._id, publicFacility, { new: true });
+        
 
         res.status(200).send({ message: 'Updated successfully'});
         
@@ -203,78 +202,6 @@ export const getPublicFacilityField = async (req, res) => {
         res.status(200).send({result});
     } catch (error) {
         res.status(500).send({ message: 'Could not get public facility field'});
-        console.log(error);
-    }
-}
-
-const getYearsList = () => {
-    const firstYear = 2013;
-    const currentYear = new Date().getFullYear();
-    return Array(currentYear - firstYear + 1).fill().map((_, index) => firstYear + index); 
-}
-
-const getAverageArrays = (arrays) => {
-    let result = [];
-    for(let indexValue = 0; indexValue < 12; indexValue++){
-        let addedValues = 0; 
-        for(let indexArray = 0; indexArray < arrays.length; indexArray++){
-            addedValues += arrays[indexArray][indexValue];
-        }
-        const averageValue = Math.round(addedValues/arrays.length);
-        result.push(averageValue);
-    }
-    return result;
-}
-
-const objectIsEmpty = (object) => {
-    return Object.keys(object).length == 0;
-}
-
-const facilityHasValues = (facility, concept, year, dataType, valueType) => {
-    if(facility.data[concept] && facility.data[concept][year] && facility.data[concept][year][valueType]){
-        if(dataType != DATA_TYPES.area) return true;
-        return facility.area;
-    }
-    return false;
-}
-
-const getConceptYearArrays = (facilities, concept, year, dataType) => {
-    const result = [];
-    const valueType = dataType == DATA_TYPES.area ? DATA_TYPES.consumption : dataType;
-    facilities.forEach(facility => {
-        if(facilityHasValues(facility, concept, year, dataType, valueType)){
-            let newArray = facility.data[concept][year][valueType];
-            if(dataType == DATA_TYPES.area){
-                newArray = newArray.map(value => value / facility.area);
-            }
-            result.push(newArray);
-        }
-    });
-    return result;
-}
-
-export const getTypologyAverage = async (req, res) => {
-    const { data_type, typology } = req.params;
-    const years = getYearsList();
-    const result = {};
-
-    try {
-        const facilities = await PublicFacilityModel.find({ typology }, 'data area');
-
-        CONCEPTS.forEach(concept => {
-            result[concept] = {};
-            years.forEach(year => {
-                const arrays = getConceptYearArrays(facilities, concept, year, data_type);
-                if(arrays.length){
-                    result[concept][year] = getAverageArrays(arrays);
-                }
-            });
-            if(objectIsEmpty(result[concept])) delete result[concept];
-        });
-
-        res.status(200).send({ result });
-    } catch (error) {
-        res.status(500).send({ message: 'Could not get typology average'});
         console.log(error);
     }
 }
