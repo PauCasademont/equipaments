@@ -15,7 +15,7 @@ function ChartLegend({ data, setData, ids, dataType }) {
     useEffect(() => {
         let groupedFacilities = groupBy(data.datasets, dataset => dataset.name);
         Object.keys(groupedFacilities).forEach(facility => {
-            groupedFacilities[facility] = groupBy(groupedFacilities[facility], dataset => dataset.concept);
+            groupedFacilities[facility] = groupBy(groupedFacilities[facility], dataset => dataset.concept);  
         });
         setLegendFacilities(groupedFacilities);
     },[]);

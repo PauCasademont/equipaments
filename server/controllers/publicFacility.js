@@ -47,12 +47,19 @@ const getPublicYearsFromData = (data) => {
     Object.keys(data).forEach(concept => {
         Object.keys(data[concept]).forEach(strYear => {
             const year = parseInt(strYear);
-            if(!years.includes(year)){
+            if(!years.includes(year) && hasValuesYear(data, concept, strYear)){
                 years.push(year);
             }
         });
     });
     return years;
+}
+
+const hasValuesYear = (data, concept, year) => {
+    return (
+        !data[concept][year][DATA_TYPES.consumption].every(value => value == 0) ||
+        !data[concept][year][DATA_TYPES.price].every(value => value == 0) 
+    );
 }
 
 export const updatePublicFaility = async (req, res) => {

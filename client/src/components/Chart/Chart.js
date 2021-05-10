@@ -53,7 +53,6 @@ function Chart({ facilityName }) {
         const facilitiesDatasets = await getPublicFacilitiesDatasets(idsList, dataType);
         const typology = await getPublicFacilityField(idsList[0], 'typology')
         const typologyAverageDatasets = await getTypologyAverageDatasets(typology, dataType);
-        console.log(typologyAverageDatasets);
         setData({
             labels: LABELS,
             datasets: facilitiesDatasets.concat(typologyAverageDatasets)

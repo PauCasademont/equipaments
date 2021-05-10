@@ -28,6 +28,13 @@ function CustomAccordion({ facilityName, facility, canRemove, handleRemoveFacili
         return 'isDeviation' in dataset && dataset.isDeviation == 'min';
     }
 
+    const getSortedDatasets = (facility, concept) => {
+        var result = facility[concept];
+        result.sort((a,b) => b.year - a.year);
+        // console.log('facility: ', facilityName, 'concept: ', concept, 'result: ',result);
+        return result;
+    }
+
     return (
         <Accordion className='chart-legend-accordion'>
             <AccordionSummary expandIcon={<ExpandMore/>}>
@@ -50,8 +57,8 @@ function CustomAccordion({ facilityName, facility, canRemove, handleRemoveFacili
                             <Typography variant='h5'>
                                 {concept}
                             </Typography>
-                            { facility[concept].map((dataset, datasetIndex) => (
-                                !isMinDeviation(dataset) &&
+                            { getSortedDatasets(facility, concept).map((dataset, datasetIndex) => (
+                                !isMinDeviation(dataset) && 
                                 <div className='chart-legend-item' key={datasetIndex}>
                                     <Checkbox
                                         className='chart-legend-checkbox'

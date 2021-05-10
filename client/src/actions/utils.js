@@ -91,63 +91,66 @@ export const replaceAccentsAndCapitals = (word) => {
 }
 
 export const getAverageDatasets = (facilities, dataType, typology) => {
+    const descendantYears = YEARS_LIST.reverse();
     const name = `EQUIPAMENTS DE TIPOLOGIA ${typology.toUpperCase()}`
     let datasets = [];
     CONCEPTS.forEach((concept, darkenAmount) => {
         let indexColor = 0
-        YEARS_LIST.reverse().forEach((year) => {
-
+        descendantYears.forEach((year) => {
             const arrays = getConceptYearArrays(facilities, concept, year, dataType);
             if(arrays.length){
-
+                
                 const average = getAverageArrays(arrays); 
-                const deviation = getDeviationArrays(arrays, average);
+                if(!average.every(value => value == 0)) {
 
-                const color = COLORS[ indexColor % COLORS.length ];
-                datasets.push({
-                    label: `${name} Mitjana ${concept} ${year}`,
-                    id: `typology ${typology}`,
-                    name: `${name}`,
-                    concept: `${concept}`,
-                    year: `${year}`,
-                    data: average,
-                    borderColor: tinycolor(color).darken(darkenAmount*12),
-                    hidden: true,
-                    fill: false,
-                    borderDash: [10,5]
-                });
-
-                datasets.push({
-                    label: `${name} Desviació max ${concept} ${year}`,
-                    id: `typology ${typology}`,
-                    name: `${name}`,
-                    isDeviation: 'max',
-                    concept: `${concept}`,
-                    year: `${year}`,
-                    data: deviation.map((value, index) => average[index] + value),
-                    borderColor: tinycolor(color).darken(darkenAmount*12),
-                    hidden: true,
-                    fill: '+1',
-                    backgroundColor: tinycolor(color).lighten(30),
-                    borderDash: [10,5]
-                });
-
-
-                datasets.push({
-                    label: `${name} Desviació min ${concept} ${year}`,
-                    id: `typology ${typology}`,
-                    name: `${name}`,
-                    isDeviation: 'min',
-                    concept: `${concept}`,
-                    year: `${year}`,
-                    data: deviation.map((value, index) => average[index] - value),
-                    borderColor: tinycolor(color).darken(darkenAmount*12),
-                    hidden: true,
-                    fill: false,
-                    borderDash: [10,5]
-                });
-
-                indexColor++;
+                    const deviation = getDeviationArrays(arrays, average);
+                    const color = COLORS[ indexColor % COLORS.length ];
+    
+                    datasets.push({
+                        label: `${name} Mitjana ${concept} ${year}`,
+                        id: `typology ${typology}`,
+                        name: `${name}`,
+                        concept: `${concept}`,
+                        year: `${year}`,
+                        data: average,
+                        borderColor: tinycolor(color).darken(darkenAmount*12),
+                        hidden: true,
+                        fill: false,
+                        borderDash: [10,5]
+                    });
+    
+                    datasets.push({
+                        label: `${name} Desviació max ${concept} ${year}`,
+                        id: `typology ${typology}`,
+                        name: `${name}`,
+                        isDeviation: 'max',
+                        concept: `${concept}`,
+                        year: `${year}`,
+                        data: deviation.map((value, index) => average[index] + value),
+                        borderColor: tinycolor(color).darken(darkenAmount*12),
+                        hidden: true,
+                        fill: '+1',
+                        backgroundColor: tinycolor(color).lighten(30),
+                        borderDash: [10,5]
+                    });
+    
+    
+                    datasets.push({
+                        label: `${name} Desviació min ${concept} ${year}`,
+                        id: `typology ${typology}`,
+                        name: `${name}`,
+                        isDeviation: 'min',
+                        concept: `${concept}`,
+                        year: `${year}`,
+                        data: deviation.map((value, index) => average[index] - value),
+                        borderColor: tinycolor(color).darken(darkenAmount*12),
+                        hidden: true,
+                        fill: false,
+                        borderDash: [10,5]
+                    });
+    
+                    indexColor++;
+                }
             }
         });
     });
@@ -171,7 +174,7 @@ const getConceptYearArrays = (facilities, concept, year, dataType) => {
 
 const facilityHasValues = (facility, concept, year, dataType, valueType) => {
     if(facility.data[concept] && facility.data[concept][year] && facility.data[concept][year][valueType]){
-        // Check Array(12).fill(0);
+        if(facility.data[concept][year][valueType].every(value => value == 0)) return false;
         if(dataType != AREA) return true;
         return facility.area;
     }

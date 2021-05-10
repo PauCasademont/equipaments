@@ -46,19 +46,23 @@ export const getPublicFacilityDatasets = async (id, dataType, firstDataset) => {
                 Object.keys(facilityData[concept]).reverse().map((year, index) => {
                     const color = COLORS[ index % COLORS.length ];
                     if(facilityData[concept][year][dataType]){
-                        datasets.push({
-                            label: `${name} ${concept} ${year}`,
-                            id,
-                            name: `${name}`,
-                            concept: `${concept}`,
-                            year: `${year}`,
-                            data: getFacilityDatasetData(facilityData[concept][year], dataValue, dataType, area),
-                            borderColor: tinycolor(color).darken(darkenAmount*12),
-                            hidden: !firstDataset,
-                            fill: false
-                        });
+                        const values = getFacilityDatasetData(facilityData[concept][year], dataValue, dataType, area);
+                        if(!values.every(value => value == null)){
+                            datasets.push({
+                                label: `${name} ${concept} ${year}`,
+                                id,
+                                name: `${name}`,
+                                concept: `${concept}`,
+                                year: `${year}`,
+                                data: values,
+                                borderColor: tinycolor(color).darken(darkenAmount*12),
+                                hidden: !firstDataset,
+                                fill: false
+                            });
 
-                        if(firstDataset) firstDataset = false;
+                            if(firstDataset) firstDataset = false;
+                        }
+
                     }
                 });
             });
