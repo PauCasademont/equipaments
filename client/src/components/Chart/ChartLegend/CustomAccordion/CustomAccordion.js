@@ -14,11 +14,11 @@ import './CustomAccordion.css';
 function CustomAccordion({ facilityName, facility, canRemove, handleRemoveFacility, handleLegendClick, handleChangeColor}) {
 
 
-    const getCircleStyles = (color = '#CACFD2', isFacility) => ({
+    const getCircleStyles = (color = '#CACFD2', isAverage, isFacility) => ({
         background: isFacility ? color : `repeating-linear-gradient(90deg, ${color}, white 5px, ${color} 5px)`, 
         height: '25px', 
         width:'25px', 
-        marginLeft: '17px',
+        marginLeft: isAverage ? '39px' : '17px',
         borderRadius: '50%',
         cursor: 'pointer',
         border: '1px solid black'
@@ -26,13 +26,6 @@ function CustomAccordion({ facilityName, facility, canRemove, handleRemoveFacili
 
     const isMinDeviation = (dataset) => {
         return 'isDeviation' in dataset && dataset.isDeviation == 'min';
-    }
-
-    const getSortedDatasets = (facility, concept) => {
-        var result = facility[concept];
-        result.sort((a,b) => b.year - a.year);
-        // console.log('facility: ', facilityName, 'concept: ', concept, 'result: ',result);
-        return result;
     }
 
     return (
@@ -57,7 +50,7 @@ function CustomAccordion({ facilityName, facility, canRemove, handleRemoveFacili
                             <Typography variant='h5'>
                                 {concept}
                             </Typography>
-                            { getSortedDatasets(facility, concept).map((dataset, datasetIndex) => (
+                            { facility[concept].map((dataset, datasetIndex) => (
                                 !isMinDeviation(dataset) && 
                                 <div className='chart-legend-item' key={datasetIndex}>
                                     <Checkbox
@@ -69,7 +62,7 @@ function CustomAccordion({ facilityName, facility, canRemove, handleRemoveFacili
                                     <Typography variant='h6'>
                                         {dataset.year}
                                     </Typography>
-                                    <label style={getCircleStyles(dataset.borderColor, dataset.borderDash == null)}>
+                                    <label style={getCircleStyles(dataset.borderColor, dataset.isAverage, dataset.borderDash == null)}>
                                         <input 
                                             className='chart-legend-input-color' 
                                             type='color' 

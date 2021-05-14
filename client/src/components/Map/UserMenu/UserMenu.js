@@ -6,7 +6,7 @@ import './UserMenu.css';
 import { importDataFromCSV, getPublicFacilitiesNames } from '../../../actions/publicFacility';
 import { USER_STORAGE } from '../../../constants';
 
-function UserMenu({ user, router }) {
+function UserMenu({ user, router, setOpenPopup }) {
     const [anchorUserMenu, setAnchorUserMenu] = useState(null);
     const [userFacilities, setUserFacilities] = useState([]);
 
@@ -31,6 +31,11 @@ function UserMenu({ user, router }) {
         
         reader.readAsText(files[0]);
     };
+
+    const handleOpenPopupCreateFaciliy = () => {
+        setOpenPopup(prevState => ({ ...prevState, createFacility: true }));
+        setAnchorUserMenu(null);
+    }
 
     return (
         <div className='userMenu-div'>
@@ -63,16 +68,21 @@ function UserMenu({ user, router }) {
                 <MenuItem onClick={handleLogout}>
                     Tancar Sessió
                 </MenuItem> 
-                { user.isAdmin &&                    
-                        <ReactFileReader handleFiles={handleFile} fileTypes={'.csv'}>
-                            <MenuItem>
-                                Importar Dades CSV
-                            </MenuItem>
-                        </ReactFileReader>                    
+                { user.isAdmin &&                                     
+                    <ReactFileReader handleFiles={handleFile} fileTypes={'.csv'}>
+                        <MenuItem>
+                            Importar Dades CSV
+                        </MenuItem>
+                    </ReactFileReader> 
                 }
-                { user.isAdmin && 
+                { user.isAdmin &&
                     <MenuItem onClick={() => router.push('/invisible_facilities')}>
                         Equipaments sense coordenades
+                    </MenuItem>
+                } 
+                { user.isAdmin &&
+                    <MenuItem onClick={() => handleOpenPopupCreateFaciliy()}>
+                        Crear Equipament
                     </MenuItem>
                 }
             </Menu>

@@ -2,7 +2,6 @@ import mongoose from 'mongoose';
 
 import PublicFacilityModel from '../models/publicFacility.js';
 
-const CONCEPTS = ['Total', 'Electricitat', 'Gas', 'Gasoil-Biomassa'];
 const DATA_TYPES = {
     consumption: 'consumption',
     price: 'price',

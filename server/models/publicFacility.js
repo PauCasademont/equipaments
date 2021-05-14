@@ -6,7 +6,7 @@ const publicFacilitySchema = mongoose.Schema({
     coordinates: { type: [Number], required: true} ,
     area: Number,
     data: {}
-});
+}, { minimize: false });
 
 export default mongoose.model('public_facilities', publicFacilitySchema);
 

@@ -47,22 +47,24 @@ export const getAverageDatasets = (facilities, dataType, typology) => {
                 
                 const average = getAverageArrays(arrays); 
                 if(!average.every(value => value == 0)) {
-
                     const deviation = getDeviationArrays(arrays, average);
-                    const color = COLORS[ indexColor % COLORS.length ];
-    
+                    let color = COLORS[ indexColor % COLORS.length ];
+                    console.log(name, concept, year, arrays)
                     datasets.push({
                         label: `${name} Mitjana ${concept} ${year}`,
                         id: `typology ${typology}`,
                         name: `${name}`,
                         concept: `${concept}`,
-                        year: `${year}`,
+                        year: `Mitjana ${year}`,
+                        isAverage: true,
                         data: average,
                         borderColor: tinycolor(color).darken(darkenAmount*12),
                         hidden: true,
                         fill: false,
                         borderDash: [10,5]
                     });
+
+                    color = COLORS[ (indexColor + 1) % COLORS.length ];
     
                     datasets.push({
                         label: `${name} Desviació max ${concept} ${year}`,
@@ -70,7 +72,7 @@ export const getAverageDatasets = (facilities, dataType, typology) => {
                         name: `${name}`,
                         isDeviation: 'max',
                         concept: `${concept}`,
-                        year: `${year}`,
+                        year: `Desviació ${year}`,
                         data: deviation.map((value, index) => average[index] + value),
                         borderColor: tinycolor(color).darken(darkenAmount*12),
                         hidden: true,
@@ -86,7 +88,7 @@ export const getAverageDatasets = (facilities, dataType, typology) => {
                         name: `${name}`,
                         isDeviation: 'min',
                         concept: `${concept}`,
-                        year: `${year}`,
+                        year: `Desviació ${year}`,
                         data: deviation.map((value, index) => average[index] - value),
                         borderColor: tinycolor(color).darken(darkenAmount*12),
                         hidden: true,
@@ -94,7 +96,7 @@ export const getAverageDatasets = (facilities, dataType, typology) => {
                         borderDash: [10,5]
                     });
     
-                    indexColor++;
+                    indexColor += 2;
                 }
             }
         });

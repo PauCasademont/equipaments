@@ -70,7 +70,7 @@ function Edit() {
     }
 
     const getNumberSuffix = () => {
-        if (dataType == DATA_TYPES[CONSUMPTION]) return 'Kw';
+        if (dataType == DATA_TYPES[CONSUMPTION]) return 'kWh';
         if (dataType == DATA_TYPES[PRICE]) return '€';
         return 'm' + SUPERSCRIPT_TWO;
     }

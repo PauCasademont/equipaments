@@ -9,6 +9,7 @@ import 'leaflet/dist/leaflet.css';
 import { getMapPublicFalcilities } from '../../actions/publicFacility';
 import CustomMarker from './CustomMarker/CustomMarker';
 import FilterControl from './FilterControl/FilterControl';
+import CreateFacility from '../Admin/CreateFacility/CreateFacility';
 import { TYPOLOGIES, USER_STORAGE, YEARS_LIST } from '../../constants';
 
 const INITIAL_MAP_CONFIG = { center: [41.98311, 2.82493], zoom: 14 }
@@ -30,6 +31,7 @@ function Map({ ids = [] }) {
     })
     const [satelliteView, setSatelliteView] = useState(false);
     const [user, setUser] = useState(JSON.parse(localStorage.getItem(USER_STORAGE)));
+    const [openPopup, setOpenPopup] = useState({ createFacility: false })
     const icons = getIcons();
     const router = useHistory();
     const location = useLocation();
@@ -61,44 +63,49 @@ function Map({ ids = [] }) {
     }
 
     return (
-        <MapContainer
-            center={INITIAL_MAP_CONFIG.center}
-            zoom={INITIAL_MAP_CONFIG.zoom}
-            scrollWheelZoom={true}
-        >
-            { satelliteView && 
-                <TileLayer
-                    url="https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}.png"
-                    attribution='&copy; <a href="Esri &mdash">Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community</a> contributors'
-                /> 
-            }
-            { !satelliteView &&
-                <TileLayer
-                        attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
-                        url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-                />                
-            }
-           
-            { publicFacilities && publicFacilities.map(publicFacility => (
-                filters.typologies.includes(publicFacility.typology) &&
-                hasFilteredYear(publicFacility.years) &&
-                <CustomMarker
-                    key={publicFacility.id}
-                    publicFacility={publicFacility}
-                    userFacilityIds={user?.isAdmin ? 'ALL' : user?.publicFacilityIds}
-                    ids={ids}
-                    icons={icons}
-                    router={router}
+        <>
+            <MapContainer                
+                center={INITIAL_MAP_CONFIG.center}
+                zoom={INITIAL_MAP_CONFIG.zoom}
+                scrollWheelZoom={true}
+            >
+                { satelliteView && 
+                    <TileLayer
+                        url="https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}.png"
+                        attribution='&copy; <a href="Esri &mdash">Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community</a> contributors'
+                    /> 
+                }
+                { !satelliteView &&
+                    <TileLayer
+                            attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
+                            url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+                    />                
+                }
+            
+                { publicFacilities && publicFacilities.map(publicFacility => (
+                    filters.typologies.includes(publicFacility.typology) &&
+                    hasFilteredYear(publicFacility.years) &&
+                    <CustomMarker
+                        key={publicFacility.id}
+                        publicFacility={publicFacility}
+                        userFacilityIds={user?.isAdmin ? 'ALL' : user?.publicFacilityIds}
+                        ids={ids}
+                        icons={icons}
+                        router={router}
+                    />
+                ))}
+                { user && <UserMenu user={user} router={router} setOpenPopup={setOpenPopup}/> }
+                <FilterControl 
+                    filters={filters} 
+                    setFilters={setFilters}
+                    satelliteView={satelliteView}
+                    setSatelliteView={setSatelliteView}
                 />
-            ))}
-            { user && <UserMenu user={user} router={router}/> }
-            <FilterControl 
-                filters={filters} 
-                setFilters={setFilters}
-                satelliteView={satelliteView}
-                setSatelliteView={setSatelliteView}
-            />
-        </MapContainer>
+            </MapContainer>
+            {openPopup.createFacility && 
+                <CreateFacility setOpenPopup={setOpenPopup} setPublicFacilities={setPublicFacilities}/>
+            }
+        </>
     )
 }
 

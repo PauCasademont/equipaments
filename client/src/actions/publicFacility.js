@@ -13,6 +13,29 @@ import {
 } from './utils';
 import { AREA, CONSUMPTION, PRICE, DATA_TYPES, COLORS } from '../constants/index.js';
 
+export const createPublicFacility = async (form) => {
+    try {
+        if(!inRangeLatitude(form.latitude) || !inRangeLongitude(form.longitude)){
+            createAlert('Coordenades no vàlides!');
+            return;
+        }
+        const body = {
+            name: form.name.toUpperCase(),
+            typology: form.typology,
+            coordinates: [form.latitude, form.longitude],
+            area: form.area ? form.area : 0,
+            data: {}
+        }
+        const { data } = await api.req_createPublicFacility(body);
+
+        createAlert(`Equipament ${form.name} creat correctament`, '', 'success');
+
+        return data.result;
+    } catch (error) {
+        console.log(error)
+    }
+}
+
 export const getMapPublicFalcilities =  async () => {
     try {
         const { data } = await api.req_getMapPublicFacilities();

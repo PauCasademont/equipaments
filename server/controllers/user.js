@@ -48,7 +48,7 @@ export const signin = async (req, res) => {
             public_facility_ids: user.public_facility_ids,
             is_admin: user.is_admin
         };
-        const token = jwt.sign(tokenData, process.env.CLIENT_SECRET, { expiresIn: '1h'});
+        const token = jwt.sign(tokenData, process.env.CLIENT_SECRET, { expiresIn: '2h'});
 
         res.status(200).json({ 
             result: {              

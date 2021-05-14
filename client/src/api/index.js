@@ -20,6 +20,7 @@ export const req_getPublicFacilityField = (id, field) => API.get(`/public_facili
 export const req_getTypologyAverage = (dataType, typology) => API.get(`/public_facility/average/${dataType}/${typology}`);
 export const req_getTypologyFacilities = (typology) => API.get(`/public_facility/typology/${typology}`);
 
+export const req_createPublicFacility = (body) => API.post('/public_facility', body); 
 export const req_importData = (body) => API.post('/public_facility/import', body);
 
 export const req_updatePublicFacility = (id, body) => API.patch(`/public_facility/${id}`, body); 
