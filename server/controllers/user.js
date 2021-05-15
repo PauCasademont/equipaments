@@ -45,6 +45,7 @@ export const signin = async (req, res) => {
         }
         
         const tokenData = {
+            id: user._id,
             public_facility_ids: user.public_facility_ids,
             is_admin: user.is_admin
         };
@@ -65,3 +66,34 @@ export const signin = async (req, res) => {
         console.log(error);
     }
 }
+
+export const changePassword = async (req, res) => {
+    const { current_password, new_password } = req.body;
+
+    try {
+
+        if(!req.user) {
+            return res.status(401).send({ message: 'User unauthenticated'});
+        }
+
+        const user = await UserModel.findById(req.user.id);
+
+        const isPasswordCorrect = await bcrypt.compare(current_password, user.password);
+        if (!isPasswordCorrect) {
+            return res.status(400).json({ 
+                message: 'Invalid credentials', 
+                clientMessage: 'La contrasenya actual no és correcte'
+            });
+        }
+
+        user.password = await bcrypt.hash(new_password, 12);
+        const result = await UserModel.findByIdAndUpdate(user._id, user, { new: true });
+        return res.status(200).json({ result }); 
+       
+    } catch (error) {
+        res.status(500).json({ 
+            message: 'Could not change the password'
+        });
+        console.log(error);
+    }
+} 

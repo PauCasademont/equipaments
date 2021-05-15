@@ -5,6 +5,7 @@ import { useHistory } from 'react-router-dom';
  
 import './Auth.css';
 import { signin } from '../../actions/user';
+import { EMAIL_ADMIN } from '../../constants';
 
 function Auth() {
     const [showPassword, setShowPassword] = useState(false);
@@ -89,6 +90,16 @@ function Auth() {
                                 <Button className='auth-button' type='submit' variant='contained' color='primary'>
                                     Accedir
                                 </Button>
+                            </Grid>
+                            <Grid item xs={12}>
+                                <div className='auth-contact-info'>
+                                    <Typography variant='body1' color='primary'>
+                                        Has oblidat la contrasenya o el nom d'usuari? 
+                                    </Typography>
+                                    <Typography variant='body1' color='primary'>
+                                        Envia un correu a {EMAIL_ADMIN}
+                                    </Typography>
+                                </div>
                             </Grid>
                         </Grid>
                     </form>

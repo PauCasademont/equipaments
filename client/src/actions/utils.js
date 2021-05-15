@@ -22,6 +22,10 @@ export const inRangeLongitude = (num) => {
     return num >= -180 && num <= 180
 }
 
+export const hasNumber = (str) => {
+    return /\d/.test(str);
+}
+
 export const getFacilityDatasetData = (facilityData, dataValue, dataType, area) => {
     return facilityData[dataValue].map(value => {
         if(value == 0) return null;

@@ -34,3 +34,10 @@
 .auth-password-visability {
     cursor: pointer;
 }
+
+.auth-contact-info {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 20px;
+}

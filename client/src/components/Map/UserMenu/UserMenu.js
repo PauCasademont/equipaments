@@ -65,6 +65,9 @@ function UserMenu({ user, router, setOpenPopup }) {
                         </MenuItem>
                     ))
                 }
+                <MenuItem onClick={() => router.push('/password')}>
+                    Canviar Contrasenya
+                </MenuItem> 
                 <MenuItem onClick={handleLogout}>
                     Tancar Sessió
                 </MenuItem> 

@@ -12,6 +12,15 @@ export const createPublicFacility = async (req, res) => {
     const { name } = req.body;
 
     try {
+
+        if(!req.user) {
+            return res.status(401).send({ message: 'User unauthenticated'});
+        }
+
+        if(!req.user.is_admin){
+            return res.status(404).send({ message: 'Permission denied'});
+        }
+
         const oldPublicFacility = await PublicFacilityModel.findOne({ name });
         if (oldPublicFacility) return res.status(400).json({ message: `Public facility \'${name}\' already exists`})
 
@@ -72,7 +81,7 @@ export const updatePublicFaility = async (req, res) => {
         return res.status(404).send({ message: `No valid public facility id: ${id}`});
     }
 
-    if(id != req.user.public_facility_id && !req.user.is_admin){
+    if(!req.user.public_facility_ids.includes(id) && !req.user.is_admin){
         return res.status(404).send({ message: 'Permission denied'});
     }
 

@@ -21,7 +21,7 @@ router.get('/:id', getPublicFacilityData);
 router.get('/typology/:typology', getTypologyFacilities);
 router.get('/:id/:field', getPublicFacilityField);
 
-router.post('/', createPublicFacility);
+router.post('/', auth, createPublicFacility);
 router.post('/import', auth, importData);
 
 router.patch('/:id', auth, updatePublicFaility);

@@ -26,4 +26,5 @@ export const req_importData = (body) => API.post('/public_facility/import', body
 export const req_updatePublicFacility = (id, body) => API.patch(`/public_facility/${id}`, body); 
 export const req_updateCoordinates = (id, body) =>  API.patch(`/public_facility/coordinates/${id}`, body);
 
-export const req_signin = (form) => API.post('/user/signin', form);
+export const req_signin = (body) => API.post('/user/signin', body);
+export const req_changePassword = (body) => API.post('/user/password', body);

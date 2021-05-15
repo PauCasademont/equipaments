@@ -1,3 +1,5 @@
+export const EMAIL_ADMIN = 'casademont13@gmail.com'
+
 export const LABELS = ['Gener', 'Febrer', 'Març', 'Abril', 'Maig', 'Juny', 'Juliol', 'Agost', 'Setembre', 'Octubre', 'Novembre', 'Desembre'];
 
 export const COLORS = ['#5DADE2', '#2ECC71', '#FA000A', '#FBFB4E', '#DD66F5', '#EB984E', '#48C9B0', '#5D6D7E'];
