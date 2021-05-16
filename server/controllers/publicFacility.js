@@ -147,6 +147,7 @@ export const importData = async (req, res) => {
     try {
         const { name, year, typology, area, concept, consumption, price } = req.body;
         let publicFacility = await PublicFacilityModel.findOne({ name });
+        let notImportedDataTypes = [];
 
         if (!publicFacility) {
             publicFacility = await PublicFacilityModel.create({
@@ -159,11 +160,24 @@ export const importData = async (req, res) => {
         }
 
         if(!publicFacility.data[concept]) publicFacility.data[concept] = {};    
-        publicFacility.data[concept][year] = {consumption, price};
+
+        if(!publicFacility.data[concept][year]){
+            publicFacility.data[concept][year] = {consumption, price};
+        }
+        else{
+            if(!publicFacility.data[concept][year].consumption){
+                publicFacility.data[concept][year].consumption = consumption;
+            } 
+            else notImportedDataTypes.push(DATA_TYPES.consumption);
+            if(!publicFacility.data[concept][year].price){
+                publicFacility.data[concept][year].price = price;
+            } 
+            else notImportedDataTypes.push(DATA_TYPES.price); 
+        }
+
         await PublicFacilityModel.findByIdAndUpdate(publicFacility._id, publicFacility, { new: true });
         
-
-        res.status(200).send({ message: 'Updated successfully'});
+        res.status(200).send({ message: 'Updated successfully', notImportedDataTypes});
         
     } catch (error) {
         res.status(500).send({ message: 'Something went wrong'});

@@ -10,6 +10,7 @@ import { getMapPublicFalcilities } from '../../actions/publicFacility';
 import CustomMarker from './CustomMarker/CustomMarker';
 import FilterControl from './FilterControl/FilterControl';
 import CreateFacility from '../Admin/CreateFacility/CreateFacility';
+import ImportData from '../Admin/ImportData/ImportData';
 import { TYPOLOGIES, USER_STORAGE, YEARS_LIST } from '../../constants';
 
 const INITIAL_MAP_CONFIG = { center: [41.98311, 2.82493], zoom: 14 }
@@ -31,7 +32,16 @@ function Map({ ids = [] }) {
     })
     const [satelliteView, setSatelliteView] = useState(false);
     const [user, setUser] = useState(JSON.parse(localStorage.getItem(USER_STORAGE)));
-    const [openPopup, setOpenPopup] = useState({ createFacility: false })
+    const [openPopup, setOpenPopup] = useState(
+        { createFacility: false }, 
+        { importData: 
+            { 
+                open: false,
+                fileName: '',
+                strFile: ''
+            }
+        }
+    );
     const icons = getIcons();
     const router = useHistory();
     const location = useLocation();
@@ -104,6 +114,9 @@ function Map({ ids = [] }) {
             </MapContainer>
             {openPopup.createFacility && 
                 <CreateFacility setOpenPopup={setOpenPopup} setPublicFacilities={setPublicFacilities}/>
+            }
+            {openPopup.importData?.open &&
+                <ImportData fileData={openPopup.importData} setOpenPopup={setOpenPopup} />
             }
         </>
     )

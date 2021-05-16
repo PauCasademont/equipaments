@@ -26,6 +26,13 @@ export const hasNumber = (str) => {
     return /\d/.test(str);
 }
 
+export const addArrayObjectsIds = (array) => {
+    return array.map((obj, index) => ({
+        ...obj,
+        id: index
+    }));
+}
+
 export const getFacilityDatasetData = (facilityData, dataValue, dataType, area) => {
     return facilityData[dataValue].map(value => {
         if(value == 0) return null;

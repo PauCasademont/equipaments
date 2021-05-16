@@ -3,7 +3,7 @@ import { IconButton, Avatar, Menu, Typography, MenuItem } from '@material-ui/cor
 import ReactFileReader from 'react-file-reader';
 
 import './UserMenu.css';
-import { importDataFromCSV, getPublicFacilitiesNames } from '../../../actions/publicFacility';
+import { getPublicFacilitiesNames } from '../../../actions/publicFacility';
 import { USER_STORAGE } from '../../../constants';
 
 function UserMenu({ user, router, setOpenPopup }) {
@@ -26,7 +26,15 @@ function UserMenu({ user, router, setOpenPopup }) {
         const reader = new FileReader();
         reader.onload = () => {
             const strFile = reader.result.replaceAll('\"', '').replaceAll('.','');
-            importDataFromCSV(strFile, files[0].name);
+            setAnchorUserMenu(null);
+            setOpenPopup(prevState => ({
+                 ...prevState, 
+                 importData: {
+                     open: true,
+                     fileName: files[0].name,
+                     strFile
+                 }
+            }));
         };
         
         reader.readAsText(files[0]);

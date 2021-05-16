@@ -43,7 +43,7 @@ function CreateFacility({ setOpenPopup, setPublicFacilities }) {
         <div className='create-facility-popup'>
             <Paper elevation={10} className='create-facility-popup-inner'>
                 <div className='create-facility-title'>
-                    <Typography  variant='h5'>
+                    <Typography  variant='h5' color='primary'>
                         Afegir Equipament
                     </Typography>
                 </div>

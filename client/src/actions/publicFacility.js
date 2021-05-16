@@ -9,7 +9,8 @@ import {
     inRangeLongitude,  
     replaceAccentsAndCapitals,
     getFacilityDatasetData,
-    getAverageDatasets
+    getAverageDatasets,
+    addArrayObjectsIds
 } from './utils';
 import { AREA, CONSUMPTION, PRICE, DATA_TYPES, COLORS } from '../constants/index.js';
 
@@ -179,7 +180,6 @@ const hasValuesCSV_row = (row) => {
 const importCSV_row = async (row, year) => {
     if (hasValuesCSV_row(row)){
         const values = row.split(';');
-        console.log(values[1]);
         const typology = replaceAccentsAndCapitals(values[2])
         const newData = {
             name: values[1].toUpperCase(),
@@ -190,20 +190,23 @@ const importCSV_row = async (row, year) => {
             consumption: arrayStringToFloat(values.slice(5, 17)),
             price: arrayStringToFloat(values.slice(17)),
         }
-        await api.req_importData(newData);
+        const { data } = await api.req_importData(newData);
+
+        if(data.notImportedDataTypes.length){
+            const notImportedResult =  data.notImportedDataTypes.map(dataType => ({
+                name: newData.name,
+                concept: newData.concept,
+                dataType: dataType == CONSUMPTION ? 'Consum' : 'Preu'
+            }));
+           
+            return notImportedResult;
+        }
     }
+    return [];
 }
 
-export const importDataFromCSV = async (strFile, fileName) => {
-    //Note1: file name has to end with the year of the data e.g. consum-2021.csv
-    //Note2: every row of the file has to contain 29 columns. Concept, Name, Typology, Area, Users, Consumption value x12, Price value x12.
-
-    const year = parseInt(fileName.substring(fileName.length - 8, fileName.length - 4));
-    if(!year){
-        createAlert('Error', 'L\'any del fitxer no és numèric.\nRevisa que el format del nom sigui correcte');
-        return;
-    }
-
+export const importDataFromCSV = async (strFile, year) => {
+    let notImportedData = [];
     const startIndex = strFile.indexOf('\n');
 
     const nColumns = strFile.slice(0, startIndex).split(';').length;
@@ -212,25 +215,17 @@ export const importDataFromCSV = async (strFile, fileName) => {
         return;
     }
 
-    swal({
-        title: `Les dades del fitxer corresponen a l\'any ${year}?`, 
-        text: 'Si l\'any és erroni revisa el format del nom del fitxer', 
-        icon: 'info',
-        buttons: ['No', 'Si'] 
-    }).then( async (isYearCorrect) => {
-        if(isYearCorrect){
-            try {
-                const rows = strFile.slice(startIndex + 1).split('\n');
-                for (const row of rows){
-                    await importCSV_row(row, year);
-                }
-                createAlert('Les dades s\'han actualitzat correctament', '', 'success');
-            } catch (error) {
-                createAlert('Error a l\'importar les dades');
-                console.log(error);
-            }
-        }
-    });
+    try {
+        const rows = strFile.slice(startIndex + 1).split('\n');
+        for (const row of rows){
+            const notImportedDataFromRow = await importCSV_row(row, year);
+            notImportedData = notImportedData.concat(notImportedDataFromRow);
+        }        
+        return addArrayObjectsIds(notImportedData);
+    } catch (error) {
+        createAlert('Error a l\'importar les dades');
+        console.log(error);
+    }
 }
 
 export const updateCoordinates = async (id, newCoords) => {
