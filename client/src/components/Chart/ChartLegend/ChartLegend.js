@@ -1,13 +1,13 @@
 import { useEffect, useState } from 'react';
 import groupBy from 'lodash.groupby';
 import { useHistory } from 'react-router-dom';
-import { Paper, Button } from '@material-ui/core';
-import { ArrowBack } from '@material-ui/icons';
+import { Paper, Button, IconButton } from '@material-ui/core';
+import { ArrowBack, GetApp } from '@material-ui/icons';
 
 import './ChartLegend.css';
 import CustomAccordion from './CustomAccordion/CustomAccordion';
 
-function ChartLegend({ data, setData, ids, dataType }) {
+function ChartLegend({ data, setData, ids, dataType, handleExportPNG }) {
     const [legendFacilities, setLegendFacilities] = useState({});
     const [facilitiesIds, setFacilitiesIds] = useState(ids);
     const router = useHistory();
@@ -100,14 +100,23 @@ function ChartLegend({ data, setData, ids, dataType }) {
         <div className='chart-legend'>
             <Paper className='chart-legend-paper' elevation={3}>
                 <div className='chart-legend-bar'>
-                    <Button 
-                        className='chart-legend-add-btn' 
-                        onClick={() => handleAddFacility()}
-                        variant='contained' 
-                        color='primary'
-                    >
-                        Afegir Equipament
-                    </Button>
+                    <div>
+                        <Button 
+                            className='chart-legend-add-btn' 
+                            onClick={() => handleAddFacility()}
+                            variant='contained' 
+                            color='primary'
+                        >
+                            Afegir Equipament
+                        </Button>
+                        <Button 
+                            onClick={() => handleExportPNG()}
+                            variant='contained' 
+                            color='primary'
+                        >
+                            <GetApp/> &nbsp; Descarrega el gràfic en PNG
+                        </Button>
+                    </div>
                     <Button 
                         className='chart-legend-return-btn' 
                         variant='outlined' 

@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { Line } from 'react-chartjs-2';
 import { Container } from '@material-ui/core';
+import { saveAs } from 'file-saver';
 
 import './Chart.css';
 import { getPublicFacilitiesDatasets, getTypologyAverageDatasets, getPublicFacilityField } from '../../actions/publicFacility';
@@ -76,6 +77,14 @@ function Chart({ facilityName, displayedDatasets = [] }) {
         
     }, []);
 
+    const handleExportPNG = () => {
+        const canvasSave = document.getElementById('line_chart');
+        canvasSave.toBlob(blob => {
+            const fileName = getChartTitle();
+            saveAs(blob, fileName);
+        })
+    }
+
     return (
         data && 
         <Container maxWidth='lg'>
@@ -84,8 +93,10 @@ function Chart({ facilityName, displayedDatasets = [] }) {
                     setData={setData} 
                     ids={idsList} 
                     dataType={dataType} 
+                    handleExportPNG={handleExportPNG}
                 />
                 <Line 
+                    id='line_chart'
                     data={data}                     
                     options={options} 
                     height={133}

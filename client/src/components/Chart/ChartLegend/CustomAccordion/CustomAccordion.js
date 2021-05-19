@@ -68,7 +68,7 @@ function CustomAccordion({ facilityName, facility, canRemove, defaultExpanded, h
                                     }
                                     {
                                         dataset.isDeviation && 
-                                        <Tippy content={`La desviació mostra la dispersió entre les dades de tipologia ${dataset.typoloy}, concepte ${dataset.concept} i any ${dataset.year}`}>
+                                        <Tippy content={`La desviació mostra la dispersió respecte la mitjana de les dades de tipologia ${dataset.typoloy}, concepte ${dataset.concept} i any ${dataset.year}`}>
                                             <Typography variant='h6' className='chart-legend-year'>
                                                 {`Desviació ${dataset.year}`}
                                             </Typography>
