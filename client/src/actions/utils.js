@@ -81,7 +81,7 @@ export const getAverageDatasets = (facilities, dataType, typology) => {
     
                     datasets.push({
                         label: `${name} Desviació max ${concept} ${year}`,
-                        id: `typology ${typology}`,
+                        id: `typology ${getTypologyUserFormat(typology)}`,
                         name: `${name}`,
                         isDeviation: 'max',
                         concept: `${concept}`,
@@ -97,7 +97,7 @@ export const getAverageDatasets = (facilities, dataType, typology) => {
     
                     datasets.push({
                         label: `${name} Desviació min ${concept} ${year}`,
-                        id: `typology ${typology}`,
+                        id: `typology ${getTypologyUserFormat(typology)}`,
                         name: `${name}`,
                         isDeviation: 'min',
                         concept: `${concept}`,

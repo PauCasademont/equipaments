@@ -37,12 +37,14 @@ function CustomAccordion({ facilityName, facility, canRemove, defaultExpanded, h
                     {facilityName}
                 </Typography>
                 {  canRemove && 
-                    <IconButton 
-                        className='chart-legend-remove-btn' 
-                        onClick={(event) => handleRemoveFacility(event, facilityName)}
-                    >
-                        <DeleteOutline />
-                    </IconButton>
+                    <Tippy content='Elimina el menú'>
+                        <IconButton 
+                            className='chart-legend-remove-btn' 
+                            onClick={(event) => handleRemoveFacility(event, facilityName)}
+                        >
+                            <DeleteOutline />
+                        </IconButton>
+                    </Tippy>
                 }
             </AccordionSummary>
             <AccordionDetails>
