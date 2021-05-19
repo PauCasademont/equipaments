@@ -10,7 +10,8 @@ import {
     replaceAccentsAndCapitals,
     getFacilityDatasetData,
     getAverageDatasets,
-    addArrayObjectsIds
+    addArrayObjectsIds,
+    getTypologyUserFormat
 } from './utils';
 import { AREA, CONSUMPTION, PRICE, DATA_TYPES, COLORS } from '../constants/index.js';
 
@@ -74,7 +75,7 @@ export const getPublicFacilityDatasets = async (id, dataType, firstDataset) => {
                             datasets.push({
                                 label: `${name} ${concept} ${year}`,
                                 id,
-                                name: `${name} | Tipologia: ${typology.toUpperCase()}`,
+                                name: `${name} | Tipologia: ${getTypologyUserFormat(typology)}`,
                                 concept: `${concept}`,
                                 year: `${year}`,
                                 data: values,

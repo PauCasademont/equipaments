@@ -26,6 +26,11 @@ export const hasNumber = (str) => {
     return /\d/.test(str);
 }
 
+export const getTypologyUserFormat = (typology) => {
+    const result = typology.toUpperCase();
+    return result == 'EDUCACIO' ? 'EDUCACIÓ' : result;
+}
+
 export const addArrayObjectsIds = (array) => {
     return array.map((obj, index) => ({
         ...obj,
@@ -46,7 +51,7 @@ export const replaceAccentsAndCapitals = (word) => {
 
 export const getAverageDatasets = (facilities, dataType, typology) => {
     const descendantYears = YEARS_LIST.reverse();
-    const name = `EQUIPAMENTS DE TIPOLOGIA ${typology.toUpperCase()}`
+    const name = `EQUIPAMENTS DE TIPOLOGIA ${getTypologyUserFormat(typology)}`
     let datasets = [];
     CONCEPTS.forEach((concept, darkenAmount) => {
         let indexColor = 0
@@ -60,10 +65,10 @@ export const getAverageDatasets = (facilities, dataType, typology) => {
                     let color = COLORS[ indexColor % COLORS.length ];
                     datasets.push({
                         label: `${name} Mitjana ${concept} ${year}`,
-                        id: `typology ${typology}`,
+                        id: `typology ${getTypologyUserFormat(typology)}`,
                         name: `${name}`,
                         concept: `${concept}`,
-                        year: `Mitjana ${year}`,
+                        year: `${year}`,
                         isAverage: true,
                         data: average,
                         borderColor: tinycolor(color).darken(darkenAmount*12),
@@ -80,7 +85,7 @@ export const getAverageDatasets = (facilities, dataType, typology) => {
                         name: `${name}`,
                         isDeviation: 'max',
                         concept: `${concept}`,
-                        year: `Desviació ${year}`,
+                        year: `${year}`,
                         data: deviation.map((value, index) => average[index] + value),
                         borderColor: tinycolor(color).darken(darkenAmount*12),
                         hidden: true,
@@ -96,7 +101,7 @@ export const getAverageDatasets = (facilities, dataType, typology) => {
                         name: `${name}`,
                         isDeviation: 'min',
                         concept: `${concept}`,
-                        year: `Desviació ${year}`,
+                        year: `${year}`,
                         data: deviation.map((value, index) => average[index] - value),
                         borderColor: tinycolor(color).darken(darkenAmount*12),
                         hidden: true,

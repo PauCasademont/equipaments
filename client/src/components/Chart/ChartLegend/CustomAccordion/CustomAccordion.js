@@ -8,6 +8,8 @@ import {
     Checkbox
     } from '@material-ui/core';
 import { ExpandMore, DeleteOutline } from '@material-ui/icons'; 
+import Tippy from '@tippy.js/react';
+import 'tippy.js/dist/tippy.css';
 
 import './CustomAccordion.css';
 
@@ -59,16 +61,36 @@ function CustomAccordion({ facilityName, facility, canRemove, defaultExpanded, h
                                         color='primary'
                                         onClick={() => handleLegendClick(dataset)}
                                     />
-                                    <Typography variant='h6'>
-                                        {dataset.year}
-                                    </Typography>
-                                    <label style={getCircleStyles(dataset.borderColor, dataset.isAverage, dataset.borderDash == null)}>
-                                        <input 
-                                            className='chart-legend-input-color' 
-                                            type='color' 
-                                            onChange={(e) => handleChangeColor(dataset.label, e.target.value)}
-                                        />
-                                    </label>
+                                    { !dataset.isDeviation && !dataset.isAverage &&
+                                        <Typography variant='h6' className='chart-legend-year'>
+                                            {dataset.year}
+                                        </Typography>
+                                    }
+                                    {
+                                        dataset.isDeviation && 
+                                        <Tippy content={`La desviació mostra la dispersió entre les dades de tipologia ${dataset.typoloy}, concepte ${dataset.concept} i any ${dataset.year}`}>
+                                            <Typography variant='h6' className='chart-legend-year'>
+                                                {`Desviació ${dataset.year}`}
+                                            </Typography>
+                                        </Tippy>
+                                    }
+                                     {
+                                        dataset.isAverage && 
+                                        <Tippy content={`Mitjana entre les dades de tipologia ${dataset.typoloy}, concepte ${dataset.concept} i any ${dataset.year}`}>
+                                            <Typography variant='h6' className='chart-legend-year'>
+                                                {`Mitjana ${dataset.year}`}
+                                            </Typography>
+                                        </Tippy>
+                                    }
+                                    <Tippy content='Prem per canviar el color'>
+                                        <label style={getCircleStyles(dataset.borderColor, dataset.isAverage, dataset.borderDash == null)}>
+                                            <input 
+                                                className='chart-legend-input-color' 
+                                                type='color' 
+                                                onChange={(e) => handleChangeColor(dataset.label, e.target.value)}
+                                            />
+                                        </label>
+                                    </Tippy>
                                 </div>
                             ))}
                         </Grid>

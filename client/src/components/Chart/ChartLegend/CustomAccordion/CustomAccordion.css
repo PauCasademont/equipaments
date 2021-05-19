@@ -17,3 +17,7 @@
 .chart-legend-input-color {
     visibility: hidden;
 }
+
+.chart-legend-year {
+    cursor: default;
+}

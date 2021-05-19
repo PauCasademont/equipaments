@@ -2,8 +2,8 @@ import axios from 'axios';
 
 import { USER_STORAGE } from '../constants';
 
-//const API = axios.create({ baseURL: 'https://consum-equipaments-publics.herokuapp.com' });
-const API = axios.create({ baseURL: 'http://localhost:5000' });
+const API = axios.create({ baseURL: 'https://consum-equipaments-publics.herokuapp.com' });
+// const API = axios.create({ baseURL: 'http://localhost:5000' });
 
 
 API.interceptors.request.use((req) => {
