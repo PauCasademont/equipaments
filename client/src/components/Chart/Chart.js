@@ -8,7 +8,7 @@ import { getPublicFacilitiesDatasets, getTypologyAverageDatasets, getPublicFacil
 import { LABELS, CONSUMPTION, PRICE, SUPERSCRIPT_TWO, DATA_TYPES, AREA } from '../../constants';
 import ChartLegend from './ChartLegend/ChartLegend';
 
-function Chart({ facilityName }) {
+function Chart({ facilityName, displayedDatasets = [] }) {
     const [data, setData] = useState(null);
     const { dataType, ids } = useParams(); 
     const idsList = ids.split(',');
@@ -49,13 +49,29 @@ function Chart({ facilityName }) {
         responsive: true                       
     }
 
+    const getTypologyDatasets = async () => {
+        const typology = await getPublicFacilityField(idsList[0], 'typology');
+        return await getTypologyAverageDatasets(typology, dataType);
+    }
+
+    const setDisplayedDatasets = (datasets) => {
+        for(const displayedDataset of displayedDatasets){
+            const index = datasets.findIndex(dataset => dataset.label == displayedDataset);
+            if(index >= 0){
+                datasets[index].hidden = false;
+            }
+        }
+        return datasets;
+    }
+
     useEffect(async () => {  
-        const facilitiesDatasets = await getPublicFacilitiesDatasets(idsList, dataType);
-        const typology = await getPublicFacilityField(idsList[0], 'typology')
-        const typologyAverageDatasets = await getTypologyAverageDatasets(typology, dataType);
+        const facilitiesDatasets = await getPublicFacilitiesDatasets(idsList, dataType);        
+        const typologyAverageDatasets = await getTypologyDatasets();
+        let datasets = facilitiesDatasets.concat(typologyAverageDatasets);
+        datasets = setDisplayedDatasets(datasets);
         setData({
             labels: LABELS,
-            datasets: facilitiesDatasets.concat(typologyAverageDatasets)
+            datasets
         });
         
     }, []);

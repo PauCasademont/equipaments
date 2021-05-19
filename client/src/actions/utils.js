@@ -7,10 +7,10 @@ export const createAlert = (title, text='', icon='error', button='ok') => {
     swal({ title, text, icon, button });
 }
 
-export const arrayStringToFloat = (arr) => {
+export const arrayStringToInt = (arr) => {
     return arr.map( value => {
-        const float = parseFloat(value);
-        return float ? float : 0;
+        const result = parseInt(value);
+        return result ? result : 0;
     });
 }
 
@@ -35,9 +35,7 @@ export const addArrayObjectsIds = (array) => {
 
 export const getFacilityDatasetData = (facilityData, dataValue, dataType, area) => {
     return facilityData[dataValue].map(value => {
-        if(value == 0) return null;
-        if(dataType == AREA) return value / area;
-        return value;
+        return dataType == AREA ? value / area : value;
     })
 }
 
@@ -60,7 +58,6 @@ export const getAverageDatasets = (facilities, dataType, typology) => {
                 if(!average.every(value => value == 0)) {
                     const deviation = getDeviationArrays(arrays, average);
                     let color = COLORS[ indexColor % COLORS.length ];
-                    console.log(name, concept, year, arrays)
                     datasets.push({
                         label: `${name} Mitjana ${concept} ${year}`,
                         id: `typology ${typology}`,

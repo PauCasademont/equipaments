@@ -22,13 +22,21 @@ function App() {
           render={(props) => 
             <>
               <AddFacilityHeader />
-              <Map ids={props.location.state.facilitiesIds}/>
+              <Map 
+                ids={props.location.state.facilitiesIds} 
+                displayedDatasets={props.location.state.displayedDatasets}
+              />
             </>
           }
         />
         <Route
           path="/chart/:dataType/:ids" exact
-          render={(props) => <Chart facilityName={props.location.state?.name}/>}
+          render={(props) => 
+            <Chart 
+              facilityName={props.location.state?.name} 
+              displayedDatasets={props.location.state?.displayedDatasets} 
+            />
+          }
         />
         <Route 
           path="/edit/:facilityId"

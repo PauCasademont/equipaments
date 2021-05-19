@@ -24,6 +24,11 @@ function ChartLegend({ data, setData, ids, dataType }) {
         return 'isDeviation' in dataset && dataset.isDeviation == 'max';
     }
 
+    const getLabelsDisplayed = () => {
+        const displayedDatasets = data.datasets.filter(dataset => !dataset.hidden);
+        return displayedDatasets.map(dataset => dataset.label);
+    }
+
     const handleLegendClick = (dataset) => {
         const index = data.datasets.findIndex((d) => d == dataset);
 
@@ -42,10 +47,12 @@ function ChartLegend({ data, setData, ids, dataType }) {
         setData({ labels: data.labels, datasets: datasetsCopy });
     };
 
-    const handleAddFacility = () => {     
+
+    const handleAddFacility = () => { 
+        const displayedDatasets = getLabelsDisplayed(); 
         router.push({
             pathname: `/map/add_facility/${dataType}`,
-            state: { facilitiesIds }
+            state: { facilitiesIds, displayedDatasets }
         });
     };
 
@@ -117,6 +124,7 @@ function ChartLegend({ data, setData, ids, dataType }) {
                         facilityName={facility}
                         facility={legendFacilities[facility]}
                         canRemove={index > 0}
+                        defaultExpanded={index == 0}
                         handleRemoveFacility={handleRemoveFacility}
                         handleLegendClick={handleLegendClick}
                         handleChangeColor={handleChangeColor}

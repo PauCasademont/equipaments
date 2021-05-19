@@ -64,7 +64,7 @@ function Edit() {
     const handleChange = (value, valueIndex) => {
         const newValue = value < 0 ? 0 : value;
         const formValuesCopy = formValues.map((valueCopy, index) => {
-            return valueIndex == index ? newValue : valueCopy;
+            return valueIndex == index ? parseInt(newValue) : valueCopy;
         });
         setFormValues(formValuesCopy);
     }

@@ -73,12 +73,6 @@ function UserMenu({ user, router, setOpenPopup }) {
                         </MenuItem>
                     ))
                 }
-                <MenuItem onClick={() => router.push('/password')}>
-                    Canviar Contrasenya
-                </MenuItem> 
-                <MenuItem onClick={handleLogout}>
-                    Tancar Sessió
-                </MenuItem> 
                 { user.isAdmin &&                                     
                     <ReactFileReader handleFiles={handleFile} fileTypes={'.csv'}>
                         <MenuItem>
@@ -96,6 +90,18 @@ function UserMenu({ user, router, setOpenPopup }) {
                         Crear Equipament
                     </MenuItem>
                 }
+                { user.isAdmin &&
+                    <MenuItem onClick={() => console.log('modificar usuaris')}>
+                        Modificar Usuaris
+                    </MenuItem>
+                }
+                <MenuItem onClick={() => router.push('/password')}>
+                    Canviar Contrasenya
+                </MenuItem> 
+                <MenuItem onClick={handleLogout}>
+                    Tancar Sessió
+                </MenuItem> 
+                
             </Menu>
         </div>  
     )

@@ -24,14 +24,13 @@ function getIcons() {
     return res;
 }
 
-function Map({ ids = [] }) {
+function Map({ ids = [], displayedDatasets = [] }) {
     const [publicFacilities, setPublicFacilities] = useState(null);
     const [filters, setFilters] = useState({
         typologies: TYPOLOGIES.map(typology => typology.icon),
         years: YEARS_LIST
     })
     const [satelliteView, setSatelliteView] = useState(false);
-    const [user, setUser] = useState(JSON.parse(localStorage.getItem(USER_STORAGE)));
     const [openPopup, setOpenPopup] = useState(
         { createFacility: false }, 
         { importData: 
@@ -41,7 +40,8 @@ function Map({ ids = [] }) {
                 strFile: ''
             }
         }
-    );
+        );
+    const user = JSON.parse(localStorage.getItem(USER_STORAGE));
     const icons = getIcons();
     const router = useHistory();
     const location = useLocation();
@@ -59,7 +59,10 @@ function Map({ ids = [] }) {
 
         if (token) {
             const decodedToken = decode(token);
-            if (decodedToken.exp - (Date.now() / 1000) < 0) setUser(null);
+            if (decodedToken.exp - (Date.now() / 1000) < 0) {
+                localStorage.removeItem(USER_STORAGE);
+                window.location.reload(false);
+            }
         }
     }, [location]);
 
@@ -100,6 +103,7 @@ function Map({ ids = [] }) {
                         publicFacility={publicFacility}
                         userFacilityIds={user?.isAdmin ? 'ALL' : user?.publicFacilityIds}
                         ids={ids}
+                        displayedDatasets={displayedDatasets}
                         icons={icons}
                         router={router}
                     />

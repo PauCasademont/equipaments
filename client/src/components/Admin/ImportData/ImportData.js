@@ -108,12 +108,26 @@ function ImportData({ fileData, setOpenPopup }) {
                 }
                 { importState == IMPORT_STATES.done &&
                     <>
-                        <div className='import-data-table'>
+                        { notImportedData.length ?
+                            <div className='import-data-table'>
+                                <Typography variant='body1'>
+                                    Dades que no s'han sobreescrit:
+                                </Typography>
+                                <DataGrid 
+                                    rows={notImportedData} 
+                                    columns={notImportedDataColumns} 
+                                    pageSize={10}
+                                    disableColumnFilter={true}
+                                    disableColumnMenu={true}
+                                    hideFooterRowCount={true}
+                                    hideFooterSelectedRowCount={true}
+                                />
+                            </div>
+                            : 
                             <Typography variant='body1'>
-                                Dades que no s'han sobreescrit:
+                                Totes les dades s'han guardat
                             </Typography>
-                            <DataGrid rows={notImportedData} columns={notImportedDataColumns} pageSize={10}/>
-                        </div>
+                        }
                         <div className='import-data-btns-div'>
                             <Button 
                                 variant='outlined' 

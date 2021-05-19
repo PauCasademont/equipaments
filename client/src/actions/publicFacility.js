@@ -4,7 +4,7 @@ import tinycolor from 'tinycolor2';
 import * as api from '../api/index.js';
 import { 
     createAlert, 
-    arrayStringToFloat, 
+    arrayStringToInt, 
     inRangeLatitude, 
     inRangeLongitude,  
     replaceAccentsAndCapitals,
@@ -59,7 +59,7 @@ export const getPublicFacilityDatasets = async (id, dataType, firstDataset) => {
     if(id){
         try {            
             const { data } = await api.req_getPublicFacilityData(id);
-            const { name, area } = data.result; 
+            const { name, area, typology } = data.result; 
             const facilityData = data.result.data;  
             const dataValue = dataType == AREA ? CONSUMPTION : dataType;        
             let datasets = [];
@@ -70,11 +70,11 @@ export const getPublicFacilityDatasets = async (id, dataType, firstDataset) => {
                     const color = COLORS[ index % COLORS.length ];
                     if(facilityData[concept][year][dataType]){
                         const values = getFacilityDatasetData(facilityData[concept][year], dataValue, dataType, area);
-                        if(!values.every(value => value == null)){
+                        if(!values.every(value => value == 0)){
                             datasets.push({
                                 label: `${name} ${concept} ${year}`,
                                 id,
-                                name: `${name}`,
+                                name: `${name} | Tipologia: ${typology.toUpperCase()}`,
                                 concept: `${concept}`,
                                 year: `${year}`,
                                 data: values,
@@ -181,14 +181,15 @@ const importCSV_row = async (row, year) => {
     if (hasValuesCSV_row(row)){
         const values = row.split(';');
         const typology = replaceAccentsAndCapitals(values[2])
+        console.log(values[1]);
         const newData = {
             name: values[1].toUpperCase(),
             typology,
-            concept: values[0],
+            concept: values[0] == 'Gasoil_biomassa' ? 'Gasoil_Biomassa' : values[0],
             year,
             area: values[3],
-            consumption: arrayStringToFloat(values.slice(5, 17)),
-            price: arrayStringToFloat(values.slice(17)),
+            consumption: arrayStringToInt(values.slice(5, 17)),
+            price: arrayStringToInt(values.slice(17)),
         }
         const { data } = await api.req_importData(newData);
 

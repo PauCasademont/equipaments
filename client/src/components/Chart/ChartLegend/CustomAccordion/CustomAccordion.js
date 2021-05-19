@@ -11,7 +11,7 @@ import { ExpandMore, DeleteOutline } from '@material-ui/icons';
 
 import './CustomAccordion.css';
 
-function CustomAccordion({ facilityName, facility, canRemove, handleRemoveFacility, handleLegendClick, handleChangeColor}) {
+function CustomAccordion({ facilityName, facility, canRemove, defaultExpanded, handleRemoveFacility, handleLegendClick, handleChangeColor}) {
 
 
     const getCircleStyles = (color = '#CACFD2', isAverage, isFacility) => ({
@@ -29,7 +29,7 @@ function CustomAccordion({ facilityName, facility, canRemove, handleRemoveFacili
     }
 
     return (
-        <Accordion className='chart-legend-accordion'>
+        <Accordion className='chart-legend-accordion' defaultExpanded={defaultExpanded}>
             <AccordionSummary expandIcon={<ExpandMore/>}>
                 <Typography variant='body1'>
                     {facilityName}

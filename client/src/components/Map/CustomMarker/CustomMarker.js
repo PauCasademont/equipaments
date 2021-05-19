@@ -13,7 +13,7 @@ function getIconMarker(icon) {
     });
 }
 
-function CustomMarker({ publicFacility, userFacilityIds, ids, icons, router }) {
+function CustomMarker({ publicFacility, userFacilityIds, ids, displayedDatasets, icons, router }) {
     const { id, name, typology, coordinates, area } = publicFacility;
     const isHomePage = !ids.length;
     const { dataType } = useParams();
@@ -22,7 +22,7 @@ function CustomMarker({ publicFacility, userFacilityIds, ids, icons, router }) {
         const idsString = ids.concat([id]).join(',');
         router.push({
             pathname: `/chart/${type}/${idsString}`,
-            state: {name}
+            state: {name, displayedDatasets}
         });
     }
 
