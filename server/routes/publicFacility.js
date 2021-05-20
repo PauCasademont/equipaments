@@ -27,4 +27,5 @@ router.post('/import', auth, importData);
 router.patch('/:id', auth, updatePublicFaility);
 router.patch('/coordinates/:id', auth, updateCoordinates);
 
+
 export default router;

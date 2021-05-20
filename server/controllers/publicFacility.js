@@ -5,7 +5,8 @@ import PublicFacilityModel from '../models/publicFacility.js';
 const DATA_TYPES = {
     consumption: 'consumption',
     price: 'price',
-    area: 'area'
+    area: 'area',
+    coordinates: 'coordinates'
 };
 
 export const createPublicFacility = async (req, res) => {
@@ -89,8 +90,14 @@ export const updatePublicFaility = async (req, res) => {
         const publicFacility = await PublicFacilityModel.findById(id);
         const { data_type, new_values, concept, year } = req.body;
 
+        console.log('Data_type: ', data_type);
         if (data_type == DATA_TYPES.area) {
             publicFacility.area = new_values[0];
+        }
+
+        else if (data_type == DATA_TYPES.coordinates){
+            console.log('dins');
+            publicFacility.coordinates = new_values;
         }
 
         else {
@@ -107,6 +114,7 @@ export const updatePublicFaility = async (req, res) => {
     }
 
 }
+
 
 export const getPublicFacilityData = async (req, res) => {
     const { id } = req.params;

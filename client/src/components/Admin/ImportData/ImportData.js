@@ -116,7 +116,7 @@ function ImportData({ fileData, setOpenPopup }) {
                                 <DataGrid 
                                     rows={notImportedData} 
                                     columns={notImportedDataColumns} 
-                                    pageSize={10}
+                                    pageSize={25}
                                     disableColumnFilter={true}
                                     disableColumnMenu={true}
                                     hideFooterRowCount={true}

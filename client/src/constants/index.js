@@ -7,12 +7,15 @@ export const COLORS = ['#5DADE2', '#2ECC71', '#FA000A', '#FBFB4E', '#DD66F5', '#
 export const CONSUMPTION = 'consumption';
 export const PRICE = 'price';
 export const AREA = 'area';
+export const COORDINATES = 'coordinates'
 
-export const CONCEPTS = ['Total', 'Gas', 'Electricitat', 'Gasoil-Biomassa'];
+
+export const CONCEPTS = ['Total', 'Electricitat', 'Gasoil_Biomassa', 'Gas' ];
 export const DATA_TYPES = {
     [CONSUMPTION]: 'Consum',
     [PRICE]: 'Preu',
-    [AREA]: 'Superfície'
+    [AREA]: 'Superfície',
+    [COORDINATES]: 'Coordenades'
 };
 
 export const TYPOLOGIES = [

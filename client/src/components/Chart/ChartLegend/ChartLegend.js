@@ -68,8 +68,6 @@ function ChartLegend({ data, setData, ids, dataType, handleExportPNG }) {
     const removeFacilityData = (id) => {
         const datasetsHidden = data.datasets.map(dataset => dataset.id == id ? { ...dataset, hidden: true } : dataset);
         setData({ labels: data.labels, datasets: datasetsHidden });
-        // const newDatasets = data.datasets.filter(dataset => dataset.id != id);
-        // setData({ labels: data.labels, datasets: newDatasets });
     };
 
     const removeFacilityLegend = (facility) => {

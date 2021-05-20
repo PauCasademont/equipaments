@@ -6,14 +6,17 @@ import './Edit.css';
 import { getPublicFacilityData, updatePublicFacility } from '../../actions/publicFacility';
 import { 
     CONCEPTS, 
-    LABELS, DATA_TYPES, 
+    LABELS, 
+    DATA_TYPES, 
     CONSUMPTION, 
     AREA, 
     PRICE, 
+    COORDINATES,
     SUPERSCRIPT_TWO,  
     CURRENT_YEAR, 
     YEARS_LIST
 } from '../../constants';
+import { inRangeLatitude, inRangeLongitude, createAlert } from '../../actions/utils';
 import DropDownBox from './DropDownBox/DropDownBox';
 
 function Edit() {
@@ -40,6 +43,10 @@ function Edit() {
                newFormValues = [publicFacility.area];
            }
 
+           else if (dataType == DATA_TYPES[COORDINATES]){
+               newFormValues = publicFacility.coordinates;
+           }
+
            else if (publicFacility.data[concept] && publicFacility.data[concept][year]){
                if (dataType == DATA_TYPES[CONSUMPTION]){
                    newFormValues = publicFacility.data[concept][year].consumption || newFormValues;
@@ -53,6 +60,17 @@ function Edit() {
     },[dataType, concept, year, publicFacility]);
 
     const handleSubmit = () => {
+        console.log('Data Type:',dataType);
+        let updatedValues = formValues.map(value => parseFloat(value));
+        if (dataType == DATA_TYPES[AREA]) updatedValues = updatedValues.slice(0,1);
+        else if (dataType == DATA_TYPES[COORDINATES]) {
+            updatedValues = updatedValues.slice(0,2);
+            if(!inRangeLatitude(updatedValues[0]) || !inRangeLongitude(updatedValues[1])){
+                createAlert('Coordenades invàlides');
+                return;
+            }
+        }
+
         updatePublicFacility(facilityId, dataType, concept, year, formValues)
         .then((updatedPublicFacility) => {
             if(updatedPublicFacility){
@@ -62,17 +80,15 @@ function Edit() {
     }
 
     const handleChange = (value, valueIndex) => {
-        const newValue = value < 0 ? 0 : value;
+        const newValue = dataType != DATA_TYPES[COORDINATES] && value < 0 ? 0 : value;
         const formValuesCopy = formValues.map((valueCopy, index) => {
-            return valueIndex == index ? parseInt(newValue) : valueCopy;
+            return valueIndex == index ? newValue : valueCopy;
         });
         setFormValues(formValuesCopy);
     }
 
     const getNumberSuffix = () => {
-        if (dataType == DATA_TYPES[CONSUMPTION]) return 'kWh';
-        if (dataType == DATA_TYPES[PRICE]) return '€';
-        return 'm' + SUPERSCRIPT_TWO;
+        return dataType == DATA_TYPES[CONSUMPTION] ? 'kWh' : '€';
     }
 
     return (
@@ -116,19 +132,19 @@ function Edit() {
             <Grid item className='edit-div' xs={12}>
                 <Paper elevation={3} className='edit-paper'>
                     <Grid container spacing={3}>
-                        { formValues && 
+                        { formValues && (dataType == DATA_TYPES[CONSUMPTION] || dataType == DATA_TYPES[PRICE]) &&
                             formValues.map((_, index) => (
                                 <Grid 
                                     item 
                                     key={index}
                                     className='edit-div' 
                                     xs={12} 
-                                    sm={dataType == DATA_TYPES[AREA] ? 12 : 6} 
+                                    sm={6} 
                                 >
                                     <TextField
                                         onChange={(event) => handleChange(event.target.value, index)}
-                                        name={dataType == DATA_TYPES[AREA] ? dataType : LABELS[index]}
-                                        label={dataType == DATA_TYPES[AREA] ? dataType : LABELS[index]}
+                                        name={LABELS[index]}
+                                        label={LABELS[index]}
                                         type='number'
                                         value={formValues[index]}
                                         InputProps={{
@@ -137,6 +153,56 @@ function Edit() {
                                     />
                                 </Grid>
                         ))}
+                        { formValues && dataType == DATA_TYPES[AREA] &&
+                            <Grid 
+                                item 
+                                className='edit-div' 
+                                xs={12} 
+                            >
+                                <TextField
+                                    onChange={(event) => handleChange(event.target.value, 0)}
+                                    name={dataType}
+                                    label={dataType}
+                                    type='number'
+                                    value={formValues[0]}
+                                    InputProps={{
+                                        endAdornment: <InputAdornment position='end'>{'m' + SUPERSCRIPT_TWO}</InputAdornment>
+                                    }}
+                                />
+                            </Grid>
+                        }
+                        { formValues && dataType == DATA_TYPES[COORDINATES] &&
+                            <>
+                                <Grid
+                                    item 
+                                    className='edit-div'
+                                    xs={12}
+                                    sm={6}
+                                >
+                                    <TextField
+                                        onChange={(event) => handleChange(event.target.value, 0)}
+                                        name='latitude'
+                                        label='Latitud'
+                                        type='number'
+                                        value={formValues[0]}
+                                    />
+                                </Grid>  
+                                <Grid
+                                    item 
+                                    className='edit-div'
+                                    xs={12}
+                                    sm={6}
+                                >
+                                    <TextField
+                                         onChange={(event) => handleChange(event.target.value, 1)}
+                                         name='longitude'
+                                         label='Longitud'
+                                         type='number'
+                                         value={formValues[1]}
+                                    />
+                                </Grid> 
+                            </>                        
+                        }
                     </Grid>
                 </Paper>
             </Grid>
