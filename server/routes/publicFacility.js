@@ -10,13 +10,15 @@ import {
     updateCoordinates,
     getPublicFacilityField,
     getInvisiblePublicFacilities,
-    getTypologyFacilities
+    getTypologyFacilities,
+    getPublicFacilitiesNames
 } from '../controllers/publicFacility.js';
 
 const router = express.Router();
 
 router.get('/', getMapPublicFalcilities);
 router.get('/invisible', getInvisiblePublicFacilities);
+router.get('/names', getPublicFacilitiesNames);
 router.get('/:id', getPublicFacilityData);
 router.get('/typology/:typology', getTypologyFacilities);
 router.get('/:id/:field', getPublicFacilityField);

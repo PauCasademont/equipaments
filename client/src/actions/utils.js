@@ -49,6 +49,18 @@ export const replaceAccentsAndCapitals = (word) => {
     return result.replace('à','a').replace('è','e').replace('é','e').replace('í','i').replace('ò','o').replace('ó','o').replace('ú','u');
 }
 
+export const remove = (list, value) => {
+    const index = list.indexOf(value);
+    if(index > -1){
+        list.splice(index, 1);
+    }
+    return list;
+}
+
+export const add = (list, value) => {
+    return list.concat([value]);
+}
+
 export const getAverageDatasets = (facilities, dataType, typology) => {
     const descendantYears = YEARS_LIST.reverse();
     const name = `EQUIPAMENTS DE TIPOLOGIA ${getTypologyUserFormat(typology)}`

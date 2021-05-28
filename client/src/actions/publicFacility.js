@@ -62,14 +62,14 @@ export const getPublicFacilityDatasets = async (id, dataType, firstDataset) => {
             const { data } = await api.req_getPublicFacilityData(id);
             const { name, area, typology } = data.result; 
             const facilityData = data.result.data;  
-            const dataValue = dataType == AREA ? CONSUMPTION : dataType;        
+            const dataValue = dataType == AREA ? CONSUMPTION : dataType; 
             let datasets = [];
 
 
             Object.keys(facilityData).map((concept, darkenAmount) => {
                 Object.keys(facilityData[concept]).reverse().map((year, index) => {
                     const color = COLORS[ index % COLORS.length ];
-                    if(facilityData[concept][year][dataType]){
+                    if(facilityData[concept][year][dataValue]){
                         const values = getFacilityDatasetData(facilityData[concept][year], dataValue, dataType, area);
                         if(!values.every(value => value == 0)){
                             datasets.push({
@@ -86,7 +86,6 @@ export const getPublicFacilityDatasets = async (id, dataType, firstDataset) => {
 
                             if(firstDataset) firstDataset = false;
                         }
-
                     }
                 });
             });
@@ -118,6 +117,14 @@ export const getTypologyAverageDatasets = async (typology, dataType) => {
     }
 }
 
+export const getPublicFacilitiesNames = async () => {
+    const { data } = await api.req_getPublicFacilitiesNames();
+    return data.result.map(facility => ({
+        id: facility._id,
+        name: facility.name
+    }));
+}
+
 export const getPublicFacilityField = async (id, field) => {
     try {
         const { data } = await api.req_getPublicFacilityField(id, field);
@@ -127,7 +134,7 @@ export const getPublicFacilityField = async (id, field) => {
     }
 }
 
-export const getPublicFacilitiesNames = async (ids) => {
+export const getPublicFacilitiesNamesFromIds = async (ids) => {
     let names = [];
     for (const id of ids) {
         const name = await getPublicFacilityField(id, 'name');

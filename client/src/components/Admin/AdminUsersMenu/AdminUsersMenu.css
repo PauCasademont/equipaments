@@ -1,0 +1,23 @@
+.admin-users-menu-title {
+    margin-bottom: 20px !important;
+}
+
+.admin-users-menu-appbar {
+    margin-bottom: 40px;
+}
+
+.admin-users-menu-paper {
+    padding-bottom: 30px;
+}
+
+.admin-users-menu-btn {
+    margin-top: 7px !important;
+}
+
+.admin-users-menu-green-btn {
+    background-color: lightgreen !important;
+}
+
+.admin-users-return-btn {
+    margin-top: 40px !important;
+}

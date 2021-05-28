@@ -29,7 +29,7 @@ function Map({ ids = [], displayedDatasets = [] }) {
     const [filters, setFilters] = useState({
         typologies: TYPOLOGIES.map(typology => typology.icon),
         years: YEARS_LIST
-    })
+    });
     const [satelliteView, setSatelliteView] = useState(false);
     const [openPopup, setOpenPopup] = useState(
         { createFacility: false }, 

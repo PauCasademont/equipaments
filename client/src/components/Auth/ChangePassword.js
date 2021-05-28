@@ -38,7 +38,7 @@ function ChangePassword() {
 
     const handleSubmit = (event) => {
         event.preventDefault();
-        changePassword(form, router);
+        changePassword(form, user.id, router);
     }
 
     return (

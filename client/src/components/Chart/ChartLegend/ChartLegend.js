@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import groupBy from 'lodash.groupby';
 import { useHistory } from 'react-router-dom';
-import { Paper, Button, IconButton } from '@material-ui/core';
+import { Paper, Button } from '@material-ui/core';
 import { ArrowBack, GetApp } from '@material-ui/icons';
 
 import './ChartLegend.css';

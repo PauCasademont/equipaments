@@ -90,13 +90,11 @@ export const updatePublicFaility = async (req, res) => {
         const publicFacility = await PublicFacilityModel.findById(id);
         const { data_type, new_values, concept, year } = req.body;
 
-        console.log('Data_type: ', data_type);
         if (data_type == DATA_TYPES.area) {
             publicFacility.area = new_values[0];
         }
 
         else if (data_type == DATA_TYPES.coordinates){
-            console.log('dins');
             publicFacility.coordinates = new_values;
         }
 
@@ -149,7 +147,7 @@ export const importData = async (req, res) => {
     }
 
     if(!req.user.is_admin){
-        return res.status(404).send({ message: 'Permission denied'});
+        return res.status(403).send({ message: 'Permission denied'});
     }
 
     try {
@@ -221,6 +219,18 @@ export const updateCoordinates = async (req, res) => {
     }
 }
 
+export const getPublicFacilitiesNames = async (req, res) => {
+
+    try {
+        const result = await PublicFacilityModel.find({}, 'name');
+        res.status(200).send({result});
+        
+    } catch (error) {
+        res.status(500).send({ message: 'Could not get public facilities names'});
+        console.log(error);
+    }
+}
+
 export const getPublicFacilityField = async (req, res) => {
     const { id, field } = req.params;
     if(!mongoose.Types.ObjectId.isValid(id)){
@@ -231,7 +241,7 @@ export const getPublicFacilityField = async (req, res) => {
         const result = await PublicFacilityModel.findById(id, field);
         res.status(200).send({result});
     } catch (error) {
-        res.status(500).send({ message: 'Could not get public facility field'});
+        res.status(500).send({ message: `Could not get public facility ${field}`});
         console.log(error);
     }
 }

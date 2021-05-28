@@ -3,7 +3,7 @@ import { IconButton, Avatar, Menu, Typography, MenuItem } from '@material-ui/cor
 import ReactFileReader from 'react-file-reader';
 
 import './UserMenu.css';
-import { getPublicFacilitiesNames } from '../../../actions/publicFacility';
+import { getPublicFacilitiesNamesFromIds } from '../../../actions/publicFacility';
 import { USER_STORAGE } from '../../../constants';
 
 function UserMenu({ user, router, setOpenPopup }) {
@@ -12,7 +12,7 @@ function UserMenu({ user, router, setOpenPopup }) {
 
     useEffect(() => {
         if(!user.isAdmin){
-            getPublicFacilitiesNames(user.publicFacilityIds)
+            getPublicFacilitiesNamesFromIds(user.publicFacilityIds)
             .then(names => setUserFacilities(names));
         }
     },[]);
@@ -67,8 +67,8 @@ function UserMenu({ user, router, setOpenPopup }) {
                     <Typography className='userMenu-username' variant='body1'>{user.username}</Typography>
                 </div>
                 { !user.isAdmin &&
-                    userFacilities.map(facility => (
-                        <MenuItem onClick={() => router.push(`/edit/${facility.id}`)}>
+                    userFacilities.map((facility, index) => (
+                        <MenuItem key={index} onClick={() => router.push(`/edit/${facility.id}`)}>
                             Editar {facility.name}
                         </MenuItem>
                     ))
@@ -91,7 +91,7 @@ function UserMenu({ user, router, setOpenPopup }) {
                     </MenuItem>
                 }
                 { user.isAdmin &&
-                    <MenuItem onClick={() => console.log('modificar usuaris')}>
+                    <MenuItem onClick={() => router.push('/users_settings')}>
                         Modificar Usuaris
                     </MenuItem>
                 }

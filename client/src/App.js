@@ -7,6 +7,7 @@ import Edit from './components/Edit/Edit';
 import Auth from './components/Auth/Auth';
 import ChangePassword from './components/Auth/ChangePassword'
 import InvisibleFacilities from './components/Admin/InvisibleFacilities/InvisibleFacilities';
+import AdminUsersMenu from './components/Admin/AdminUsersMenu/AdminUsersMenu';
 
 function App() {
 
@@ -53,6 +54,10 @@ function App() {
         <Route
           path="/invisible_facilities" exact
           render={() => <InvisibleFacilities/>}
+        />
+        <Route
+          path="/users_settings" exact
+          render={() => <AdminUsersMenu/>}
         />
       </Switch> 
     </BrowserRouter>
