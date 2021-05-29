@@ -13,7 +13,7 @@ import {
     addArrayObjectsIds,
     getTypologyUserFormat
 } from './utils';
-import { AREA, CONSUMPTION, PRICE, COORDINATES, DATA_TYPES, COLORS } from '../constants/index.js';
+import { AREA, CONSUMPTION, PRICE, COORDINATES, DATA_TYPES, COLORS, TYPOLOGY } from '../constants/index.js';
 
 export const createPublicFacility = async (form) => {
     try {
@@ -165,6 +165,7 @@ export const updatePublicFacility = async (id, dataType, concept, year, newValue
     if (DATA_TYPES[PRICE] == dataType) dbDataType = PRICE;
     else if (DATA_TYPES[AREA] == dataType) dbDataType = AREA;
     else if (DATA_TYPES[COORDINATES] == dataType) dbDataType = COORDINATES;
+    else if (DATA_TYPES[TYPOLOGY] == dataType) dbDataType = TYPOLOGY;
 
     const body = {
         data_type: dbDataType,

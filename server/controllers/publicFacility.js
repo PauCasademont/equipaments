@@ -6,7 +6,8 @@ const DATA_TYPES = {
     consumption: 'consumption',
     price: 'price',
     area: 'area',
-    coordinates: 'coordinates'
+    coordinates: 'coordinates',
+    typology: 'typology'
 };
 
 export const createPublicFacility = async (req, res) => {
@@ -89,8 +90,11 @@ export const updatePublicFaility = async (req, res) => {
     try {
         const publicFacility = await PublicFacilityModel.findById(id);
         const { data_type, new_values, concept, year } = req.body;
+        if (data_type == DATA_TYPES.typology){
+            publicFacility.typology = new_values[0];
+        }
 
-        if (data_type == DATA_TYPES.area) {
+        else if (data_type == DATA_TYPES.area) {
             publicFacility.area = new_values[0];
         }
 

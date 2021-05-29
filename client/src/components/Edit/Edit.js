@@ -14,7 +14,9 @@ import {
     COORDINATES,
     SUPERSCRIPT_TWO,  
     CURRENT_YEAR, 
-    YEARS_LIST
+    YEARS_LIST,
+    TYPOLOGY,
+    TYPOLOGIES
 } from '../../constants';
 import { inRangeLatitude, inRangeLongitude, createAlert } from '../../actions/utils';
 import DropDownBox from './DropDownBox/DropDownBox';
@@ -37,9 +39,13 @@ function Edit() {
     
     useEffect(() => {
        if(publicFacility){
-           let newFormValues = Array(12).fill(0);
+           let newFormValues = null;
 
-           if (dataType == DATA_TYPES[AREA]){              
+           if (dataType == DATA_TYPES[TYPOLOGY]){
+               newFormValues = [publicFacility.typology];
+           }
+
+           else if (dataType == DATA_TYPES[AREA]){              
                newFormValues = [publicFacility.area];
            }
 
@@ -47,27 +53,40 @@ function Edit() {
                newFormValues = publicFacility.coordinates;
            }
 
-           else if (publicFacility.data[concept] && publicFacility.data[concept][year]){
-               if (dataType == DATA_TYPES[CONSUMPTION]){
-                   newFormValues = publicFacility.data[concept][year].consumption || newFormValues;
-               }
-               else{
-                newFormValues = publicFacility.data[concept][year].price || newFormValues;
-               }
-            }  
+           else {
+                newFormValues = Array(12).fill(0);
+                if (publicFacility.data[concept] && publicFacility.data[concept][year]){
+                    if (dataType == DATA_TYPES[CONSUMPTION]){
+                        newFormValues = publicFacility.data[concept][year].consumption || newFormValues;
+                    }
+                    else{
+                     newFormValues = publicFacility.data[concept][year].price || newFormValues;
+                    }
+                 }  
+           }
+
             setFormValues(newFormValues);
        }
     },[dataType, concept, year, publicFacility]);
 
     const handleSubmit = () => {
-        console.log('Data Type:',dataType);
-        let updatedValues = formValues.map(value => parseFloat(value));
-        if (dataType == DATA_TYPES[AREA]) updatedValues = updatedValues.slice(0,1);
-        else if (dataType == DATA_TYPES[COORDINATES]) {
-            updatedValues = updatedValues.slice(0,2);
-            if(!inRangeLatitude(updatedValues[0]) || !inRangeLongitude(updatedValues[1])){
-                createAlert('Coordenades invàlides');
-                return;
+        let updatedValues = null;
+
+        if(dataType == DATA_TYPES[TYPOLOGY]){
+            updatedValues = [formValues[0]];
+        }
+
+        else {
+            updatedValues = formValues.map(value => parseFloat(value));
+    
+            if (dataType == DATA_TYPES[AREA]) updatedValues = updatedValues.slice(0,1);
+    
+            else if (dataType == DATA_TYPES[COORDINATES]) {
+                updatedValues = updatedValues.slice(0,2);
+                if(!inRangeLatitude(updatedValues[0]) || !inRangeLongitude(updatedValues[1])){
+                    createAlert('Coordenades invàlides');
+                    return;
+                }
             }
         }
 
@@ -79,10 +98,14 @@ function Edit() {
         });
     }
 
-    const handleChange = (value, valueIndex) => {
-        const newValue = dataType != DATA_TYPES[COORDINATES] && value < 0 ? 0 : value;
-        const formValuesCopy = formValues.map((valueCopy, index) => {
-            return valueIndex == index ? newValue : valueCopy;
+    const handleChange = (newValue, valueIndex) => {
+
+        if((dataType == DATA_TYPES[AREA] || dataType == DATA_TYPES[PRICE] || dataType == DATA_TYPES[CONSUMPTION]) && newValue < 0){
+            newValue = 0;
+        }   
+
+        const formValuesCopy = formValues.map((value, index) => {
+            return valueIndex == index ? newValue : value;
         });
         setFormValues(formValuesCopy);
     }
@@ -202,6 +225,20 @@ function Edit() {
                                     />
                                 </Grid> 
                             </>                        
+                        }
+                        { formValues && dataType == DATA_TYPES[TYPOLOGY] &&
+                            <Grid 
+                                item 
+                                className='edit-div' 
+                                xs={12} 
+                            >
+                                <DropDownBox 
+                                    values={TYPOLOGIES.map(typology => typology.icon)}
+                                    selectedValue={formValues[0]}
+                                    setValue={(value) => handleChange(value,0)}
+                                    name={'Tipologia'}
+                                />
+                            </Grid>
                         }
                     </Grid>
                 </Paper>
