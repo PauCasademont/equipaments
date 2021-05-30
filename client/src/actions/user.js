@@ -62,8 +62,7 @@ export const deleteUser = async (userId, username) => {
         if(wantToDelete){
             try {
                 const { data } = await api.req_deleteUser(userId);
-                createAlert('', 'Usuari eliminar correctament', 'success');
-                console.log('data:', data);
+                createAlert('', 'Usuari eliminat correctament', 'success');
                 return data.result;
             } catch (error) {
                 console.log(error);

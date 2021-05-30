@@ -8,6 +8,7 @@ import Auth from './components/Auth/Auth';
 import ChangePassword from './components/Auth/ChangePassword'
 import InvisibleFacilities from './components/Admin/InvisibleFacilities/InvisibleFacilities';
 import AdminUsersMenu from './components/Admin/AdminUsersMenu/AdminUsersMenu';
+import AdminFacilitiesMenu from './components/Admin/AdminFacilitiesMenu/AdminFacilitiesMenu';
 
 function App() {
 
@@ -58,6 +59,10 @@ function App() {
         <Route
           path="/users_settings" exact
           render={() => <AdminUsersMenu/>}
+        />
+        <Route
+          path="/facilities_settings" exact
+          render={() => <AdminFacilitiesMenu/>}
         />
       </Switch> 
     </BrowserRouter>

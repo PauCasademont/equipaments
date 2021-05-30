@@ -11,7 +11,6 @@ function DeleteUser({ usernames, setNames }) {
     const handleDeleteClick = () => {
         deleteUser(selectedUser.id, selectedUser.name)
         .then(res => {
-            console.log(res);
             if(res) {
                 const deletedId = selectedUser.id;
                 setSelectedUser(null);

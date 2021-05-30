@@ -40,11 +40,6 @@ function UserMenu({ user, router, setOpenPopup }) {
         reader.readAsText(files[0]);
     };
 
-    const handleOpenPopupCreateFaciliy = () => {
-        setOpenPopup(prevState => ({ ...prevState, createFacility: true }));
-        setAnchorUserMenu(null);
-    }
-
     return (
         <div className='userMenu-div'>
             <IconButton 
@@ -86,13 +81,13 @@ function UserMenu({ user, router, setOpenPopup }) {
                     </MenuItem>
                 } 
                 { user.isAdmin &&
-                    <MenuItem onClick={() => handleOpenPopupCreateFaciliy()}>
-                        Crear Equipament
+                    <MenuItem onClick={() => router.push('/users_settings')}>
+                        Configuració Usuaris
                     </MenuItem>
                 }
                 { user.isAdmin &&
-                    <MenuItem onClick={() => router.push('/users_settings')}>
-                        Modificar Usuaris
+                    <MenuItem onClick={() => router.push('/facilities_settings')}>
+                        Configuració Equipaments
                     </MenuItem>
                 }
                 <MenuItem onClick={() => router.push('/password')}>

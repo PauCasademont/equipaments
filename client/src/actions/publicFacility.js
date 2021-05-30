@@ -38,6 +38,27 @@ export const createPublicFacility = async (form) => {
     }
 }
 
+export const deletePublicFacility = async (publicFacility) => {
+    return await swal({
+        title: 'Eliminar Equipament',
+        text: `Estàs segur que desitges eliminar l\'equipament ${publicFacility.name}`,
+        icon: 'warning',
+        buttons: ['Cancelar', 'Eliminar']
+    }).then(async (wantToDelete) =>  {
+        if(wantToDelete){
+            try {
+                const { data } = await api.req_deletePublicFacility(publicFacility.id);
+                createAlert('', 'Equipament eliminat correctament', 'success');
+                return data.result;
+            } catch (error) {
+                console.log(error);
+                createAlert('Error', `No s\'ha pogut eliminar l\'usuari ${publicFacility.name}`);
+            }
+        }
+        return null;
+    })
+}
+
 export const getMapPublicFalcilities =  async () => {
     try {
         const { data } = await api.req_getMapPublicFacilities();

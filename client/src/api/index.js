@@ -29,6 +29,8 @@ export const req_importData = (body) => API.post('/public_facility/import', body
 export const req_updatePublicFacility = (id, body) => API.patch(`/public_facility/${id}`, body); 
 export const req_updateCoordinates = (id, body) =>  API.patch(`/public_facility/coordinates/${id}`, body);
 
+export const req_deletePublicFacility = (id) => API.delete(`/public_facility/${id}`);
+
 
 //***************************  User  *******************************//
 export const req_getUsersNames = () => API.get('/user/names');

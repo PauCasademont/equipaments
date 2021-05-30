@@ -34,6 +34,32 @@ export const createPublicFacility = async (req, res) => {
     }
 }
 
+export const deletePublicFacility = async (req, res) => {
+    const { id } = req.params;
+
+    try {
+
+        if(!req.user) {
+            return res.status(401).send({ message: 'User unauthenticated'});
+        }
+
+        if(!req.user.is_admin){
+            return res.status(404).send({ message: 'Permission denied'});
+        }
+        
+        if(!mongoose.Types.ObjectId.isValid(id)){
+            return res.status(404).send({ message: `No valid user id: ${facilityId}`});
+        }
+
+        await PublicFacilityModel.findByIdAndRemove(id);
+        res.status(200).json({ result: 'Public faicility deleted successfully' });
+    } catch (error) {
+        res.status(500).json({ message: 'Public facility could not be created'});
+        console.log(error);
+    }
+}
+
+
 export const getMapPublicFalcilities = async (req, res) => {
     try { 
         const facilities = await PublicFacilityModel.find({ coordinates: { $ne: [] }});

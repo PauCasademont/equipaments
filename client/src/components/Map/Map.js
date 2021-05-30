@@ -9,7 +9,6 @@ import 'leaflet/dist/leaflet.css';
 import { getMapPublicFalcilities } from '../../actions/publicFacility';
 import CustomMarker from './CustomMarker/CustomMarker';
 import FilterControl from './FilterControl/FilterControl';
-import CreateFacility from '../Admin/CreateFacility/CreateFacility';
 import ImportData from '../Admin/ImportData/ImportData';
 import { TYPOLOGIES, USER_STORAGE, YEARS_LIST } from '../../constants';
 
@@ -32,7 +31,6 @@ function Map({ ids = [], displayedDatasets = [] }) {
     });
     const [satelliteView, setSatelliteView] = useState(false);
     const [openPopup, setOpenPopup] = useState(
-        { createFacility: false }, 
         { importData: 
             { 
                 open: false,
@@ -40,7 +38,7 @@ function Map({ ids = [], displayedDatasets = [] }) {
                 strFile: ''
             }
         }
-        );
+    );
     const user = JSON.parse(localStorage.getItem(USER_STORAGE));
     const icons = getIcons();
     const router = useHistory();
@@ -116,9 +114,6 @@ function Map({ ids = [], displayedDatasets = [] }) {
                     setSatelliteView={setSatelliteView}
                 />
             </MapContainer>
-            {openPopup.createFacility && 
-                <CreateFacility setOpenPopup={setOpenPopup} setPublicFacilities={setPublicFacilities}/>
-            }
             {openPopup.importData?.open &&
                 <ImportData fileData={openPopup.importData} setOpenPopup={setOpenPopup} />
             }

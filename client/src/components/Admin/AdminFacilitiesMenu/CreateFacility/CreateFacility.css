@@ -1,0 +1,17 @@
+.create-facility-div {
+    display: flex;
+    align-items: baseline;
+}
+
+.create-facility-input {
+    max-width: 400px;
+}
+
+.create-facility-input-coords {
+    margin-left: 30px !important;
+}
+
+.create-facility-input-typology {
+    margin-left: 60px;
+    min-width: 150px;
+}

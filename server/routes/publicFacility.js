@@ -11,7 +11,8 @@ import {
     getPublicFacilityField,
     getInvisiblePublicFacilities,
     getTypologyFacilities,
-    getPublicFacilitiesNames
+    getPublicFacilitiesNames,
+    deletePublicFacility
 } from '../controllers/publicFacility.js';
 
 const router = express.Router();
@@ -28,6 +29,8 @@ router.post('/import', auth, importData);
 
 router.patch('/:id', auth, updatePublicFaility);
 router.patch('/coordinates/:id', auth, updateCoordinates);
+
+router.delete('/:id', auth, deletePublicFacility)
 
 
 export default router;
