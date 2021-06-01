@@ -15,7 +15,7 @@ import {
 import { ArrowBack } from '@material-ui/icons';
 
 import './InvisibleFacilities.css'
-import { getInvisiblePublicFacilities, updateCoordinates } from '../../../actions/publicFacility';
+import { getInvisiblePublicFacilities, updateCoordinates, deletePublicFacility } from '../../../actions/publicFacility';
 import { USER_STORAGE } from '../../../constants';
 
 function InvisibleFacilities() {
@@ -30,14 +30,23 @@ function InvisibleFacilities() {
         });
     },[]);
 
+    const removeFromLlist = (id) => {
+        const newInvisibleFacilities = Object.assign({}, publicFacilities);
+        delete newInvisibleFacilities[id];
+        setPublicFacilities(newInvisibleFacilities);
+    }
+
     const handleSave = (id) => {
         updateCoordinates(id, publicFacilities[id].coordinates)
         .then(changed => {
-            if(changed){
-                const newInvisibleFacilities = Object.assign({}, publicFacilities);
-                delete newInvisibleFacilities[id];
-                setPublicFacilities(newInvisibleFacilities);
-            }
+            if(changed) removeFromLlist(id);
+        });
+    }
+
+    const handleDelete = (id, name) => {
+        deletePublicFacility({ id, name })
+        .then(result => {
+            if(result) removeFromLlist(id);
         });
     }
 
@@ -104,6 +113,11 @@ function InvisibleFacilities() {
                                     <TableCell aling='right'>
                                         <Button className='invisibleFacilities-saveBtn' onClick={() => handleSave(id)}>
                                             Guardar
+                                        </Button>
+                                    </TableCell>
+                                    <TableCell align='right'>
+                                        <Button variant='outlined' color='secondary' onClick={() => handleDelete(id, publicFacilities[id].name)}>
+                                            Eliminar
                                         </Button>
                                     </TableCell>
                                 </TableRow>
