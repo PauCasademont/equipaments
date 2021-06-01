@@ -66,15 +66,17 @@ function Chart({ facilityName, displayedDatasets = [] }) {
     }
 
     useEffect(async () => {  
-        const facilitiesDatasets = await getPublicFacilitiesDatasets(idsList, dataType);        
-        const typologyAverageDatasets = await getTypologyDatasets();
-        let datasets = facilitiesDatasets.concat(typologyAverageDatasets);
-        datasets = setDisplayedDatasets(datasets);
+        let facilitiesDatasets = await getPublicFacilitiesDatasets(idsList, dataType);  
+
+        if(facilitiesDatasets.length > 0){
+            const typologyAverageDatasets = await getTypologyDatasets();
+            facilitiesDatasets = facilitiesDatasets.concat(typologyAverageDatasets);
+        }
+        const datasets = setDisplayedDatasets(facilitiesDatasets);
         setData({
             labels: LABELS,
             datasets
-        });
-        
+        });        
     }, []);
 
     const handleExportPNG = () => {

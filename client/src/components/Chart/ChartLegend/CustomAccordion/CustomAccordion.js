@@ -20,7 +20,7 @@ function CustomAccordion({ facilityName, facility, canRemove, defaultExpanded, h
         background: isFacility ? color : `repeating-linear-gradient(90deg, ${color}, white 5px, ${color} 5px)`, 
         height: '25px', 
         width:'25px', 
-        marginLeft: isAverage ? '39px' : '17px',
+        marginLeft: isAverage ? '35px' : '17px',
         borderRadius: '50%',
         cursor: 'pointer',
         border: '1px solid black'
@@ -64,14 +64,14 @@ function CustomAccordion({ facilityName, facility, canRemove, defaultExpanded, h
                                         onClick={() => handleLegendClick(dataset)}
                                     />
                                     { !dataset.isDeviation && !dataset.isAverage &&
-                                        <Typography variant='h6' className='chart-legend-year'>
+                                        <Typography variant='body1' className='chart-legend-year'>
                                             {dataset.year}
                                         </Typography>
                                     }
                                     {
                                         dataset.isDeviation && 
                                         <Tippy content={`La desviació mostra la dispersió respecte la mitjana de les dades de tipologia ${dataset.typology}, concepte ${dataset.concept} i any ${dataset.year}`}>
-                                            <Typography variant='h6' className='chart-legend-year'>
+                                            <Typography variant='body1' className='chart-legend-year'>
                                                 {`Desviació ${dataset.year}`}
                                             </Typography>
                                         </Tippy>
@@ -79,7 +79,7 @@ function CustomAccordion({ facilityName, facility, canRemove, defaultExpanded, h
                                      {
                                         dataset.isAverage && 
                                         <Tippy content={`Mitjana entre les dades de tipologia ${dataset.typology}, concepte ${dataset.concept} i any ${dataset.year}`}>
-                                            <Typography variant='h6' className='chart-legend-year'>
+                                            <Typography variant='body1' className='chart-legend-year'>
                                                 {`Mitjana ${dataset.year}`}
                                             </Typography>
                                         </Tippy>
