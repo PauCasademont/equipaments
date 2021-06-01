@@ -18,15 +18,15 @@ function Auth() {
     const getInputProps = (isPassword) => ({
         startAdornment: (            
             <InputAdornment position='start'>
-                { isPassword ? <LockOutlined fontSize='large' variant='outlined'/> 
-                : <PersonOutline fontSize='large' variant='outlined'/> }                
+                { isPassword ? <LockOutlined variant='outlined'/> 
+                : <PersonOutline variant='outlined'/> }                
             </InputAdornment>
         ),
         endAdornment: ( isPassword ?
             <InputAdornment position='end'>
                 <IconButton onClick={() => setShowPassword(!showPassword)}>
-                    { showPassword ? <VisibilityOff fontSize='large'/>  
-                    : <Visibility fontSize='large'/> }
+                    { showPassword ? <VisibilityOff/>  
+                    : <Visibility/> }
                 </IconButton>
             </InputAdornment> 
             : null

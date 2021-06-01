@@ -87,7 +87,7 @@ function Chart({ facilityName, displayedDatasets = [] }) {
 
     return (
         data && 
-        <Container maxWidth='lg'>
+        <Container maxWidth='md'>
                 <ChartLegend 
                     data={data} 
                     setData={setData} 

@@ -9,7 +9,7 @@ import { CONSUMPTION, PRICE, AREA, SUPERSCRIPT_TWO} from '../../../constants';
 function getIconMarker(icon) {
     return new L.icon({
         iconUrl: icon,
-        iconSize: [45, 45]
+        iconSize: [35, 35]
     });
 }
 

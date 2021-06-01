@@ -63,7 +63,7 @@ export const add = (list, value) => {
 
 export const getAverageDatasets = (facilities, dataType, typology) => {
     const descendantYears = YEARS_LIST.reverse();
-    const name = `EQUIPAMENTS DE TIPOLOGIA ${getTypologyUserFormat(typology)}`
+    const name = `Mostra mitjanes i desviacions dels equipaments de tipologia ${getTypologyUserFormat(typology)}`
     let datasets = [];
     CONCEPTS.forEach((concept, darkenAmount) => {
         let indexColor = 0
