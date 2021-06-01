@@ -9,17 +9,19 @@ function DeleteUser({ usernames, setNames }) {
     const [selectedUser, setSelectedUser] = useState(null);
 
     const handleDeleteClick = () => {
-        deleteUser(selectedUser.id, selectedUser.name)
-        .then(res => {
-            if(res) {
-                const deletedId = selectedUser.id;
-                setSelectedUser(null);
-                setNames(prevState => ({
-                    ...prevState,
-                    users: prevState.users.filter(user => user.id != deletedId)
-                }));
-            }
-        });
+        if(selectedUser){
+            deleteUser(selectedUser.id, selectedUser.name)
+            .then(res => {
+                if(res) {
+                    const deletedId = selectedUser.id;
+                    setSelectedUser(null);
+                    setNames(prevState => ({
+                        ...prevState,
+                        users: prevState.users.filter(user => user.id != deletedId)
+                    }));
+                }
+            });
+        }
     }
 
     return (

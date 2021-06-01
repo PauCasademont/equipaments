@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { Grid, Typography, Divider, Select, MenuItem, TextField, InputAdornment, Button } from '@material-ui/core';
+import { useHistory } from 'react-router-dom';
 
 import './CreateFacility.css';
 import { createPublicFacility } from '../../../../actions/publicFacility';
@@ -16,6 +17,7 @@ function CreateFacility({setFacilitiesNames }) {
     };
 
     const [form, setForm] = useState(formInitialState);
+    const router = useHistory();
 
     const handleChange = (event) => {
         setForm({ ...form, [event.target.name]: event.target.value});
@@ -26,9 +28,7 @@ function CreateFacility({setFacilitiesNames }) {
         createPublicFacility(form)
         .then(result => {
             if(result){
-                setForm(formInitialState);
-                const newFacility = { id: result._id, name: result.name };
-                setFacilitiesNames(prevState => [...prevState, newFacility]);
+                router.push(`/edit/${result._id}`);
             }
         });
     };

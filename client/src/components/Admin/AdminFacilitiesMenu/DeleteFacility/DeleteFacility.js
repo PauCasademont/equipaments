@@ -8,16 +8,18 @@ function DeleteFacility({ facilitiesNames, setFacilitiesNames }) {
     const [selectedFacility, setSelectedFacility] = useState(null);
 
     const handleDeleteClick = () => {
-        deletePublicFacility(selectedFacility)
-        .then(res => {
-            if(res){
-                const facilityId = selectedFacility.id;
-                setSelectedFacility(null);
-                setFacilitiesNames(prevState => 
-                    prevState.filter(facility => facility.id != facilityId)
-                );
-            }
-        });
+        if(selectedFacility){
+            deletePublicFacility(selectedFacility)
+            .then(res => {
+                if(res){
+                    const facilityId = selectedFacility.id;
+                    setSelectedFacility(null);
+                    setFacilitiesNames(prevState => 
+                        prevState.filter(facility => facility.id != facilityId)
+                    );
+                }
+            });
+        }
     };
     
     return (

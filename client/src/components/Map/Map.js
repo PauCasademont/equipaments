@@ -43,6 +43,7 @@ function Map({ ids = [], displayedDatasets = [] }) {
     const icons = getIcons();
     const router = useHistory();
     const location = useLocation();
+    const isHomePage = ids.length == 0;
 
     useEffect(() => {
         getMapPublicFalcilities()
@@ -106,15 +107,16 @@ function Map({ ids = [], displayedDatasets = [] }) {
                         router={router}
                     />
                 ))}
-                { user && <UserMenu user={user} router={router} setOpenPopup={setOpenPopup}/> }
+                { user && isHomePage && <UserMenu user={user} router={router} setOpenPopup={setOpenPopup}/> }
                 <FilterControl 
                     filters={filters} 
                     setFilters={setFilters}
                     satelliteView={satelliteView}
                     setSatelliteView={setSatelliteView}
+                    icons={icons}
                 />
             </MapContainer>
-            {openPopup.importData?.open &&
+            { openPopup.importData?.open &&
                 <ImportData fileData={openPopup.importData} setOpenPopup={setOpenPopup} />
             }
         </>

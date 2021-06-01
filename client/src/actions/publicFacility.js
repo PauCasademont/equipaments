@@ -34,7 +34,9 @@ export const createPublicFacility = async (form) => {
 
         return data.result;
     } catch (error) {
-        console.log(error)
+        console.log(error);
+        const message = error.response?.data?.clientMessage || 'Error no identificat';
+        createAlert('Error', message);
     }
 }
 

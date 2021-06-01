@@ -1,8 +1,9 @@
 import { useEffect, useState } from 'react';
 import groupBy from 'lodash.groupby';
 import { useHistory } from 'react-router-dom';
-import { Paper, Button } from '@material-ui/core';
+import { Paper, Button, Grid } from '@material-ui/core';
 import { ArrowBack, GetApp } from '@material-ui/icons';
+import Tippy from '@tippy.js/react';
 
 import './ChartLegend.css';
 import CustomAccordion from './CustomAccordion/CustomAccordion';
@@ -99,34 +100,41 @@ function ChartLegend({ data, setData, ids, dataType, handleExportPNG }) {
     return (
         <div className='chart-legend'>
             <Paper className='chart-legend-paper' elevation={3}>
-                <div className='chart-legend-bar'>
-                    <div>
+                <Grid container>
+                    <Grid item xs={12} sm={5} md={2}>
+                        <Tippy content='Afegeix un altre equipament per comparar dades'>
+                            <Button 
+                                className='chart-legend-btn' 
+                                onClick={() => handleAddFacility()}
+                                variant='contained' 
+                                color='primary'
+                            >
+                                Afegir Equipament
+                            </Button>
+                        </Tippy>
+                    </Grid>
+                    <Grid item xs={12} sm={6} md={7}>
                         <Button 
-                            className='chart-legend-add-btn' 
-                            onClick={() => handleAddFacility()}
-                            variant='contained' 
-                            color='primary'
-                        >
-                            Afegir Equipament
-                        </Button>
-                        <Button 
+                            className='chart-legend-btn'
                             onClick={() => handleExportPNG()}
                             variant='contained' 
                             color='primary'
                         >
                             <GetApp/> &nbsp; Descarrega el gràfic en PNG
                         </Button>
-                    </div>
-                    <Button 
-                        className='chart-legend-return-btn' 
-                        variant='outlined' 
-                        color='primary' 
-                        onClick={() => router.push('/')}
-                    >
-                        <ArrowBack/>
-                        &nbsp; Torna al mapa
-                    </Button>                   
-                </div>
+                    </Grid>
+                    <Grid item xs={12} sm={12} md={3}>
+                        <Button 
+                            className='chart-legend-btn' 
+                            variant='outlined' 
+                            color='primary' 
+                            onClick={() => router.push('/')}
+                        >
+                            <ArrowBack/>
+                            &nbsp; Torna al mapa
+                        </Button>                   
+                    </Grid>
+                </Grid>
                 { Object.keys(legendFacilities).map((facility, index) => (
                     <CustomAccordion
                         key={index}

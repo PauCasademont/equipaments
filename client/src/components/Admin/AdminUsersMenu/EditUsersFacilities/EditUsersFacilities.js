@@ -39,29 +39,33 @@ function EditUsersFacilities({ usernames, facilityNames, defaultUser }) {
    
 
     const handleAddClick = () => {
-        addUserFacility(selectedUser.id, form.selectedFacilityToAdd.id)
-        .then(() => {
-            const addedFacility = form.selectedFacilityToAdd;
-            setForm(prevState => ({
-                ...prevState,
-                selectedFacilityToAdd: null
-            }));
-            setFacilitiesToAdd(remove(facilitiesToAdd, addedFacility));
-            setFacilitiesToRemove(add(facilitiesToRemove, addedFacility));
-        });
+        if(form.selectedFacilityToAdd) {
+            addUserFacility(selectedUser.id, form.selectedFacilityToAdd.id)
+            .then(() => {
+                const addedFacility = form.selectedFacilityToAdd;
+                setForm(prevState => ({
+                    ...prevState,
+                    selectedFacilityToAdd: null
+                }));
+                setFacilitiesToAdd(remove(facilitiesToAdd, addedFacility));
+                setFacilitiesToRemove(add(facilitiesToRemove, addedFacility));
+            });
+        }
     }
 
     const handleRemoveClick = () => {
-        removeUserFacility(selectedUser.id, form.selectedFacilityToRemove.id)
-        .then(() => {
-            const removedFacility = form.selectedFacilityToRemove;
-            setForm(prevState => ({
-                ...prevState,
-                selectedFacilityToRemove: null
-            }));
-            setFacilitiesToAdd(add(facilitiesToAdd, removedFacility));
-            setFacilitiesToRemove(remove(facilitiesToRemove, removedFacility));
-        })
+        if(form.selectedFacilityToRemove){
+            removeUserFacility(selectedUser.id, form.selectedFacilityToRemove.id)
+            .then(() => {
+                const removedFacility = form.selectedFacilityToRemove;
+                setForm(prevState => ({
+                    ...prevState,
+                    selectedFacilityToRemove: null
+                }));
+                setFacilitiesToAdd(add(facilitiesToAdd, removedFacility));
+                setFacilitiesToRemove(remove(facilitiesToRemove, removedFacility));
+            });
+        }
     }
 
     return (

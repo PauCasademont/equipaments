@@ -39,22 +39,22 @@ function Edit() {
     
     useEffect(() => {
        if(publicFacility){
-           let newFormValues = null;
+           let newFormValues = Array(12).fill(0);;
 
            if (dataType == DATA_TYPES[TYPOLOGY]){
-               newFormValues = [publicFacility.typology];
+               newFormValues[0] = publicFacility.typology;
            }
 
            else if (dataType == DATA_TYPES[AREA]){              
-               newFormValues = [publicFacility.area];
+               newFormValues[0] = publicFacility.area;
            }
 
            else if (dataType == DATA_TYPES[COORDINATES]){
-               newFormValues = publicFacility.coordinates;
-           }
+                newFormValues[0] = publicFacility.coordinates[0];
+                newFormValues[1] = publicFacility.coordinates[1];
+        }
 
            else {
-                newFormValues = Array(12).fill(0);
                 if (publicFacility.data[concept] && publicFacility.data[concept][year]){
                     if (dataType == DATA_TYPES[CONSUMPTION]){
                         newFormValues = publicFacility.data[concept][year].consumption || newFormValues;

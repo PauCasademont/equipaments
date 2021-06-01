@@ -18,7 +18,7 @@ export const signin =  async (form, router) => {
 
 const checkPasswordsInputs = (password1, password2) => {
     if(password1.length < 8 || !hasNumber(password1)){
-        createAlert('Error', 'La contrasenya és massa dèbil. Ha de contenir com a mínim 8 caracters amb 1 dígit, 0-9');
+        createAlert('Error', 'La contrasenya és massa dèbil. Ha de contenir com a mínim 8 caràcters amb 1 dígit, 0-9');
         return false;
     }
 
