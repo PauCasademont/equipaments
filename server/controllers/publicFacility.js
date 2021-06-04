@@ -66,14 +66,20 @@ export const deletePublicFacility = async (req, res) => {
 export const getMapPublicFalcilities = async (req, res) => {
     try { 
         const facilities = await PublicFacilityModel.find({ coordinates: { $ne: [] }});
-        const result = facilities.map(facility => ({
-            id: facility._id,
-            name: facility.name,
-            typology: facility.typology,
-            coordinates: facility.coordinates,
-            area: facility.area,
-            years: getPublicYearsFromData(facility.data)
-        }));
+        const result = facilities.map(facility => {
+            const { years, hasConsumptionData, hasPriceData } = getFacilityDataInfo(facility.data);
+            return {
+                id: facility._id,
+                name: facility.name,
+                typology: facility.typology,
+                coordinates: facility.coordinates,
+                area: facility.area,
+                years,
+                hasConsumptionData,
+                hasPriceData,                
+                users: facility.users || []
+            }
+        });
         res.status(200).json({result});
     } catch (error) {
         res.status(500).json({ message: 'Could not get public facilities'});
@@ -81,17 +87,30 @@ export const getMapPublicFalcilities = async (req, res) => {
     }
 }
 
-const getPublicYearsFromData = (data) => {
-    let years = []
+const getFacilityDataInfo = (data) => {
+    let years = [];
+    let hasConsumptionData = false;
+    let hasPriceData = false;
+
     Object.keys(data).forEach(concept => {
         Object.keys(data[concept]).forEach(strYear => {
             const year = parseInt(strYear);
+
             if(!years.includes(year) && hasValuesYear(data, concept, strYear)){
                 years.push(year);
             }
+
+            if(!hasConsumptionData && DATA_TYPES.consumption in data[concept][year]){
+                hasConsumptionData = true;
+            }
+
+            if(!hasPriceData && DATA_TYPES.price in data[concept][year]){
+                hasPriceData = true;
+            }
+
         });
     });
-    return years;
+    return { years, hasConsumptionData, hasPriceData };
 }
 
 const hasValuesYear = (data, concept, year) => {
@@ -287,6 +306,65 @@ export const getTypologyFacilities = async (req, res) => {
         res.status(200).send({ result });
     } catch (error) {
         res.status(500).send({ message: 'Could not get typology facilities'});
+        console.log(error);
+    }
+}
+
+export const addUserToFacility = async (req, res) => {
+    const { facilityId } = req.body;
+
+    try {
+        let facility = await PublicFacilityModel.findById(facilityId);
+        if(facility.users) {
+            facility.users.push(req.newUser.username);
+        } else {
+            facility.users = [req.newUser.username];
+        }
+        await PublicFacilityModel.findByIdAndUpdate(facilityId, facility, { new: true });
+        res.status(200).send({ result: req.newUser });
+    } catch (error) {
+        res.status(500).send({ message: 'Could not add the user to the facility'});
+        console.log(error);
+    }
+}
+
+export const removeUserFromFacility = async (req, res) => {
+    const { facilityId } = req.body;
+
+    try {
+        let facility = await PublicFacilityModel.findById(facilityId);
+        if(facility.users) {
+            const index = facility.users.indexOf(req.newUser.username);
+            if(index > -1){
+                facility.users.splice(index, 1);
+            }
+        } 
+        await PublicFacilityModel.findByIdAndUpdate(facilityId, facility, { new: true });
+        res.status(200).send({ result: req.newUser });
+    } catch (error) {
+        res.status(500).send({ message: 'Could not remove the user from the facility'});
+        console.log(error);
+    }
+}
+
+export const updateUsernamesFromFacilities = async (req, res) => {
+    const prevUsername = req.prevUsername;
+    const newUsername = req.newUser.username;
+    try {
+        const facilitiesUsers = await PublicFacilityModel.find({}, 'users');
+        facilitiesUsers.forEach(async (facility) => {
+            if(facility.users){
+                const index = facility.users.indexOf(prevUsername);
+                if(index > -1){
+                    let facilityWithUser = await PublicFacilityModel.findById(facility._id);
+                    facilityWithUser.users[index] = newUsername;
+                    await PublicFacilityModel.findByIdAndUpdate(facility._id, facilityWithUser, { new: true });
+                }
+            }
+        });
+        res.status(200).send({ result: req.newUser });
+    } catch (error) {
+        res.status(500).send({ message: 'Could not update facilities users'});
         console.log(error);
     }
 }

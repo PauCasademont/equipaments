@@ -48,14 +48,26 @@ function CustomMarker({ publicFacility, userFacilityIds, ids, displayedDatasets,
                 <Typography className='popup-info' variant='body1' >
                     Tipologia: {typology} <br /> {area ? `Superficie: ${area} m${SUPERSCRIPT_TWO}` : ''}
                 </Typography>
+                { publicFacility.users.length == 1 &&
+                    <Typography className='popup-info' variant='body1' >
+                        Administrador: {publicFacility.users[0]}
+                    </Typography>
+                }
+                { publicFacility.users.length > 1 &&
+                    <Typography className='popup-info' variant='body1' >
+                        Administradors: {publicFacility.users.join(', ')}
+                    </Typography>
+                }
                 { isHomePage ? 
-                <>
+                <> 
+                    { publicFacility.hasConsumptionData &&
                     <IconButton className='popup-icon-button' onClick={() => { handleChartClick(CONSUMPTION) }}>
                         <img className='popup-icon' src={icons.consum} alt='icon_btn' />
-                    </IconButton>
+                    </IconButton> }
+                    { publicFacility.hasPriceData &&
                     <IconButton className='popup-icon-button' onClick={() => { handleChartClick(PRICE) }}>
                         <img className='popup-icon' src={icons.cost} alt='icon_btn' />
-                    </IconButton>
+                    </IconButton> }
                     {area > 0 && 
                     <IconButton className='popup-icon-button' onClick={() => { handleChartClick(AREA) }}>
                         <img className='popup-icon' src={icons.indicadors} alt='icon_btn' />

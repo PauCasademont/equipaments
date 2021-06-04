@@ -166,7 +166,7 @@ export const adminChangePassword = async (req, res) => {
     }
 }
 
-export const adminChangeUsername = async (req, res) => {
+export const adminChangeUsername = async (req, res, next) => {
     const { new_username } = req.body;
     const { id } = req.params;
 
@@ -181,11 +181,12 @@ export const adminChangeUsername = async (req, res) => {
         }
     
         const user = await UserModel.findById(id);
+        req.prevUsername = user.username;
 
         user.username = new_username;
-        const result = await UserModel.findByIdAndUpdate(id, user, { new: true });
-        return res.status(200).json({ result }); 
-       
+        const newUser = await UserModel.findByIdAndUpdate(id, user, { new: true });
+        req.newUser = newUser;
+        next();       
     } catch (error) {
         res.status(500).json({ 
             message: 'Could not change the username'
@@ -222,7 +223,7 @@ export const getUserField = async (req, res) => {
     }
 }
 
-export const addUserFacility = async (req, res) => {
+export const addFacilityToUser = async (req, res, next) => {
     const { id } = req.params;
     const { facilityId } = req.body;
 
@@ -245,15 +246,16 @@ export const addUserFacility = async (req, res) => {
     try {
         const user = await UserModel.findById(id);
         user.public_facility_ids = user.public_facility_ids.concat([facilityId]);
-        const result = await UserModel.findByIdAndUpdate(id, user, { new: true });
-        res.status(200).send({result});
+        const newUser = await UserModel.findByIdAndUpdate(id, user, { new: true });
+        req.newUser = newUser;
+        next();
     } catch (error) {
         res.status(500).send({ message: 'Could not update user'});
         console.log(error);
     }
 }
 
-export const removeUserFacility = async (req, res) => {
+export const removeFacilityFromUser = async (req, res, next) => {
     const { id } = req.params;
     const { facilityId } = req.body;
 
@@ -279,10 +281,20 @@ export const removeUserFacility = async (req, res) => {
         if(index > -1){
             user.public_facility_ids.splice(index, 1);
         }
-        const result = await UserModel.findByIdAndUpdate(id, user, { new: true });
-        res.status(200).send({result});
+        const newUser = await UserModel.findByIdAndUpdate(id, user, { new: true });
+        req.newUser = newUser;
+        next();
     } catch (error) {
         res.status(500).send({ message: 'Could not update user'});
+        console.log(error);
+    }
+}
+
+export const getUsernameFromId = async (id) => {
+    try {
+        const result =  await UserModel.findById(id, 'username');
+        return result.username;
+    } catch (error) {
         console.log(error);
     }
 }
