@@ -30,7 +30,7 @@ function InvisibleFacilities() {
         });
     },[]);
 
-    const removeFromLlist = (id) => {
+    const removeFromList = (id) => {
         const newInvisibleFacilities = Object.assign({}, publicFacilities);
         delete newInvisibleFacilities[id];
         setPublicFacilities(newInvisibleFacilities);
@@ -39,14 +39,14 @@ function InvisibleFacilities() {
     const handleSave = (id) => {
         updateCoordinates(id, publicFacilities[id].coordinates)
         .then(changed => {
-            if(changed) removeFromLlist(id);
+            if(changed) removeFromList(id);
         });
     }
 
     const handleDelete = (id, name) => {
         deletePublicFacility({ id, name })
         .then(result => {
-            if(result) removeFromLlist(id);
+            if(result) removeFromList(id);
         });
     }
 

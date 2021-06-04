@@ -101,7 +101,7 @@ function ChartLegend({ data, setData, ids, dataType, handleExportPNG }) {
         <div className='chart-legend'>
             <Paper className='chart-legend-paper' elevation={3}>
                 <Grid container>
-                    <Grid item xs={12} sm={6} md={3}>
+                    <Grid item sm={12} md={6} lg={3}>
                         <Tippy content='Afegeix un altre equipament per comparar dades'>
                             <Button 
                                 className='chart-legend-btn' 

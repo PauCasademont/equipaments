@@ -24,11 +24,11 @@ function CustomAccordion({ facilityName, facility, canRemove, defaultExpanded, h
         borderRadius: '50%',
         cursor: 'pointer',
         border: '1px solid black'
-    })
+    });
 
     const isMinDeviation = (dataset) => {
         return 'isDeviation' in dataset && dataset.isDeviation == 'min';
-    }
+    };
 
     return (
         <Accordion className='chart-legend-accordion' defaultExpanded={defaultExpanded}>
@@ -50,8 +50,8 @@ function CustomAccordion({ facilityName, facility, canRemove, defaultExpanded, h
             <AccordionDetails>
                 <Grid container spacing={3}>
                     { Object.keys(facility).map((concept, conceptIndex) => (                        
-                        <Grid item xs={12} sm={6} md={3} key={conceptIndex}>
-                            <Typography variant='h5'>
+                        <Grid item xs={12} sm={12} md={6} lg={3} key={conceptIndex}>
+                            <Typography variant='h6'>
                                 {concept}
                             </Typography>
                             { facility[concept].map((dataset, datasetIndex) => (

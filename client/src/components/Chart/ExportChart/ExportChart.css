@@ -1,0 +1,31 @@
+.export-chart-legend {
+    margin-top: 20px !important;
+}
+
+.export-chart-legend-item {
+    display: flex;
+    margin-top: 10px;
+}
+
+
+.export-chart-legend-circle {
+    margin-right: 5px;
+    border-radius: 50%;
+    background: grey;
+    width: 20px;
+    height: 20px;
+    overflow: hidden;
+}
+
+.export-chart-legend-circle-segment-color {
+    float: left;
+    width: 11.11%;
+    height: 100%;
+}
+
+.export-chart-legend-circle-segment-white {
+    background: white;
+    float: left;
+    width: 11.11%;
+    height: 100%;
+}

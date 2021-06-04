@@ -1,16 +1,19 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import { useParams } from 'react-router-dom';
 import { Line } from 'react-chartjs-2';
-import { Container } from '@material-ui/core';
-import { saveAs } from 'file-saver';
+import { Grid } from '@material-ui/core';
+import { exportComponentAsPNG } from 'react-component-export-image';
 
 import './Chart.css';
 import { getPublicFacilitiesDatasets, getTypologyAverageDatasets, getPublicFacilityField } from '../../actions/publicFacility';
 import { LABELS, CONSUMPTION, PRICE, SUPERSCRIPT_TWO, DATA_TYPES, AREA } from '../../constants';
 import ChartLegend from './ChartLegend/ChartLegend';
+import ExportChart from './ExportChart/ExportChart';
+
 
 function Chart({ facilityName, displayedDatasets = [] }) {
     const [data, setData] = useState(null);
+    const exportChartRef = useRef();
     const { dataType, ids } = useParams(); 
     const idsList = ids.split(',');
 
@@ -80,16 +83,20 @@ function Chart({ facilityName, displayedDatasets = [] }) {
     }, []);
 
     const handleExportPNG = () => {
-        const canvasSave = document.getElementById('line_chart');
-        canvasSave.toBlob(blob => {
-            const fileName = getChartTitle();
-            saveAs(blob, fileName);
+        exportComponentAsPNG(exportChartRef, {
+            html2CanvasOptions: {
+                onclone: (clonedDoc) => {
+                    clonedDoc.getElementById('export_chart').style.visibility = 'visible';
+                    // clonedDoc.getElementById('export_chart').style.height = '1000px';
+                }
+            }
         })
     }
 
     return (
         data && 
-        <Container maxWidth='md'>
+        <Grid container justify='center' id='chartContainer'>
+            <Grid item xs={10} sm={6}>
                 <ChartLegend 
                     data={data} 
                     setData={setData} 
@@ -98,12 +105,13 @@ function Chart({ facilityName, displayedDatasets = [] }) {
                     handleExportPNG={handleExportPNG}
                 />
                 <Line 
-                    id='line_chart'
                     data={data}                     
                     options={options} 
                     height={133}
                 /> 
-        </Container>
+                <ExportChart data={data} options={options} ref={exportChartRef}/>
+            </Grid>
+        </Grid>
     )
 }
 

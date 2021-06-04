@@ -100,7 +100,7 @@ function Edit() {
 
     const handleChange = (newValue, valueIndex) => {
 
-        if((dataType == DATA_TYPES[AREA] || dataType == DATA_TYPES[PRICE] || dataType == DATA_TYPES[CONSUMPTION]) && newValue < 0){
+        if(dataType == DATA_TYPES[AREA]  && newValue < 0){
             newValue = 0;
         }   
 
