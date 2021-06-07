@@ -35,7 +35,6 @@ function App() {
           path="/chart/:dataType/:ids" exact
           render={(props) => 
             <Chart 
-              facilityName={props.location.state?.name} 
               displayedDatasets={props.location.state?.displayedDatasets} 
             />
           }

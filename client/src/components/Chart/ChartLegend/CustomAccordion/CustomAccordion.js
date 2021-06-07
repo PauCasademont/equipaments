@@ -13,7 +13,7 @@ import 'tippy.js/dist/tippy.css';
 
 import './CustomAccordion.css';
 
-function CustomAccordion({ facilityName, facility, canRemove, defaultExpanded, handleRemoveFacility, handleLegendClick, handleChangeColor}) {
+function CustomAccordion({ accordionName, accordionDatasets, canRemove, defaultExpanded, handleRemoveAccordion, handleLegendClick, handleChangeColor}) {
 
 
     const getCircleStyles = (color = '#CACFD2', isAverage, isFacility) => ({
@@ -34,13 +34,13 @@ function CustomAccordion({ facilityName, facility, canRemove, defaultExpanded, h
         <Accordion className='chart-legend-accordion' defaultExpanded={defaultExpanded}>
             <AccordionSummary expandIcon={<ExpandMore/>}>
                 <Typography variant='body1'>
-                    {facilityName}
+                    {accordionName}
                 </Typography>
                 {  canRemove && 
                     <Tippy content='Elimina el menú'>
                         <IconButton 
                             className='chart-legend-remove-btn' 
-                            onClick={(event) => handleRemoveFacility(event, facilityName)}
+                            onClick={(event) => handleRemoveAccordion(event, accordionName)}
                         >
                             <DeleteOutline />
                         </IconButton>
@@ -49,12 +49,12 @@ function CustomAccordion({ facilityName, facility, canRemove, defaultExpanded, h
             </AccordionSummary>
             <AccordionDetails>
                 <Grid container spacing={3}>
-                    { Object.keys(facility).map((concept, conceptIndex) => (                        
+                    { Object.keys(accordionDatasets).map((concept, conceptIndex) => (                        
                         <Grid item xs={12} sm={12} md={6} lg={3} key={conceptIndex}>
                             <Typography variant='h6'>
                                 {concept}
                             </Typography>
-                            { facility[concept].map((dataset, datasetIndex) => (
+                            { accordionDatasets[concept].map((dataset, datasetIndex) => (
                                 !isMinDeviation(dataset) && 
                                 <div className='chart-legend-item' key={datasetIndex}>
                                     <Checkbox

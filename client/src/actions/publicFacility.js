@@ -13,7 +13,7 @@ import {
     addArrayObjectsIds,
     getTypologyUserFormat
 } from './utils';
-import { AREA, CONSUMPTION, PRICE, COORDINATES, DATA_TYPES, COLORS, TYPOLOGY } from '../constants/index.js';
+import { AREA, CONSUMPTION, PRICE, COORDINATES, DATA_TYPES, COLORS, TYPOLOGY, SUPERSCRIPT_TWO, LABELS } from '../constants/index.js';
 
 export const createPublicFacility = async (form) => {
     try {
@@ -98,7 +98,8 @@ export const getPublicFacilityDatasets = async (id, dataType, firstDataset) => {
                             datasets.push({
                                 label: `${name} ${concept} ${year}`,
                                 id,
-                                name: `${name} | Tipologia: ${getTypologyUserFormat(typology)}`,
+                                name,
+                                menuName: `${name} | Tipologia: ${getTypologyUserFormat(typology)}`,
                                 concept: `${concept}`,
                                 year: `${year}`,
                                 data: values,
@@ -277,3 +278,28 @@ export const updateCoordinates = async (id, newCoords) => {
     }
 }
 
+export const getCSVReport = (datasets, dataType) => {
+    let unitDataType = '';
+    if(dataType == CONSUMPTION) unitDataType  = 'kWh';
+    else if(dataType == PRICE) unitDataType = '€';
+    else if(dataType == AREA) unitDataType = `kWh/m${SUPERSCRIPT_TWO}`;
+
+    const getValuesDataset = (dataset) => (
+        dataset.data.reduce((result, currentValue, index) => {
+            const month = `${LABELS[index]} [${unitDataType}]`;
+            return { ...result, [month]: currentValue}
+        },{})
+    );
+    const data = [];
+    datasets.forEach(dataset => {
+        if(!dataset.hidden){
+            data.push({
+                nom: dataset.name,
+                concepte: dataset.concept,
+                any: dataset.year,
+                ...getValuesDataset(dataset)
+            });
+        }
+    })
+    return { data };
+}

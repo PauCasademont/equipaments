@@ -22,7 +22,7 @@ function CustomMarker({ publicFacility, userFacilityIds, ids, displayedDatasets,
         const idsString = ids.concat([id]).join(',');
         router.push({
             pathname: `/chart/${type}/${idsString}`,
-            state: {name, displayedDatasets}
+            state: { displayedDatasets }
         });
     }
 

@@ -3,31 +3,30 @@ import { useParams } from 'react-router-dom';
 import { Line } from 'react-chartjs-2';
 import { Grid } from '@material-ui/core';
 import { exportComponentAsPNG } from 'react-component-export-image';
+import { useLocation } from 'react-router-dom';
 
 import './Chart.css';
-import { getPublicFacilitiesDatasets, getTypologyAverageDatasets, getPublicFacilityField } from '../../actions/publicFacility';
+import { 
+    getPublicFacilitiesDatasets, 
+    getTypologyAverageDatasets, 
+    getPublicFacilityField, 
+    getPublicFacilitiesNamesFromIds
+} from '../../actions/publicFacility';
 import { LABELS, CONSUMPTION, PRICE, SUPERSCRIPT_TWO, DATA_TYPES, AREA } from '../../constants';
 import ChartLegend from './ChartLegend/ChartLegend';
 import ExportChart from './ExportChart/ExportChart';
 
-
-function Chart({ facilityName, displayedDatasets = [] }) {
+function Chart({ displayedDatasets = [] }) {
     const [data, setData] = useState(null);
+    const [chartTitle, setChartTitle] = useState('');
     const exportChartRef = useRef();
     const { dataType, ids } = useParams(); 
     const idsList = ids.split(',');
-
-    const getChartTitle = () => {
-        let tipusGrafic = DATA_TYPES[dataType];
-        if(dataType == AREA) tipusGrafic= 'Consum per m' + SUPERSCRIPT_TWO;
-
-        if(idsList.length > 1) return `Gràfic ${tipusGrafic}`;
-        return `${tipusGrafic} ${facilityName}`;
-    }
+    const location = useLocation();
 
     const options = {
         legend: { display: false },
-        title: { display: true, text: getChartTitle(), fontSize: 30 },
+        title: { display: true, text: chartTitle, fontSize: 22 },
         scales: {
             yAxes: [{
                 ticks: {
@@ -79,15 +78,29 @@ function Chart({ facilityName, displayedDatasets = [] }) {
         setData({
             labels: LABELS,
             datasets
-        });        
+        });           
     }, []);
 
-    const handleExportPNG = () => {
+    useEffect(() => {
+        let chartType = DATA_TYPES[dataType];
+        if(dataType == AREA) chartType= 'Consum per m' + SUPERSCRIPT_TWO;
+
+        getPublicFacilitiesNamesFromIds(idsList)
+        .then(facilities => {
+            const names  = facilities.map(facility => facility.name);
+            const title = `${chartType} ${idsList.length > 1 ? 'equipaments: ' : ''} ${names.join(', ')}`;
+            setChartTitle(title);
+        });
+    },[location]);
+
+
+
+    const handleExportPNG = (fileName) => {
         exportComponentAsPNG(exportChartRef, {
+            fileName,
             html2CanvasOptions: {
                 onclone: (clonedDoc) => {
                     clonedDoc.getElementById('export_chart').style.visibility = 'visible';
-                    // clonedDoc.getElementById('export_chart').style.height = '1000px';
                 }
             }
         })
@@ -101,7 +114,8 @@ function Chart({ facilityName, displayedDatasets = [] }) {
                     data={data} 
                     setData={setData} 
                     ids={idsList} 
-                    dataType={dataType} 
+                    dataType={dataType}
+                    chartTitle={chartTitle} 
                     handleExportPNG={handleExportPNG}
                 />
                 <Line 

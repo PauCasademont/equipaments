@@ -40,7 +40,7 @@ export const addArrayObjectsIds = (array) => {
 
 export const getFacilityDatasetData = (facilityData, dataValue, dataType, area) => {
     return facilityData[dataValue].map(value => {
-        return dataType == AREA ? value / area : value;
+        return dataType == AREA ? Math.round(value / area) : value;
     })
 }
 
@@ -63,7 +63,7 @@ export const add = (list, value) => {
 
 export const getAverageDatasets = (facilities, dataType, typology) => {
     const descendantYears = YEARS_LIST.reverse();
-    const name = `Mostra mitjanes i desviacions dels equipaments de tipologia ${getTypologyUserFormat(typology)}`
+    const menuName = `Mostra mitjanes i desviacions dels equipaments de tipologia ${getTypologyUserFormat(typology)}`
     let datasets = [];
     CONCEPTS.forEach((concept, darkenAmount) => {
         let indexColor = 0
@@ -76,9 +76,10 @@ export const getAverageDatasets = (facilities, dataType, typology) => {
                     const deviation = getDeviationArrays(arrays, average);
                     let color = COLORS[ indexColor % COLORS.length ];
                     datasets.push({
-                        label: `${name} Mitjana ${concept} ${year}`,
+                        label: `${menuName} Mitjana ${concept} ${year}`,
                         id: `typology ${getTypologyUserFormat(typology)}`,
-                        name: `${name}`,
+                        menuName,
+                        name: `Mitjana tipologia ${typology}`,
                         concept: `${concept}`,
                         year: `${year}`,
                         typology: `${typology}`,
@@ -93,9 +94,10 @@ export const getAverageDatasets = (facilities, dataType, typology) => {
                     color = COLORS[ (indexColor + 1) % COLORS.length ];
     
                     datasets.push({
-                        label: `${name} Desviació max ${concept} ${year}`,
+                        label: `${menuName} Desviació max ${concept} ${year}`,
                         id: `typology ${getTypologyUserFormat(typology)}`,
-                        name: `${name}`,
+                        menuName,
+                        name: `Desviació max tipologia ${typology}`,
                         isDeviation: 'max',
                         concept: `${concept}`,
                         typology: `${typology}`,
@@ -110,9 +112,10 @@ export const getAverageDatasets = (facilities, dataType, typology) => {
     
     
                     datasets.push({
-                        label: `${name} Desviació min ${concept} ${year}`,
+                        label: `${menuName} Desviació min ${concept} ${year}`,
                         id: `typology ${getTypologyUserFormat(typology)}`,
-                        name: `${name}`,
+                        menuName,
+                        name: `Desviació min tipologia ${typology}`,
                         isDeviation: 'min',
                         concept: `${concept}`,
                         year: `${year}`,

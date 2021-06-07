@@ -9,7 +9,7 @@
 .chart-legend-paper {
     padding: 0 20px 20px 20px;
     width: 100%;
-    background-color:#EBF5FB !important;
+    background-color:#f7f7f7 !important;
 }
 
 .chart-legend-form {
@@ -27,5 +27,13 @@
     margin-right: 5px !important;
 }
 
+.chart-legend-export-btn {
+    margin-top: 16px !important;
+}
+
+.chart-legend-export-csv-link {
+    color: black;
+    text-decoration: none;
+}
 
 

@@ -1,34 +1,37 @@
 import { useEffect, useState } from 'react';
 import groupBy from 'lodash.groupby';
 import { useHistory } from 'react-router-dom';
-import { Paper, Button, Grid } from '@material-ui/core';
+import { Paper, Button, Grid, Menu, IconButton, MenuItem } from '@material-ui/core';
 import { ArrowBack, GetApp } from '@material-ui/icons';
 import Tippy from '@tippy.js/react';
+import { CSVLink } from 'react-csv';
 
 import './ChartLegend.css';
+import { getCSVReport } from '../../../actions/publicFacility';
 import CustomAccordion from './CustomAccordion/CustomAccordion';
 
-function ChartLegend({ data, setData, ids, dataType, handleExportPNG }) {
-    const [legendFacilities, setLegendFacilities] = useState({});
+function ChartLegend({ data, setData, ids, dataType, handleExportPNG, chartTitle }) {
+    const [legendDatasets, setLegendDatasets] = useState({});
     const [facilitiesIds, setFacilitiesIds] = useState(ids);
+    const [anchorExportMenu, setAnchorExportMenu] = useState(null);
     const router = useHistory();
-
+    const exportFileName = chartTitle.replaceAll(' ','_');
     useEffect(() => {
-        let groupedFacilities = groupBy(data.datasets, dataset => dataset.name);
-        Object.keys(groupedFacilities).forEach(facility => {
-            groupedFacilities[facility] = groupBy(groupedFacilities[facility], dataset => dataset.concept);  
+        let groupedDatasets = groupBy(data.datasets, dataset => dataset.menuName);
+        Object.keys(groupedDatasets).forEach(facility => {
+            groupedDatasets[facility] = groupBy(groupedDatasets[facility], dataset => dataset.concept);  
         });
-        setLegendFacilities(groupedFacilities);
+        setLegendDatasets(groupedDatasets);
     },[]);
 
     const isDeviationMax = (dataset) => {
         return 'isDeviation' in dataset && dataset.isDeviation == 'max';
     }
-
     const getLabelsDisplayed = () => {
         const displayedDatasets = data.datasets.filter(dataset => !dataset.hidden);
         return displayedDatasets.map(dataset => dataset.label);
     }
+
 
     const handleLegendClick = (dataset) => {
         const index = data.datasets.findIndex((d) => d == dataset);
@@ -72,9 +75,9 @@ function ChartLegend({ data, setData, ids, dataType, handleExportPNG }) {
     };
 
     const removeFacilityLegend = (facility) => {
-        let legendFacilitiesCopy = legendFacilities;
-        delete legendFacilitiesCopy[facility];
-        setLegendFacilities(legendFacilitiesCopy);
+        let legendDatasetsCopy = legendDatasets;
+        delete legendDatasetsCopy[facility];
+        setLegendDatasets(legendDatasetsCopy);
     };
 
     const removeFacilityId = (id) => {
@@ -89,9 +92,9 @@ function ChartLegend({ data, setData, ids, dataType, handleExportPNG }) {
         }
     }
 
-    const handleRemoveFacility = (event, facility) => {
+    const handleRemoveAccordion = (event, facility) => {
         event.stopPropagation();
-        const id = data.datasets.find(dataset => dataset.name == facility).id;
+        const id = data.datasets.find(dataset => dataset.menuName == facility).id;
         removeFacilityData(id);
         removeFacilityLegend(facility);
         removeFacilityId(id);
@@ -114,14 +117,38 @@ function ChartLegend({ data, setData, ids, dataType, handleExportPNG }) {
                         </Tippy>
                     </Grid>
                     <Grid item xs={12} sm={6} md={6}>
-                        <Button 
-                            className='chart-legend-btn'
-                            onClick={() => handleExportPNG()}
-                            variant='contained' 
-                            color='primary'
+                        <Tippy content='Exporta el gràfic en format CSV o PNG'>
+                            <IconButton 
+                                className='chart-legend-btn chart-legend-export-btn'
+                                onClick={(event) => setAnchorExportMenu(event.currentTarget)}
+                                variant='contained' 
+                                color='primary'
+                                aeia-controls='exportMenu'
+                                aria-haspopup='true'
+                            >
+                                <GetApp/>
+                            </IconButton>
+                        </Tippy>
+                        <Menu
+                            id='exportMenu'
+                            keepMounted
+                            anchorEl={anchorExportMenu}
+                            open={Boolean(anchorExportMenu)}
+                            onClose={() => setAnchorExportMenu(null)}
                         >
-                            <GetApp/> &nbsp; Descarrega el gràfic en PNG
-                        </Button>
+                            <MenuItem onClick={() => console.log('csv')}>
+                                <CSVLink 
+                                    className='chart-legend-export-csv-link'
+                                    filename={`${exportFileName}.csv`}
+                                    {...getCSVReport(data.datasets, dataType)}
+                                >
+                                    Exportar en CSV
+                                </CSVLink>
+                            </MenuItem>
+                            <MenuItem onClick={() => handleExportPNG(exportFileName)}>
+                                Exportar en PNG
+                            </MenuItem>
+                        </Menu>
                     </Grid>
                     <Grid item xs={12} sm={6} md={3}>
                         <Button 
@@ -135,14 +162,14 @@ function ChartLegend({ data, setData, ids, dataType, handleExportPNG }) {
                         </Button>                   
                     </Grid>
                 </Grid>
-                { Object.keys(legendFacilities).map((facility, index) => (
+                { Object.keys(legendDatasets).map((accordionName, index) => (
                     <CustomAccordion
                         key={index}
-                        facilityName={facility}
-                        facility={legendFacilities[facility]}
+                        accordionName={accordionName}
+                        accordionDatasets={legendDatasets[accordionName]}
                         canRemove={index > 0}
                         defaultExpanded={index == 0}
-                        handleRemoveFacility={handleRemoveFacility}
+                        handleRemoveAccordion={handleRemoveAccordion}
                         handleLegendClick={handleLegendClick}
                         handleChangeColor={handleChangeColor}
                     />
