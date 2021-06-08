@@ -23,6 +23,7 @@ export const createPublicFacility = async (req, res) => {
             return res.status(404).send({ message: 'Permission denied'});
         }
 
+        //Check if already exist
         const oldPublicFacility = await PublicFacilityModel.findOne({ name });
         if (oldPublicFacility) return res.status(400).json({ message: `Public facility \'${name}\' already exists`})
 
@@ -64,8 +65,14 @@ export const deletePublicFacility = async (req, res) => {
 
 
 export const getMapPublicFalcilities = async (req, res) => {
+    //Return a list of facilities. Every facility has to have: id, name, typology, coordinates, area, 
+    //list of years that contains data, boolean to know if it has consumption data, 
+    //boolean to know if it has price data, users admins of the facility.
+
     try { 
+        //Get only facilities that have coordinates
         const facilities = await PublicFacilityModel.find({ coordinates: { $ne: [] }});
+
         const result = facilities.map(facility => {
             const { years, hasConsumptionData, hasPriceData } = getFacilityDataInfo(facility.data);
             return {
@@ -88,6 +95,7 @@ export const getMapPublicFalcilities = async (req, res) => {
 }
 
 const getFacilityDataInfo = (data) => {
+    //Return list of years that have data and boolean to know if it has consumption and price data.
     let years = [];
     let hasConsumptionData = false;
     let hasPriceData = false;
@@ -114,6 +122,7 @@ const getFacilityDataInfo = (data) => {
 }
 
 const hasValuesYear = (data, concept, year) => {
+    //List of 0 equals empty data
     return (
         !data[concept][year][DATA_TYPES.consumption]?.every(value => value == 0) ||
         !data[concept][year][DATA_TYPES.price]?.every(value => value == 0) 
@@ -183,6 +192,7 @@ export const getPublicFacilityData = async (req, res) => {
 }
 
 export const getInvisiblePublicFacilities = async (req, res) => {
+    //Return id and name for facilities that don't have coordiantes
     try {
         const result = await PublicFacilityModel.find({ coordinates: [] },'name coordinates');
         res.status(200).send({result});
@@ -207,6 +217,7 @@ export const importData = async (req, res) => {
         let publicFacility = await PublicFacilityModel.findOne({ name });
         let notImportedDataTypes = [];
 
+        //Create facility if it doesn't exist
         if (!publicFacility) {
             publicFacility = await PublicFacilityModel.create({
                 name,
@@ -219,9 +230,12 @@ export const importData = async (req, res) => {
 
         if(!publicFacility.data[concept]) publicFacility.data[concept] = {};    
 
+        //Save data if year field doesn't exist
         if(!publicFacility.data[concept][year]){
             publicFacility.data[concept][year] = {consumption, price};
         }
+
+        //Don't overwirte data
         else{
             if(!publicFacility.data[concept][year].consumption){
                 publicFacility.data[concept][year].consumption = consumption;
@@ -235,6 +249,7 @@ export const importData = async (req, res) => {
 
         await PublicFacilityModel.findByIdAndUpdate(publicFacility._id, publicFacility, { new: true });
         
+        //Return data types that haven't been updated
         res.status(200).send({ message: 'Updated successfully', notImportedDataTypes});
         
     } catch (error) {
@@ -352,6 +367,8 @@ export const updateUsernamesFromFacilities = async (req, res) => {
     const newUsername = req.newUser.username;
     try {
         const facilitiesUsers = await PublicFacilityModel.find({}, 'users');
+
+        //For each facility check if it has the previous username and update it
         facilitiesUsers.forEach(async (facility) => {
             if(facility.users){
                 const index = facility.users.indexOf(prevUsername);

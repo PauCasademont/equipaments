@@ -16,6 +16,8 @@ export const signup = async (req, res) => {
 
     const { username, public_facility_ids, password } = req.body;
     try {
+
+        //Check user already exist
         const oldUser = await UserModel.findOne({ username });
         if (oldUser) return res.status(400).json({ 
             message: `User \'${username}\' already exist`,
@@ -40,6 +42,8 @@ export const signin = async (req, res) => {
     const { username, password } = req.body;
 
     try {
+
+        //Check credentials
         const user = await UserModel.findOne({ username });
         if (!user) {
             return res.status(404).json({ 
@@ -47,7 +51,6 @@ export const signin = async (req, res) => {
                 clientMessage: `L'usuari \'${username}\' no existeix`
             });
         }
-
         const isPasswordCorrect = await bcrypt.compare(password, user.password);
         if (!isPasswordCorrect) {
             return res.status(400).json({ 
@@ -56,6 +59,7 @@ export const signin = async (req, res) => {
             });
         }
         
+        //Create jwt token
         const tokenData = {
             id: user._id,
             public_facility_ids: user.public_facility_ids,
@@ -186,6 +190,8 @@ export const adminChangeUsername = async (req, res, next) => {
         user.username = new_username;
         const newUser = await UserModel.findByIdAndUpdate(id, user, { new: true });
         req.newUser = newUser;
+
+        //Next function will update the username from public facilities users
         next();       
     } catch (error) {
         res.status(500).json({ 

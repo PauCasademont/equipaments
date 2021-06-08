@@ -1,3 +1,4 @@
+//Users collection routes. Use auth to check users permissons
 import express from 'express';
 
 import auth from '../middleware/auth.js';

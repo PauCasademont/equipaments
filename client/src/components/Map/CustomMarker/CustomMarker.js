@@ -68,7 +68,7 @@ function CustomMarker({ publicFacility, userFacilityIds, ids, displayedDatasets,
                     <IconButton className='popup-icon-button' onClick={() => { handleChartClick(PRICE) }}>
                         <img className='popup-icon' src={icons.cost} alt='icon_btn' />
                     </IconButton> }
-                    {area > 0 && 
+                    { publicFacility.hasConsumptionData && area > 0 && 
                     <IconButton className='popup-icon-button' onClick={() => { handleChartClick(AREA) }}>
                         <img className='popup-icon' src={icons.indicadors} alt='icon_btn' />
                     </IconButton> }

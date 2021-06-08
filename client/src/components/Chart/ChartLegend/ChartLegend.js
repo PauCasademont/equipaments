@@ -104,7 +104,7 @@ function ChartLegend({ data, setData, ids, dataType, handleExportPNG, chartTitle
         <div className='chart-legend'>
             <Paper className='chart-legend-paper' elevation={3}>
                 <Grid container>
-                    <Grid item sm={12} md={6} lg={3}>
+                    <Grid item sm={12} md={6} lg={4}>
                         <Tippy content='Afegeix un altre equipament per comparar dades'>
                             <Button 
                                 className='chart-legend-btn' 
@@ -116,7 +116,7 @@ function ChartLegend({ data, setData, ids, dataType, handleExportPNG, chartTitle
                             </Button>
                         </Tippy>
                     </Grid>
-                    <Grid item xs={12} sm={6} md={6}>
+                    <Grid item xs={12} sm={6} md={5}>
                         <Tippy content='Exporta el gràfic en format CSV o PNG'>
                             <IconButton 
                                 className='chart-legend-btn chart-legend-export-btn'
