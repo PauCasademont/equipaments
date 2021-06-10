@@ -18,7 +18,7 @@ function CustomMarker({ publicFacility, userFacilityIds, ids, displayedDatasets,
     //Create leaflet icon from image
         return new L.icon({
             iconUrl: icon,
-            iconSize: [35, 35]
+            iconSize: [29, 34]
         });
     }
 
@@ -48,6 +48,7 @@ function CustomMarker({ publicFacility, userFacilityIds, ids, displayedDatasets,
         icons[typology] ?
         <Marker position={coordinates} icon={getIconMarker(icons[typology])}>
             <Popup maxWidth='500'>
+                {/* Popup Data */}
                 <div className='popup-title-div'>
                     <Typography className='popup-title-text' variant='h6' gutterBottom aling='center'>
                         {name}
@@ -66,6 +67,7 @@ function CustomMarker({ publicFacility, userFacilityIds, ids, displayedDatasets,
                         Administradors: {publicFacility.users.join(', ')}
                     </Typography>
                 }
+                {/* Popup data */}
                 { isHomePage ? 
                 <> 
                     { publicFacility.hasConsumptionData &&

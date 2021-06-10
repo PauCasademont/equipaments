@@ -11,6 +11,7 @@
 .export-chart-legend-circle {
     margin-right: 5px;
     border-radius: 50%;
+    border: 1px solid black;
     background: grey;
     width: 20px;
     height: 20px;

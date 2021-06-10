@@ -67,7 +67,7 @@ function InvisibleFacilities() {
     }
 
     return (
-        publicFacilities && 
+        !publicFacilities ? '' : 
         <Grid 
             container 
             className='invisibleFacilities-container'

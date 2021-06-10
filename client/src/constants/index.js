@@ -1,6 +1,6 @@
 //This file contains all constant variables of client side
 
-export const EMAIL_ADMIN = 'casademont13@gmail.com'
+export const EMAIL_ADMIN = 'catedragironasmartcity@udg.edu'
 
 export const MONTHS = ['Gener', 'Febrer', 'Març', 'Abril', 'Maig', 'Juny', 'Juliol', 'Agost', 'Setembre', 'Octubre', 'Novembre', 'Desembre'];
 

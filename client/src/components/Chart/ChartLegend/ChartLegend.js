@@ -19,7 +19,6 @@ function ChartLegend({ data, setData, ids, dataType, handleExportPNG, chartTitle
     //Ids of the facilities in the chart
     const [facilitiesIds, setFacilitiesIds] = useState(ids);
 
-    const [anchorExportMenu, setAnchorExportMenu] = useState(null);
     const router = useHistory();
     const exportFileName = chartTitle.replaceAll(' ','_');
 
@@ -122,7 +121,7 @@ function ChartLegend({ data, setData, ids, dataType, handleExportPNG, chartTitle
             <Paper className='chart-legend-paper' elevation={3}>
                 {/* Legend header */}
                 <Grid container>
-                    <Grid item sm={12} md={6} lg={4}>
+                    <Grid item sm={12} md={6} lg={3}>
                         <Tippy content='Afegeix un altre equipament per comparar dades'>
                             <Button 
                                 className='chart-legend-btn' 
@@ -134,41 +133,32 @@ function ChartLegend({ data, setData, ids, dataType, handleExportPNG, chartTitle
                             </Button>
                         </Tippy>
                     </Grid>
-                    <Grid item xs={12} sm={6} md={5}>
-                        <Tippy content='Exporta el gràfic en format CSV o PNG'>
-                            <IconButton 
-                                className='chart-legend-btn chart-legend-export-btn'
-                                onClick={(event) => setAnchorExportMenu(event.currentTarget)}
-                                variant='contained' 
-                                color='primary'
-                                aeia-controls='exportMenu'
-                                aria-haspopup='true'
-                            >
-                                <GetApp/>
-                            </IconButton>
-                        </Tippy>
-                        <Menu
-                            id='exportMenu'
-                            keepMounted
-                            anchorEl={anchorExportMenu}
-                            open={Boolean(anchorExportMenu)}
-                            onClose={() => setAnchorExportMenu(null)}
+                    <Grid item sm={12} md={6} lg={3}>
+                        <Button 
+                            className='chart-legend-btn'
+                            variant='contained' 
+                            color='primary' 
                         >
-                            <MenuItem onClick={() => console.log('csv')}>
-                                <CSVLink 
-                                    className='chart-legend-export-csv-link'
-                                    filename={`${exportFileName}.csv`}
-                                    {...getCSVReport(data.datasets, dataType)}
-                                >
-                                    Exportar en CSV
-                                </CSVLink>
-                            </MenuItem>
-                            <MenuItem onClick={() => handleExportPNG(exportFileName)}>
-                                Exportar en PNG
-                            </MenuItem>
-                        </Menu>
+                            <CSVLink 
+                                className='chart-legend-export-csv-link'
+                                filename={`${exportFileName}.csv`}
+                                {...getCSVReport(data.datasets, dataType)}
+                            >
+                                Exportar en CSV
+                            </CSVLink>
+                        </Button>
                     </Grid>
-                    <Grid item xs={12} sm={6} md={3}>
+                    <Grid item sm={12} md={6} lg={3}>
+                        <Button 
+                            className='chart-legend-btn'
+                            variant='contained' 
+                            color='primary' 
+                            onClick={() => handleExportPNG(exportFileName)}
+                        >
+                            Exportar en PNG
+                        </Button>
+                    </Grid>
+                    <Grid item sm={12} md={6} lg={3}>
                         <Button 
                             className='chart-legend-btn' 
                             variant='outlined' 

@@ -1,5 +1,5 @@
 import { Typography, Button } from '@material-ui/core';
-import { ShowChart } from '@material-ui/icons';
+import { ArrowBack } from '@material-ui/icons';
 import { useHistory } from 'react-router-dom';
 
 import './AddFacilityHeader.css';
@@ -11,17 +11,17 @@ function AddFacilityHeader() {
 
     return (
         <div className='addFacilityHeader'>
-            <Typography variant='h5'>
+            <Typography variant='h6' color='primary'>
                 Selecciona l'equipament que vulguis afegir
             </Typography>
             <Button 
                 className='addFacilityHeader-button'
                 variant='outlined' 
-                color='secondary' 
+                color='primary' 
                 onClick={() => router.goBack()}
             >
-                Tornar
-                <ShowChart className='addFacilityHeader-icon'/>
+                <ArrowBack className='addFacilityHeader-icon'/>
+                &nbsp; Tornar
             </Button>
         </div>
     )

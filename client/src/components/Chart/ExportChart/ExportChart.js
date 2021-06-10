@@ -22,16 +22,19 @@ const ExportChart = React.forwardRef(({ data, options }, ref) => {
 
     return (
         <div ref={ref} id='export_chart' style={{ visibility: 'hidden', marginTop: '-1000px' }}>
+            {/* Export chart */}
             <Line 
                 data={data}                     
                 options={options} 
                 height={133}
             /> 
+            {/* Export chart legend */}
             <div className='export-chart-legend'>
                 { data.datasets.map((dataset, index) => (
                     showDatasetInLegend(dataset) &&
                     <div key={index} className='export-chart-legend-item'>
                         <div className='export-chart-legend-circle' style={{ background: dataset.borderColor }}>
+                            {/* Apply discontinous style if dataset is average or deviation */}
                             { dataset.borderDash &&
                                 Array(10).fill().map((_, index) => (
                                     <div key={index} className={ index % 2 == 0 ? 'export-chart-legend-circle-segment-color' : 'export-chart-legend-circle-segment-white'}/>

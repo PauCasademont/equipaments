@@ -1,3 +1,7 @@
+.chart {
+    margin-bottom: 200px !important;
+}
+
 .chart-legend {
     width: 100%;
     height: auto;
@@ -32,7 +36,7 @@
 }
 
 .chart-legend-export-csv-link {
-    color: black;
+    color: white;
     text-decoration: none;
 }
 
