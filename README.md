@@ -2,7 +2,7 @@
 
 Aquesta aplicació web serveix per visualitzar i comparar les  dades del consum energètic dels equipametns públics de Girona amb gràfics. Proporciona una eina de benchmarking als administradors d'equipaments i regidors de l’Ajuntament de Girona com a base de suport a la presa de decisions  del comportament energètic en els equipaments públics.
 
-Es accedir a la web mitjançant el següent enllaç: https://equipaments.catedragironasmartcity.cat/
+Es pot accedir a la web mitjançant el següent enllaç: https://equipaments.catedragironasmartcity.cat/
 
 
 
@@ -21,16 +21,17 @@ Per comprendre el codi, editar-lo o afegir noves funcionalitats cal haver assumi
 - Node v14 o superior
 
 ### Crear entorn
-Abans d'executar el codi si es descarrega localment s'han seguir següents passos:
+Abans d'executar el codi, si es descarrega localment, s'han seguir següents passos:
 - Instalar les dependències: s'ha d'executar la comanda ***npm i*** o ***npm install*** des d'un terminal amb node, dins el directoris [client](https://github.com/PauCasademont/equipaments/tree/main/client) i [server](https://github.com/PauCasademont/equipaments/tree/main/server).
-- Crear el fitxer .env dins al directori servidor amb les variables:
+- Crear el fitxer .env dins al directori [server](https://github.com/PauCasademont/equipaments/tree/main/server) amb les variables:
     - CONNECTION_URL: 'enllaç de connexio amb la base dades de MongoDB'
     - CLIENT_SECRET: 'clau secreta que servirà per autentificar els usuaris, pot ser cualsevol string però es recomana un mínim de 16 caracters aletoris per seguratat'
+    
 El fitxer [.env.example](https://github.com/PauCasademont/equipaments/blob/main/server/.env.example) mostra com han de ser les variables.
 
 ### Execució
-Per executar el client cal executar la comanda ***npm start*** dins el directori [client](https://github.com/PauCasademont/equipaments/tree/main/client)
-Per executar el servidor cal executar la comanda ***npm start*** dins el directori [server](https://github.com/PauCasademont/equipaments/tree/main/server.)
+Per executar el client cal executar la comanda ***npm start*** dins el directori [client](https://github.com/PauCasademont/equipaments/tree/main/client).
+Per executar el servidor cal executar la comanda ***npm start*** dins el directori [server](https://github.com/PauCasademont/equipaments/tree/main/server.).
 
 NOTA: Si s'utilitza el client localment, també caldra iniciar le servidor perquè funcioni.
 
@@ -79,16 +80,17 @@ Hi ha dos tipus de documents diferents, un per les dades dels equipaments i l'al
 
 Les claus de l'objecte data són els conceptes. Cada concepte conté un objecte on les claus són els anys de les dades. Per cada any hi han dos tipus de dades, consum i preu del consum. Aquestes dades estan representades amb llistes de 12 valors, cada valor representa un mes de l'any.
 
-Exemple: 
-    data: {
-        Total: {
-            2019: {
-                consumption: Array(12),
-                price: Array(12)
-            },
-            2018: { ... }
-        },
-        Electricitat: { ... }
+Exemple:
+
+    data: {   
+        Total: {       
+            2019: {          
+                consumption: Array(12),              
+                price: Array(12)               
+            },          
+            2018: { ... }          
+        },        
+        Electricitat: { ... }        
     }
 
 - **users**
@@ -102,8 +104,9 @@ Exemple:
 El servidor per contectar-se amb la base de dades necessita un codi de connexió. Es pot trobar dins la web l'Atlas, dins la base de dades del projecte, a l'apartat de clusters, cal apretar el botó *connect* i després *connect your aplication*. El driver que s'ha de seleccionar es Node.js, que està per defecte, i a continuació es mostrarà l'enllaç per copiar-lo.
 
 Exemple del codi de connexió:
-*mongodb+srv://Admin:<password>@clusterequipaments.maukd.mongodb.net/<database>?retryWrites=true&w=majority*
-Canviant <password> per la contrasenya de l'administrador i <database> pel nom de la base de dades.
+*mongodb+srv://Admin:< password >@clusterequipaments.maukd.mongodb.net/< database >?retryWrites=true&w=majority*
+    
+Canviant < password > per la contrasenya de l'administrador i < database > pel nom de la base de dades.
 
 Guia de l'Atlas: [SetUpAtlasConnectivity](https://docs.mongodb.com/guides/cloud/connectionstring/)
 
@@ -141,7 +144,7 @@ En aquesta aplicació es poden diferenciar 3 tipus d'usuaris diferents:
 
 Només l'usuari administrador pot registrar nous usuaris a l'aplicació, a través de la finestra de configuració d'usuaris. Les contrasenyes es guardaran de manera encriptada i l'usuari registrat la podrà modificar.
 
-La web no disposa d'una funcionalitat per crear un nou usuari administrador, ja que només n'hi hauria d'haver un. Si es vol editar o crear un nou administrador s'ha d'accedir a la base dades de MongoDB i crear un nou usuari administrador amb els següents camps:
+La web no disposa d'una funcionalitat per crear un nou usuari administrador, ja que només n'hi hauria d'haver un. Si es vol editar o crear un nou administrador s'ha d'accedir a la base dades de MongoDB i crear un nou usuari amb els següents camps:
 - username: 'nom de l'usuari'
 - is_admin: true
 - password: 'contrasenya encriptada'
