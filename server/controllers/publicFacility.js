@@ -11,6 +11,8 @@ const DATA_TYPES = {
 };
 
 export const createPublicFacility = async (req, res) => {
+//Permission: administrator
+
     const { name } = req.body;
 
     try {
@@ -39,6 +41,8 @@ export const createPublicFacility = async (req, res) => {
 }
 
 export const deletePublicFacility = async (req, res) => {
+//Permission: administrator
+
     const { id } = req.params;
 
     try {
@@ -65,9 +69,9 @@ export const deletePublicFacility = async (req, res) => {
 
 
 export const getMapPublicFalcilities = async (req, res) => {
-    //Return a list of facilities. Every facility has to have: id, name, typology, coordinates, area, 
-    //list of years that contains data, boolean to know if it has consumption data, 
-    //boolean to know if it has price data, users admins of the facility.
+//Return a list of facilities. Every facility has to have: id, name, typology, coordinates, area, 
+//list of years that contains data, boolean to know if it has consumption data, 
+//boolean to know if it has price data, users admins of the facility.
 
     try { 
         //Get only facilities that have coordinates
@@ -95,7 +99,8 @@ export const getMapPublicFalcilities = async (req, res) => {
 }
 
 const getFacilityDataInfo = (data) => {
-    //Return list of years that have data and boolean to know if it has consumption and price data.
+//Return list of years that have data and boolean to know if it has consumption and price data.
+
     let years = [];
     let hasConsumptionData = false;
     let hasPriceData = false;
@@ -130,6 +135,8 @@ const hasValuesYear = (data, concept, year) => {
 }
 
 export const updatePublicFaility = async (req, res) => {
+//Permission: registered user or administrator
+
     const { id } = req.params;
 
     if(!req.user) {
@@ -203,6 +210,7 @@ export const getInvisiblePublicFacilities = async (req, res) => {
 }
 
 export const importData = async (req, res) => {
+//Permission: administrator
 
     if(!req.user) {
         return res.status(401).send({ message: 'User unauthenticated'});
@@ -235,7 +243,7 @@ export const importData = async (req, res) => {
             publicFacility.data[concept][year] = {consumption, price};
         }
 
-        //Don't overwirte data
+        //Save data if not overwritten
         else{
             if(!publicFacility.data[concept][year].consumption){
                 publicFacility.data[concept][year].consumption = consumption;
@@ -259,7 +267,8 @@ export const importData = async (req, res) => {
 }
 
 export const updateCoordinates = async (req, res) => {
-    
+//Permission: administrator
+
     if(!req.user) {
         return res.status(401).send({ message: 'User unauthenticated'});
     }
@@ -314,6 +323,8 @@ export const getPublicFacilityField = async (req, res) => {
 }
 
 export const getTypologyFacilities = async (req, res) => {
+//Return data and area if facilities of the same typology
+
     const { typology } = req.params;
 
     try {
@@ -325,63 +336,49 @@ export const getTypologyFacilities = async (req, res) => {
     }
 }
 
-export const addUserToFacility = async (req, res) => {
-    const { facilityId } = req.body;
+export const addUserToFacility = async (facilityId, username) => {
 
     try {
         let facility = await PublicFacilityModel.findById(facilityId);
         if(facility.users) {
-            facility.users.push(req.newUser.username);
+            facility.users.push(username);
         } else {
-            facility.users = [req.newUser.username];
+            facility.users = [username];
         }
         await PublicFacilityModel.findByIdAndUpdate(facilityId, facility, { new: true });
-        res.status(200).send({ result: req.newUser });
     } catch (error) {
-        res.status(500).send({ message: 'Could not add the user to the facility'});
         console.log(error);
     }
 }
 
-export const removeUserFromFacility = async (req, res) => {
-    const { facilityId } = req.body;
+export const removeUserFromFacility = async (facilityId, username) => {
 
     try {
         let facility = await PublicFacilityModel.findById(facilityId);
         if(facility.users) {
-            const index = facility.users.indexOf(req.newUser.username);
+            const index = facility.users.indexOf(username);
             if(index > -1){
                 facility.users.splice(index, 1);
+                await PublicFacilityModel.findByIdAndUpdate(facilityId, facility, { new: true });
             }
         } 
-        await PublicFacilityModel.findByIdAndUpdate(facilityId, facility, { new: true });
-        res.status(200).send({ result: req.newUser });
     } catch (error) {
-        res.status(500).send({ message: 'Could not remove the user from the facility'});
         console.log(error);
     }
 }
 
-export const updateUsernamesFromFacilities = async (req, res) => {
-    const prevUsername = req.prevUsername;
-    const newUsername = req.newUser.username;
+export const updateUsernamesFromFacilities = async (prevUsername, newUsername, facilityId) => {
+    
     try {
-        const facilitiesUsers = await PublicFacilityModel.find({}, 'users');
-
-        //For each facility check if it has the previous username and update it
-        facilitiesUsers.forEach(async (facility) => {
-            if(facility.users){
-                const index = facility.users.indexOf(prevUsername);
-                if(index > -1){
-                    let facilityWithUser = await PublicFacilityModel.findById(facility._id);
-                    facilityWithUser.users[index] = newUsername;
-                    await PublicFacilityModel.findByIdAndUpdate(facility._id, facilityWithUser, { new: true });
-                }
+        let facility = await PublicFacilityModel.findById(facilityId);
+        if(facility.users){
+            const index = facility.users.indexOf(prevUsername);
+            if(index > -1){
+                facilityWithUser.users[index] = newUsername;
+                await PublicFacilityModel.findByIdAndUpdate(facility._id, facilityWithUser, { new: true });
             }
-        });
-        res.status(200).send({ result: req.newUser });
+        }
     } catch (error) {
-        res.status(500).send({ message: 'Could not update facilities users'});
         console.log(error);
     }
 }

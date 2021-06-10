@@ -6,6 +6,7 @@ import { Line } from 'react-chartjs-2';
 import './ExportChart.css';
 
 const ExportChart = React.forwardRef(({ data, options }, ref) => {
+//Return a hidden chart with a custom legend to export it in PNG
 
     const getLegendDatasetName = (dataset) => {
         if(dataset.isAverage) return `Mitjana dels equipaments de tipologia: ${dataset.typology}`;
@@ -14,6 +15,7 @@ const ExportChart = React.forwardRef(({ data, options }, ref) => {
     };
 
     const showDatasetInLegend = (dataset) => {
+        //To not repeat min and max deviation in the legend
         if(dataset?.isDeviation == 'min') return false;
         return !dataset.hidden;
     };

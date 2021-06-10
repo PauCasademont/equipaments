@@ -7,6 +7,8 @@ import './EditUsersCredentials.css';
 import { adminChangeUsername, adminChangePassword } from '../../../../actions/user';
 
 function EditUsersCredentials({ usernames, setNames }) {
+//Return edit users credentials page
+
     const [selectedUser, setSelectedUser] = useState(null);
     const [form, setForm] = useState({
         newUsername: '',
@@ -19,6 +21,7 @@ function EditUsersCredentials({ usernames, setNames }) {
     });
 
     const getInputProps = (formName) => ({
+    //Return visibility icon according if password is showing
         endAdornment: 
             <InputAdornment position='end'>
                 <IconButton onClick={() => setShowPassword({ ...showPassword, [formName]: !showPassword[formName] })}>
@@ -32,6 +35,7 @@ function EditUsersCredentials({ usernames, setNames }) {
     const handleChangeUsernameClick = () => {
         adminChangeUsername(form, selectedUser.id)
         .then(result => {
+        //If user has been edited, update users names and selected user
             if(result){
                 const newUser = { name: result.username, id: result._id}
                 setSelectedUser(null);

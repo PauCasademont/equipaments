@@ -11,6 +11,7 @@ import AdminUsersMenu from './components/Admin/AdminUsersMenu/AdminUsersMenu';
 import AdminFacilitiesMenu from './components/Admin/AdminFacilitiesMenu/AdminFacilitiesMenu';
 
 function App() {
+//Root component. Return the page according to the current url
 
   return (
     <BrowserRouter>

@@ -8,6 +8,8 @@ import { USER_STORAGE } from '../../constants'
 import { changePassword } from '../../actions/user';
 
 function ChangePassword() {
+//Return change password page
+
     const [showPassword, setShowPassword] = useState({
             currentPassword: false,
             newPassword: false,
@@ -22,6 +24,7 @@ function ChangePassword() {
     const router = useHistory();
 
     const getInputProps = (formName) => ({
+   //Return visibility icon according if password is showing
         endAdornment: 
             <InputAdornment position='end'>
                 <IconButton onClick={() => setShowPassword({ ...showPassword, [formName]: !showPassword[formName] })}>

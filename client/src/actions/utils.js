@@ -8,6 +8,7 @@ export const createAlert = (title, text='', icon='error', button='ok') => {
 }
 
 export const arrayStringToInt = (arr) => {
+    //Switch nul values to 0 in order to see the value in the chart
     return arr.map( value => {
         const result = parseInt(value);
         return result ? result : 0;
@@ -27,20 +28,25 @@ export const hasNumber = (str) => {
 }
 
 export const getTypologyUserFormat = (typology) => {
+//Return the typology string in uppercase with accents.
     const result = typology.toUpperCase();
     return result == 'EDUCACIO' ? 'EDUCACIÓ' : result;
 }
 
 export const addArrayObjectsIds = (array) => {
+//Input: array of objects
+//Output: the array with index filed in the objects
+
     return array.map((obj, index) => ({
         ...obj,
         id: index
     }));
 }
 
-export const getFacilityDatasetData = (facilityData, dataValue, dataType, area) => {
+export const getFacilityDatasetData = (facilityData, dataValue, isDataTypeArea, area) => {
+    //DataValue can only be 'consumption' or 'price'
     return facilityData[dataValue].map(value => {
-        return dataType == AREA ? Math.round(value / area) : value;
+        return isDataTypeArea ? Math.round(value / area) : value;
     })
 }
 
@@ -50,6 +56,7 @@ export const replaceAccentsAndCapitals = (word) => {
 }
 
 export const remove = (list, value) => {
+//Remove value from list
     const index = list.indexOf(value);
     if(index > -1){
         list.splice(index, 1);
@@ -58,23 +65,37 @@ export const remove = (list, value) => {
 }
 
 export const add = (list, value) => {
+//Add value in list
     return list.concat([value]);
 }
 
-export const getAverageDatasets = (facilities, dataType, typology) => {
+export const getAverageAndDeviationDatasets = (facilities, dataType, typology) => {
+//Return list of datasets ready to use in Chart js with the average and deviation of every facility in facilities.
+
     const descendantYears = YEARS_LIST.reverse();
     const menuName = `Mostra mitjanes i desviacions dels equipaments de tipologia ${getTypologyUserFormat(typology)}`
     let datasets = [];
+
     CONCEPTS.forEach((concept, darkenAmount) => {
         let indexColor = 0
         descendantYears.forEach((year) => {
+            //Get all values of concept, year and dataType of facilities
             const arrays = getConceptYearArrays(facilities, concept, year, dataType);
+
             if(arrays.length){
-                
+
+                //Get the average of the values
                 const average = getAverageArrays(arrays); 
+
+                //Check if the average is not null
                 if(!average.every(value => value == 0)) {
+
+                    //Get the deviation of the values
                     const deviation = getDeviationArrays(arrays, average);
+
                     let color = COLORS[ indexColor % COLORS.length ];
+
+                    //Add the average dataset
                     datasets.push({
                         label: `${menuName} Mitjana ${concept} ${year}`,
                         id: `typology ${getTypologyUserFormat(typology)}`,
@@ -92,7 +113,9 @@ export const getAverageDatasets = (facilities, dataType, typology) => {
                     });
 
                     color = COLORS[ (indexColor + 1) % COLORS.length ];
-    
+                    
+                    //Add deviation max values (average + devaition) dataset
+                    //Fill '+1' menas that the chart will be colored (backgroundColor) from this dataset to the next one (min deviation)
                     datasets.push({
                         label: `${menuName} Desviació max ${concept} ${year}`,
                         id: `typology ${getTypologyUserFormat(typology)}`,
@@ -110,7 +133,7 @@ export const getAverageDatasets = (facilities, dataType, typology) => {
                         borderDash: [10,5]
                     });
     
-    
+                    //Add deviation min values (average - devaition) dataset.
                     datasets.push({
                         label: `${menuName} Desviació min ${concept} ${year}`,
                         id: `typology ${getTypologyUserFormat(typology)}`,
@@ -136,8 +159,11 @@ export const getAverageDatasets = (facilities, dataType, typology) => {
 }
 
 const getConceptYearArrays = (facilities, concept, year, dataType) => {
+//Return list of arrays of concept, year and dataType for each facility in facilities
+
     const result = [];
     const valueType = dataType == AREA ? CONSUMPTION : dataType;
+
     facilities.forEach(facility => {
         if(facilityHasValues(facility, concept, year, dataType, valueType)){
             let newArray = facility.data[concept][year][valueType];
@@ -151,6 +177,8 @@ const getConceptYearArrays = (facilities, concept, year, dataType) => {
 }
 
 const facilityHasValues = (facility, concept, year, dataType, valueType) => {
+//Return true if facility has values of concept, year and dataType. If valueType is area then it has to have area > 0.
+
     if(facility.data[concept] && facility.data[concept][year] && facility.data[concept][year][valueType]){
         if(facility.data[concept][year][valueType].every(value => value == 0)) return false;
         if(dataType != AREA) return true;
@@ -160,12 +188,18 @@ const facilityHasValues = (facility, concept, year, dataType, valueType) => {
 }
 
 const getAverageArrays = (arrays) => {
+//Return the average of every month in arrays
+
     let result = [];
     for(let indexMonth = 0; indexMonth < 12; indexMonth++){
         let addedValues = 0; 
+
+        //Sum values of indexMonth
         for(let indexArray = 0; indexArray < arrays.length; indexArray++){
             addedValues += arrays[indexArray][indexMonth];
         }
+
+        //Add the average of indexMonth
         const averageValue = Math.round(addedValues/arrays.length);
         result.push(averageValue);
     }
@@ -174,13 +208,18 @@ const getAverageArrays = (arrays) => {
 
 
 const getDeviationArrays = (arrays, average) => {
+//Return the deviation of every month in arrays
+//Formula: squareRoot( Σ(Xi - x̄)/ N) being Xi = month value of arrays[i], x̄ = average for that month and N = number of arrays.
+
     const result = [];
     for(let indexMonth = 0; indexMonth < 12; indexMonth++){
         let summation = 0;
+
+        //Add devaition for indexMonth
         for(let indexArray = 0; indexArray < arrays.length; indexArray++){
             summation += Math.pow(arrays[indexArray][indexMonth] - average[indexMonth], 2);
         }
-        const deviation = Math.sqrt(summation / (arrays.length - 1));
+        const deviation = Math.sqrt(summation / (arrays.length));
         result.push(Math.round(deviation));
     }
     return result;

@@ -5,6 +5,8 @@ import { useHistory } from 'react-router-dom';
 import './AddFacilityHeader.css';
 
 function AddFacilityHeader() {
+//Return the header for add facility to existing chart page
+
     const router = useHistory();
 
     return (

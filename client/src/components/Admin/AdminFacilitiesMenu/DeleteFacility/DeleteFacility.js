@@ -5,12 +5,14 @@ import { Autocomplete } from '@material-ui/lab';
 import { deletePublicFacility } from '../../../../actions/publicFacility';
 
 function DeleteFacility({ facilitiesNames, setFacilitiesNames }) {
+//Return delete facility page
     const [selectedFacility, setSelectedFacility] = useState(null);
 
     const handleDeleteClick = () => {
         if(selectedFacility){
             deletePublicFacility(selectedFacility)
             .then(res => {
+                //If it has benn deleted, remove selectedFacility and update facilityNames
                 if(res){
                     const facilityId = selectedFacility.id;
                     setSelectedFacility(null);

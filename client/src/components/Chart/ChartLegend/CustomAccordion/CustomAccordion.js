@@ -14,9 +14,10 @@ import 'tippy.js/dist/tippy.css';
 import './CustomAccordion.css';
 
 function CustomAccordion({ accordionName, accordionDatasets, canRemove, defaultExpanded, handleRemoveAccordion, handleLegendClick, handleChangeColor}) {
-
+//Return the accrodion menu for accordionDatasets
 
     const getCircleStyles = (color = '#CACFD2', isAverage, isFacility) => ({
+        //Clickable circle. The color if discontinous if it's not a facility (it's average or deviation)
         background: isFacility ? color : `repeating-linear-gradient(90deg, ${color}, white 5px, ${color} 5px)`, 
         height: '25px', 
         width:'25px', 

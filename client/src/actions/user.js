@@ -7,7 +7,11 @@ import { USER_STORAGE } from '../constants';
 export const signin =  async (form, router) => {
     try {
         const { data } = await api.req_signin(form); 
-        localStorage.setItem(USER_STORAGE, JSON.stringify(data.result))       
+
+        //Store user data and JWT in localStorage
+        localStorage.setItem(USER_STORAGE, JSON.stringify(data.result))   
+        
+        //Go to home page
         router.push('/');
     } catch (error){       
         console.log(error);
@@ -53,12 +57,15 @@ export const signup = async (form) => {
 }
 
 export const deleteUser = async (userId, username) => {
+
+    //Warning alter
     return await swal({
         title: 'Eliminar Usuari',
         text: `Estàs segur que desitges eliminar l\'usuari ${username}`,
         icon: 'warning',
         buttons: ['Cancelar', 'Eliminar']
     }).then(async (wantToDelete) =>  {
+        //If users accepts
         if(wantToDelete){
             try {
                 const { data } = await api.req_deleteUser(userId);
@@ -129,6 +136,8 @@ export const adminChangeUsername = async (form, userId) => {
 
 
 export const getUsersNames = async () => {
+//Return a list with name and id of every user
+
     const { data } = await api.req_getUsersNames();
     return data.result.map(user => ({ 
         id: user._id,

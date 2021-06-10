@@ -3,6 +3,7 @@ import { FormControl, InputLabel, Select, MenuItem } from '@material-ui/core';
 import './DropDownBox.css';
 
 function DropDownBox({ values, selectedValue, setValue, name }) {
+//Return a multi select option 
     return (
         <FormControl className='edit-form'>
             <InputLabel id='edit-select-label'>

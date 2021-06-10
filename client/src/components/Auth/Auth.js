@@ -8,6 +8,8 @@ import { signin } from '../../actions/user';
 import { EMAIL_ADMIN } from '../../constants';
 
 function Auth() {
+//Return login page
+
     const [showPassword, setShowPassword] = useState(false);
     const [form, setForm] = useState({
         username: '',
@@ -16,6 +18,7 @@ function Auth() {
     const router = useHistory();
 
     const getInputProps = (isPassword) => ({
+    //Get text field icons
         startAdornment: (            
             <InputAdornment position='start'>
                 { isPassword ? <LockOutlined variant='outlined'/> 

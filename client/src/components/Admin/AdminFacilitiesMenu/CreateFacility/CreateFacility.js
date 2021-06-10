@@ -6,11 +6,12 @@ import './CreateFacility.css';
 import { createPublicFacility } from '../../../../actions/publicFacility';
 import { TYPOLOGIES, SUPERSCRIPT_TWO } from '../../../../constants';
 
-function CreateFacility({setFacilitiesNames }) {
+function CreateFacility() {
+//Return create facility page 
 
     const formInitialState = {
         name: '',
-        typology: TYPOLOGIES[0].icon,
+        typology: TYPOLOGIES[0].name,
         latitude: '',
         longitude: '',
         area: ''
@@ -28,6 +29,7 @@ function CreateFacility({setFacilitiesNames }) {
         createPublicFacility(form)
         .then(result => {
             if(result){
+                //Redirect to edit facility page
                 router.push(`/edit/${result._id}`);
             }
         });
@@ -67,8 +69,8 @@ function CreateFacility({setFacilitiesNames }) {
                             onChange={(event) => {setForm({ ...form, typology: event.target.value })}}
                         >
                             { TYPOLOGIES.map((typology, index) => (
-                                <MenuItem key={index} value={typology.icon}>
-                                    {typology.name}
+                                <MenuItem key={index} value={typology.name}>
+                                    {typology.screenName}
                                 </MenuItem>
                             ))}
                         </Select>

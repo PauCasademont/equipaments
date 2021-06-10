@@ -16,9 +16,12 @@ const getYearFromFileName = (name) => {
 }
 
 function ImportData({ fileData, setOpenPopup }) {
+//Return import data pop-up window
 
     const [year, setYear] = useState(getYearFromFileName(fileData.fileName) || '');
     const [importState, setImportState] = useState(IMPORT_STATES.setUp);
+
+    //List of the data that has not been imported to not overwrite
     const [notImportedData, setNotImportedData] = useState([]);
 
     const notImportedDataColumns = [

@@ -6,16 +6,21 @@ import { getUserField, addUserFacility, removeUserFacility } from '../../../../a
 import { remove, add } from '../../../../actions/utils';
 
 function EditUsersFacilities({ usernames, facilityNames, defaultUser }) {
-    
+//Return edit users facilities page
+
     const [selectedUser, setSelectedUser] = useState( defaultUser ? usernames[usernames.length - 1] : null);
     const [form, setForm] = useState({
         selectedFacilityToAdd: null,
         selectedFacilityToRemove: null
     });
+    //List of facilities that can be added to the user
     const [facilitiesToAdd, setFacilitiesToAdd] = useState(null);
+
+    //List of facilities that can be removed to the user
     const [facilitiesToRemove, setFacilitiesToRemove] = useState(null);
 
     useEffect(() => {
+    //Update facilities list every time the selected user changes
         if(selectedUser){
             getUserField(selectedUser.id, 'public_facility_ids')
             .then(userFacilitiesIds => {
@@ -42,6 +47,7 @@ function EditUsersFacilities({ usernames, facilityNames, defaultUser }) {
         if(form.selectedFacilityToAdd) {
             addUserFacility(selectedUser.id, form.selectedFacilityToAdd.id)
             .then(() => {
+                //Update lists to add and remove 
                 const addedFacility = form.selectedFacilityToAdd;
                 setForm(prevState => ({
                     ...prevState,
@@ -57,6 +63,7 @@ function EditUsersFacilities({ usernames, facilityNames, defaultUser }) {
         if(form.selectedFacilityToRemove){
             removeUserFacility(selectedUser.id, form.selectedFacilityToRemove.id)
             .then(() => {
+                //Update lists to add and remove
                 const removedFacility = form.selectedFacilityToRemove;
                 setForm(prevState => ({
                     ...prevState,

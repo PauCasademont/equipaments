@@ -15,6 +15,7 @@ import { TYPOLOGIES, USER_STORAGE, YEARS_LIST } from '../../constants';
 const INITIAL_MAP_CONFIG = { center: [41.98311, 2.82493], zoom: 14 }
 
 function getIcons() {
+    //Return object. Keys are icons names and values are the icon path
     const req = require.context('../../images', false, /.*\.png$/);
     let res = {}
     req.keys().map((key) => {
@@ -24,9 +25,14 @@ function getIcons() {
 }
 
 function Map({ ids = [], displayedDatasets = [] }) {
+//Return home page
+
+    //Facilities list
     const [publicFacilities, setPublicFacilities] = useState(null);
+
+    //Lists of filters
     const [filters, setFilters] = useState({
-        typologies: TYPOLOGIES.map(typology => typology.icon),
+        typologies: TYPOLOGIES.map(typology => typology.name),
         years: YEARS_LIST
     });
     const [satelliteView, setSatelliteView] = useState(false);
@@ -43,9 +49,12 @@ function Map({ ids = [], displayedDatasets = [] }) {
     const icons = getIcons();
     const router = useHistory();
     const location = useLocation();
+
+    //If is the map to add facility to the chart, ids will contain the chart facilities ids
     const isHomePage = ids.length == 0;
 
     useEffect(() => {
+    //Get facilities data when the page is loaded
         getMapPublicFalcilities()
             .then((facilities) => {
                 setPublicFacilities(facilities);
@@ -54,6 +63,7 @@ function Map({ ids = [], displayedDatasets = [] }) {
     }, []);
 
     useEffect(() => {
+    //Logout the user when his token gets expired
         const token = user?.token;
 
         if (token) {
@@ -107,7 +117,9 @@ function Map({ ids = [], displayedDatasets = [] }) {
                         router={router}
                     />
                 ))}
+                {/* User avatar */}
                 { user && isHomePage && <UserMenu user={user} router={router} setOpenPopup={setOpenPopup}/> }
+                {/* Map legend */}
                 <FilterControl 
                     filters={filters} 
                     setFilters={setFilters}
@@ -116,6 +128,7 @@ function Map({ ids = [], displayedDatasets = [] }) {
                     icons={icons}
                 />
             </MapContainer>
+            {/* Import data popup */}
             { openPopup.importData?.open &&
                 <ImportData fileData={openPopup.importData} setOpenPopup={setOpenPopup} />
             }

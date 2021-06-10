@@ -6,7 +6,7 @@ import './Edit.css';
 import { getPublicFacilityData, updatePublicFacility } from '../../actions/publicFacility';
 import { 
     CONCEPTS, 
-    LABELS, 
+    MONTHS, 
     DATA_TYPES, 
     CONSUMPTION, 
     AREA, 
@@ -22,6 +22,8 @@ import { inRangeLatitude, inRangeLongitude, createAlert } from '../../actions/ut
 import DropDownBox from './DropDownBox/DropDownBox';
 
 function Edit() {
+//Return edit facility page
+
     const [concept, setConcept] = useState(CONCEPTS[0]);
     const [dataType, setDataType] = useState(DATA_TYPES[CONSUMPTION]);
     const [year, setYear] = useState(CURRENT_YEAR);
@@ -38,6 +40,7 @@ function Edit() {
     },[]);
     
     useEffect(() => {
+    //When options aer changed,set the new values
        if(publicFacility){
            let newFormValues = Array(12).fill(0);;
 
@@ -70,6 +73,8 @@ function Edit() {
     },[dataType, concept, year, publicFacility]);
 
     const handleSubmit = () => {
+
+        //Set updated values according to it's dataType
         let updatedValues = null;
 
         if(dataType == DATA_TYPES[TYPOLOGY]){
@@ -90,6 +95,7 @@ function Edit() {
             }
         }
 
+        //Update values
         updatePublicFacility(facilityId, dataType, concept, year, formValues)
         .then((updatedPublicFacility) => {
             if(updatedPublicFacility){
@@ -104,6 +110,7 @@ function Edit() {
             newValue = 0;
         }   
 
+        //Does not work if only the new value gets updated
         const formValuesCopy = formValues.map((value, index) => {
             return valueIndex == index ? newValue : value;
         });
@@ -123,6 +130,7 @@ function Edit() {
                 </Typography>
             </Grid>
             <Grid item className='edit-div' xs={12}>
+                {/* Menu select data */}
                 <Paper elevation={3} className='edit-paper'>
                     <Grid container spacing={3}>
                         <Grid item className='edit-div' xs={12} sm={4}>
@@ -153,6 +161,7 @@ function Edit() {
                 </Paper>
             </Grid>
             <Grid item className='edit-div' xs={12}>
+                {/* Data to edit */}
                 <Paper elevation={3} className='edit-paper'>
                     <Grid container spacing={3}>
                         { formValues && (dataType == DATA_TYPES[CONSUMPTION] || dataType == DATA_TYPES[PRICE]) &&
@@ -166,8 +175,8 @@ function Edit() {
                                 >
                                     <TextField
                                         onChange={(event) => handleChange(event.target.value, index)}
-                                        name={LABELS[index]}
-                                        label={LABELS[index]}
+                                        name={MONTHS[index]}
+                                        label={MONTHS[index]}
                                         type='number'
                                         value={formValues[index]}
                                         InputProps={{
@@ -233,7 +242,7 @@ function Edit() {
                                 xs={12} 
                             >
                                 <DropDownBox 
-                                    values={TYPOLOGIES.map(typology => typology.icon)}
+                                    values={TYPOLOGIES.map(typology => typology.name)}
                                     selectedValue={formValues[0]}
                                     setValue={(value) => handleChange(value,0)}
                                     name={'Tipologia'}

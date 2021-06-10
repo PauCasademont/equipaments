@@ -2,10 +2,10 @@ import axios from 'axios';
 
 import { USER_STORAGE } from '../constants';
 
-const API = axios.create({ baseURL: 'https://consum-equipaments-publics.herokuapp.com' });
-// const API = axios.create({ baseURL: 'http://localhost:5000' });
+//API instance using axios
+const API = axios.create({ baseURL: 'http://localhost:5000' });
 
-
+//Add JWT in API request headers if exist
 API.interceptors.request.use((req) => {
     if (localStorage.getItem(USER_STORAGE)) {
         req.headers.Authorization = `Bearer ${JSON.parse(localStorage.getItem(USER_STORAGE)).token}`;
@@ -13,7 +13,7 @@ API.interceptors.request.use((req) => {
     return req;
 })
 
-//***************************  Public Facility  *******************************//
+//***************************  Public Facility requests *******************************//
 
 export const req_getMapPublicFacilities = () => API.get('/public_facility');
 export const req_getInvisiblePublicFacilities = () => API.get('/public_facility/invisible');
@@ -32,7 +32,8 @@ export const req_updateCoordinates = (id, body) =>  API.patch(`/public_facility/
 export const req_deletePublicFacility = (id) => API.delete(`/public_facility/${id}`);
 
 
-//***************************  User  *******************************//
+//***************************  User request *******************************//
+
 export const req_getUsersNames = () => API.get('/user/names');
 export const req_getUserField = (id, field) => API.get(`/user/${id}/${field}`);
 

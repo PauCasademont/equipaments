@@ -2,7 +2,6 @@
 import express from 'express';
 
 import auth from '../middleware/auth.js';
-import { addUserToFacility, removeUserFromFacility, updateUsernamesFromFacilities } from '../controllers/publicFacility.js';
 import { 
     signin, 
     signup, 
@@ -25,9 +24,9 @@ router.post('/signup', auth, signup);
 router.post('/signin', signin);
 
 router.patch('/password/:id', auth, changePassword);
-router.patch('/add_facility/:id', auth, addFacilityToUser, addUserToFacility);
-router.patch('/remove_facility/:id', auth, removeFacilityFromUser, removeUserFromFacility);
-router.patch('/admin/username/:id', auth, adminChangeUsername, updateUsernamesFromFacilities);
+router.patch('/add_facility/:id', auth, addFacilityToUser);
+router.patch('/remove_facility/:id', auth, removeFacilityFromUser);
+router.patch('/admin/username/:id', auth, adminChangeUsername);
 router.patch('/admin/password/:id', auth, adminChangePassword);
 
 router.delete('/:id', auth, deleteUser);

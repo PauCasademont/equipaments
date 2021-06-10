@@ -6,6 +6,7 @@ import './CreateUser.css';
 import { signup } from '../../../../actions/user';
 
 function CreateUser({ setNames, setDefaultUser, setOpenTab, tabs }) {
+//Return craete user page
 
     const formInitialState = {
         username: '',
@@ -17,9 +18,11 @@ function CreateUser({ setNames, setDefaultUser, setOpenTab, tabs }) {
         password: false,
         confirmPassword: false
     });
+
     const [form, setForm] = useState(formInitialState);
 
     const getInputProps = (formName) => ({
+    //Return visibility icon according if password is showing
         endAdornment: 
             <InputAdornment position='end'>
                 <IconButton onClick={() => setShowPassword({ ...showPassword, [formName]: !showPassword[formName] })}>
@@ -38,6 +41,7 @@ function CreateUser({ setNames, setDefaultUser, setOpenTab, tabs }) {
         event.preventDefault();
         signup(form)
         .then(result => {
+        //If it's created, names list and redirect to new user facilities tab.
             if(result){
                 setForm(formInitialState);
                 setNames(prevState => ({

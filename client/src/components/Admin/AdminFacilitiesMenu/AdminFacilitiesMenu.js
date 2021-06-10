@@ -14,6 +14,8 @@ const TABS = {
 };
 
 function AdminFacilitiesMenu() {
+//Return admin settings page
+
     const [openTab, setOpenTab] = useState(0);
     const [facilitiesNames, setFacilitiesNames] = useState([]);
 
@@ -46,7 +48,7 @@ function AdminFacilitiesMenu() {
                         </Tabs>
                     </AppBar>
                     { openTab == TABS.create && 
-                        <CreateFacility setFacilitiesNames={setFacilitiesNames}/>
+                        <CreateFacility/>
                     }
                     { openTab == TABS.remove && 
                         <DeleteFacility facilitiesNames={facilitiesNames} setFacilitiesNames={setFacilitiesNames} />

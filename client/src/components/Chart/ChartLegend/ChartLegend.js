@@ -11,12 +11,21 @@ import { getCSVReport } from '../../../actions/publicFacility';
 import CustomAccordion from './CustomAccordion/CustomAccordion';
 
 function ChartLegend({ data, setData, ids, dataType, handleExportPNG, chartTitle }) {
+//Return the chart legend
+
+    //Grouped chart datasets
     const [legendDatasets, setLegendDatasets] = useState({});
+
+    //Ids of the facilities in the chart
     const [facilitiesIds, setFacilitiesIds] = useState(ids);
+
     const [anchorExportMenu, setAnchorExportMenu] = useState(null);
     const router = useHistory();
     const exportFileName = chartTitle.replaceAll(' ','_');
+
+
     useEffect(() => {
+        //Group datasts by menuName, and for each menuName, group by concept
         let groupedDatasets = groupBy(data.datasets, dataset => dataset.menuName);
         Object.keys(groupedDatasets).forEach(facility => {
             groupedDatasets[facility] = groupBy(groupedDatasets[facility], dataset => dataset.concept);  
@@ -32,8 +41,8 @@ function ChartLegend({ data, setData, ids, dataType, handleExportPNG, chartTitle
         return displayedDatasets.map(dataset => dataset.label);
     }
 
-
     const handleLegendClick = (dataset) => {
+        //Switch hidden value of the clicked dataset  
         const index = data.datasets.findIndex((d) => d == dataset);
 
         let datasetsCopy = data.datasets;
@@ -41,6 +50,7 @@ function ChartLegend({ data, setData, ids, dataType, handleExportPNG, chartTitle
         dataCopy.hidden = !dataCopy.hidden;
         datasetsCopy[index] = dataCopy;
 
+        //If dataset is deviation max, switch the next that it's deviation min
         if(isDeviationMax(dataset)){
             datasetsCopy = data.datasets;
             dataCopy = datasetsCopy[index + 1];
@@ -53,6 +63,7 @@ function ChartLegend({ data, setData, ids, dataType, handleExportPNG, chartTitle
 
 
     const handleAddFacility = () => { 
+        //Redirect to add facility page and pass the list facilities ids and displayed datasets
         const displayedDatasets = getLabelsDisplayed(); 
         router.push({
             pathname: `/map/add_facility/${dataType}`,
@@ -95,14 +106,21 @@ function ChartLegend({ data, setData, ids, dataType, handleExportPNG, chartTitle
     const handleRemoveAccordion = (event, facility) => {
         event.stopPropagation();
         const id = data.datasets.find(dataset => dataset.menuName == facility).id;
+
+        //Remove from the chart
         removeFacilityData(id);
+
+        //Remove from the legend
         removeFacilityLegend(facility);
+
+        //Remove from the url
         removeFacilityId(id);
     };
 
     return (
         <div className='chart-legend'>
             <Paper className='chart-legend-paper' elevation={3}>
+                {/* Legend header */}
                 <Grid container>
                     <Grid item sm={12} md={6} lg={4}>
                         <Tippy content='Afegeix un altre equipament per comparar dades'>
@@ -162,6 +180,7 @@ function ChartLegend({ data, setData, ids, dataType, handleExportPNG, chartTitle
                         </Button>                   
                     </Grid>
                 </Grid>
+                {/* Legend accrodion menus */}
                 { Object.keys(legendDatasets).map((accordionName, index) => (
                     <CustomAccordion
                         key={index}

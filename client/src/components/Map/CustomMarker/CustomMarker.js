@@ -4,21 +4,26 @@ import { useParams } from 'react-router-dom';
 import L from 'leaflet';
 
 import './CustomMarker.css';
-import { CONSUMPTION, PRICE, AREA, SUPERSCRIPT_TWO} from '../../../constants';
+import { CONSUMPTION, PRICE, AREA, SUPERSCRIPT_TWO } from '../../../constants';
 
-function getIconMarker(icon) {
-    return new L.icon({
-        iconUrl: icon,
-        iconSize: [35, 35]
-    });
-}
 
 function CustomMarker({ publicFacility, userFacilityIds, ids, displayedDatasets, icons, router }) {
+//Return facility marker with his pop-up
+
     const { id, name, typology, coordinates, area } = publicFacility;
     const isHomePage = !ids.length;
     const { dataType } = useParams();
 
+    function getIconMarker(icon) {
+    //Create leaflet icon from image
+        return new L.icon({
+            iconUrl: icon,
+            iconSize: [35, 35]
+        });
+    }
+
     const handleChartClick = (type) => {
+    //Redirect to chart page
         const idsString = ids.concat([id]).join(',');
         router.push({
             pathname: `/chart/${type}/${idsString}`,
@@ -27,14 +32,17 @@ function CustomMarker({ publicFacility, userFacilityIds, ids, displayedDatasets,
     }
 
     const handleEditClick = () => {
+    //Redirect to edit facility page
         router.push(`edit/${id}`);
     }
 
     const userCanEdit = () => {
         if(!userFacilityIds) return false;
+        //Is administrator
         if(userFacilityIds == 'ALL') return true;
         return userFacilityIds.includes(id);
     }
+
 
     return (
         icons[typology] ?

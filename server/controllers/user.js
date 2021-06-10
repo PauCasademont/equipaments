@@ -3,8 +3,10 @@ import jwt from 'jsonwebtoken';
 import mongoose from 'mongoose';
 
 import UserModel from '../models/user.js';
+import { addUserToFacility, removeUserFromFacility, updateUsernamesFromFacilities } from './publicFacility.js';
 
 export const signup = async (req, res) => {
+//Permission: administrator
 
     if(!req.user) {
         return res.status(401).send({ message: 'User unauthenticated'});
@@ -17,7 +19,7 @@ export const signup = async (req, res) => {
     const { username, public_facility_ids, password } = req.body;
     try {
 
-        //Check user already exist
+        //Check if user already exist
         const oldUser = await UserModel.findOne({ username });
         if (oldUser) return res.status(400).json({ 
             message: `User \'${username}\' already exist`,
@@ -84,6 +86,8 @@ export const signin = async (req, res) => {
 }
 
 export const deleteUser = async (req, res) => {
+//Permission: administrator
+
     const { id } = req.params;
 
     if(!req.user) {
@@ -99,7 +103,16 @@ export const deleteUser = async (req, res) => {
     }
 
     try {
+        const { public_facility_ids, username } = await UserModel.findById(id, 'public_facility_ids username'); 
+
+        //Delete user
         await UserModel.findByIdAndRemove(id);
+
+        //Delete user from his facilities 
+        public_facility_ids.forEach(async (facilityId) =>  {
+            await removeUserFromFacility(facilityId, username);
+        });
+
         res.status(200).json({ result: 'User deleted successfully' }); 
     } catch (error) {
         console.log(error);
@@ -107,6 +120,8 @@ export const deleteUser = async (req, res) => {
     }
 }
 export const changePassword = async (req, res) => {
+//Permission: registered user
+
     const { current_password, new_password } = req.body;
     const { id } = req.params;
 
@@ -143,6 +158,8 @@ export const changePassword = async (req, res) => {
 } 
 
 export const adminChangePassword = async (req, res) => {
+//Permission: administrator (doesn't need the user's current password)
+
     const { new_password } = req.body;
     const { id } = req.params;
 
@@ -170,7 +187,9 @@ export const adminChangePassword = async (req, res) => {
     }
 }
 
-export const adminChangeUsername = async (req, res, next) => {
+export const adminChangeUsername = async (req, res) => {
+//Permission: administrator
+
     const { new_username } = req.body;
     const { id } = req.params;
 
@@ -185,14 +204,17 @@ export const adminChangeUsername = async (req, res, next) => {
         }
     
         const user = await UserModel.findById(id);
-        req.prevUsername = user.username;
+        const prevUsername = user.username;
 
         user.username = new_username;
-        const newUser = await UserModel.findByIdAndUpdate(id, user, { new: true });
-        req.newUser = newUser;
+        const result = await UserModel.findByIdAndUpdate(id, user, { new: true });
 
-        //Next function will update the username from public facilities users
-        next();       
+        //Update username from user's facilities
+        user.public_facility_ids.forEach(async (facilityId) => {
+            await updateUsernamesFromFacilities(prevUsername, new_username, facilityId);    
+        });
+
+        res.status(200).send({ result }) 
     } catch (error) {
         res.status(500).json({ 
             message: 'Could not change the username'
@@ -229,7 +251,9 @@ export const getUserField = async (req, res) => {
     }
 }
 
-export const addFacilityToUser = async (req, res, next) => {
+export const addFacilityToUser = async (req, res) => {
+//Permission: administrator
+
     const { id } = req.params;
     const { facilityId } = req.body;
 
@@ -250,18 +274,24 @@ export const addFacilityToUser = async (req, res, next) => {
     }
 
     try {
+        //Add the facility
         const user = await UserModel.findById(id);
         user.public_facility_ids = user.public_facility_ids.concat([facilityId]);
-        const newUser = await UserModel.findByIdAndUpdate(id, user, { new: true });
-        req.newUser = newUser;
-        next();
+        const result = await UserModel.findByIdAndUpdate(id, user, { new: true });
+
+        //Add the user to the facility
+        await addUserToFacility(facilityId, user.username);
+
+        res.status(200).send({ result });
     } catch (error) {
         res.status(500).send({ message: 'Could not update user'});
         console.log(error);
     }
 }
 
-export const removeFacilityFromUser = async (req, res, next) => {
+export const removeFacilityFromUser = async (req, res) => {
+//Permission: administrator
+
     const { id } = req.params;
     const { facilityId } = req.body;
 
@@ -282,25 +312,21 @@ export const removeFacilityFromUser = async (req, res, next) => {
     }
 
     try {
-        const user = await UserModel.findById(id);
+        //Remove facility from user
+        let user = await UserModel.findById(id);
         const index = user.public_facility_ids.indexOf(facilityId);
         if(index > -1){
             user.public_facility_ids.splice(index, 1);
         }
-        const newUser = await UserModel.findByIdAndUpdate(id, user, { new: true });
-        req.newUser = newUser;
-        next();
+        const result = await UserModel.findByIdAndUpdate(id, user, { new: true });
+
+        //Remove user from facility
+        await removeUserFromFacility(facilityId, user.username);
+
+        res.status(200).send({ result });
     } catch (error) {
         res.status(500).send({ message: 'Could not update user'});
         console.log(error);
     }
 }
 
-export const getUsernameFromId = async (id) => {
-    try {
-        const result =  await UserModel.findById(id, 'username');
-        return result.username;
-    } catch (error) {
-        console.log(error);
-    }
-}

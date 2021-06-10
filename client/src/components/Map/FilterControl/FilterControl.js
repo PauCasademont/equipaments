@@ -6,7 +6,9 @@ import './FilterControl.css';
 import { TYPOLOGIES, YEARS_LIST } from '../../../constants';
 
 function FilterControl({ filters, setFilters, satelliteView, setSatelliteView, icons }) {
+//Return map legend
 
+    //To open legend menu. Only used in small screens
     const [openSideMenu, setOpenSideMenu] = useState(false);
 
     const MapFilters = () => (
@@ -22,15 +24,15 @@ function FilterControl({ filters, setFilters, satelliteView, setSatelliteView, i
                 <AccordionDetails className='map-filter-accordion-details'>
                     { TYPOLOGIES.map((typology, index) => (
                         <div key={index} className='map-filter-item'>
-                            <img src={icons[typology.icon]} className='filter-control-icon'/>
+                            <img src={icons[typology.name]} className='filter-control-icon'/>
                             <Typography variant='body1'>
-                                {typology.name}
+                                {typology.screenName}
                             </Typography>
                             <Checkbox       
                                 className='filter-control-item'        
                                 color='primary'
-                                checked={filters.typologies.includes(typology.icon)}
-                                onClick={() => handleFilterClick('typologies', typology.icon)}
+                                checked={filters.typologies.includes(typology.name)}
+                                onClick={() => handleFilterClick('typologies', typology.name)}
                             />
                         </div>
                     ))}
@@ -85,12 +87,18 @@ function FilterControl({ filters, setFilters, satelliteView, setSatelliteView, i
     );
 
     const handleFilterClick = (field, value) => {
+    //Update filters
+
+        //Remove filter
         if(filters[field].includes(value)){
             setFilters((prevFilters) => ({ 
                 ...prevFilters,
                 [field]: prevFilters[field].filter(elem => elem != value)
             }));
-        } else {
+        } 
+
+        //Add filter
+        else {
             setFilters((prevFilters) => ({
                 ...prevFilters,
                 [field]: [...prevFilters[field], value]
@@ -100,7 +108,9 @@ function FilterControl({ filters, setFilters, satelliteView, setSatelliteView, i
     
     return (
         <div className='map-filter-control'>
+            {/* If screen if big enough for the legend show this*/}
            <MapFilters className='map-filter-paper' />
+           {/* If screen if small show this */}
             <div className='map-filter-hamburger-menu'>
                 { !openSideMenu && 
                     <Paper>

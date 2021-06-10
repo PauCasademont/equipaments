@@ -11,6 +11,7 @@ function UserMenu({ user, router, setOpenPopup }) {
     const [userFacilities, setUserFacilities] = useState([]);
 
     useEffect(() => {
+        //Get facilities names of registered user
         if(!user.isAdmin){
             getPublicFacilitiesNamesFromIds(user.publicFacilityIds)
             .then(names => setUserFacilities(names));
@@ -18,11 +19,13 @@ function UserMenu({ user, router, setOpenPopup }) {
     },[]);
 
     const handleLogout = () => {
+        //Remove user data from local storage and refresh the page
         localStorage.removeItem(USER_STORAGE);
         window.location.reload(false);
     };
 
     const handleFile = (files) => {
+        //Open file explorer and read the file selected
         const reader = new FileReader();
         reader.onload = () => {
             const strFile = reader.result.replaceAll('\"', '').replaceAll('.','');
@@ -61,13 +64,16 @@ function UserMenu({ user, router, setOpenPopup }) {
                 <div className='userMenu-username-div'>
                     <Typography className='userMenu-username' variant='body1'>{user.username}</Typography>
                 </div>
+                {/* Registered user options */}
                 { !user.isAdmin &&
                     userFacilities.map((facility, index) => (
+                        facility && 
                         <MenuItem key={index} onClick={() => router.push(`/edit/${facility.id}`)}>
                             Editar {facility.name}
                         </MenuItem>
                     ))
                 }
+                {/* Admin options */}
                 { user.isAdmin &&                                     
                     <ReactFileReader handleFiles={handleFile} fileTypes={'.csv'}>
                         <MenuItem>
@@ -90,6 +96,7 @@ function UserMenu({ user, router, setOpenPopup }) {
                         Configuració Equipaments
                     </MenuItem>
                 }
+                {/* Option for every user */}
                 <MenuItem onClick={() => router.push('/password')}>
                     Canviar Contrasenya
                 </MenuItem> 

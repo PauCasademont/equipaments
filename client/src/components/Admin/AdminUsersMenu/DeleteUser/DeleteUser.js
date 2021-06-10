@@ -6,12 +6,15 @@ import './DeleteUser.css';
 import { deleteUser } from '../../../../actions/user';
 
 function DeleteUser({ usernames, setNames }) {
+//Return delete user page
+
     const [selectedUser, setSelectedUser] = useState(null);
 
     const handleDeleteClick = () => {
         if(selectedUser){
             deleteUser(selectedUser.id, selectedUser.name)
             .then(res => {
+            //If user has been deleted, remove it from names list
                 if(res) {
                     const deletedId = selectedUser.id;
                     setSelectedUser(null);

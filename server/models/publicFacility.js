@@ -1,5 +1,6 @@
 import mongoose from 'mongoose';
 
+//publicFacilitySchema define the facilities document
 const publicFacilitySchema = mongoose.Schema({
     name: { type: String, required: true},
     typology: { type: String, required: true},

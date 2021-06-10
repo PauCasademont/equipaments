@@ -19,11 +19,16 @@ const TABS = {
 }
 
 function AdminUsersMenu() {
+//Return admin settings page
+
     const [openTab, setOpenTab] = useState(0);
+    
+    //Lists of all the names of facilities and users 
     const [names, setNames] = useState({
         publicFaiclities: [],
         users: []
     });
+    
     const [defaultUser, setDefaultUser] = useState(false);
 
     const router = useHistory();

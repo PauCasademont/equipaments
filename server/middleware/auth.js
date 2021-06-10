@@ -1,4 +1,5 @@
 //Verify user token. headers: { authorization: 'bearer token' }
+//The tokens are created in controllers.user.signin function
 import jwt from 'jsonwebtoken'
 import dotenv from 'dotenv'
 

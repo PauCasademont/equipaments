@@ -19,8 +19,11 @@ import { getInvisiblePublicFacilities, updateCoordinates, deletePublicFacility }
 import { USER_STORAGE } from '../../../constants';
 
 function InvisibleFacilities() {
+//Return invisible facilities page
+
+    //List of facilities without coordinates
     const [publicFacilities, setPublicFacilities] = useState();
-    const user = JSON.parse(localStorage.getItem(USER_STORAGE));
+
     const router = useHistory();
 
     useEffect(() => {
@@ -51,7 +54,11 @@ function InvisibleFacilities() {
     }
 
     const handleChange = (event, id) => {
+
+        //If latitude index = 0, if longitude index = 1 ( [lat, lng] ).
         const coordinatesIndex = event.target.name == 'latitude' ? 0 : 1;
+
+        //Copy the state var (publicFacilities) to update it
         let facilityCopy = publicFacilities[id];
         let coordinatesCopy = facilityCopy.coordinates;
         coordinatesCopy[coordinatesIndex] = event.target.value;
@@ -60,7 +67,7 @@ function InvisibleFacilities() {
     }
 
     return (
-        user?.isAdmin && publicFacilities ? 
+        publicFacilities && 
         <Grid 
             container 
             className='invisibleFacilities-container'
@@ -132,7 +139,6 @@ function InvisibleFacilities() {
                 }
             </Grid>
         </Grid> 
-        : <div>Accessible només per usuaris administradors</div>
     )
 }
 
