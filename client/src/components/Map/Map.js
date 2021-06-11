@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { MapContainer, TileLayer } from 'react-leaflet';
 import { useHistory, useLocation } from 'react-router-dom';
+import { CircularProgress, Typography } from '@material-ui/core';
 import decode from 'jwt-decode';
 
 import './Map.css';
@@ -85,6 +86,7 @@ function Map({ ids = [], displayedDatasets = [] }) {
     }
 
     return (
+        publicFacilities ?
         <>
             <MapContainer                
                 center={INITIAL_MAP_CONFIG.center}
@@ -133,6 +135,14 @@ function Map({ ids = [], displayedDatasets = [] }) {
                 <ImportData fileData={openPopup.importData} setOpenPopup={setOpenPopup} />
             }
         </>
+        :
+        // If public Facilities are loading
+        <div className='map-loading-div'>
+            <Typography variant='h5' className='map-loading-text' color='primary'>
+                Carregant...
+            </Typography>
+            <CircularProgress />
+        </div>
     )
 }
 

@@ -54,13 +54,13 @@ function Auth() {
             direction='column' 
             alignItems='center' 
         >
-            <Grid item xs={12} sm={8} md={6} lg={4}>
+            <Grid item xs={12} sm={8} md={6} lg={5} xl={4}>
                 <Paper className='auth-paper' elevation={3}>
                     <form onSubmit={handleSubmit}>
                         <Grid container spacing={3} justify='center'>
                             <div className='auth-header'>
                                 <AccountCircle className='auth-avatar'/>
-                                <Typography className='auth-title' variant='h2'>
+                                <Typography className='auth-title' variant='h3'>
                                     Login
                                 </Typography>
                             </div>
