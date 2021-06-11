@@ -21,7 +21,7 @@ Per comprendre el codi, editar-lo o afegir noves funcionalitats cal haver assumi
 - Node v14 o superior
 
 ### Crear entorn
-Abans d'executar el codi, si es descarrega localment, s'han seguir següents passos:
+Abans d'executar el codi, si es descarrega localment, s'han seguir els següents passos:
 - Instalar les dependències: s'ha d'executar la comanda ***npm i*** o ***npm install*** des d'un terminal amb node, dins el directoris [client](https://github.com/PauCasademont/equipaments/tree/main/client) i [server](https://github.com/PauCasademont/equipaments/tree/main/server).
 - Crear el fitxer .env dins al directori [server](https://github.com/PauCasademont/equipaments/tree/main/server) amb les variables:
     - CONNECTION_URL: 'enllaç de connexio amb la base dades de MongoDB'
