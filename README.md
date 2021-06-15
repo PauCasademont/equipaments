@@ -1,6 +1,6 @@
 # Sistema interactiu del consum d'energia en els equipaments públics a Girona
 
-Aquesta aplicació web serveix per visualitzar i comparar les  dades del consum energètic dels equipametns públics de Girona amb gràfics. Proporciona una eina de benchmarking als administradors d'equipaments i regidors de l’Ajuntament de Girona com a base de suport a la presa de decisions  del comportament energètic en els equipaments públics.
+Aquesta aplicació web serveix per visualitzar i comparar les  dades del consum energètic dels equipaments públics de Girona amb gràfics. Proporciona una eina de benchmarking als administradors d'equipaments i regidors de l’Ajuntament de Girona com a base de suport a la presa de decisions  del comportament energètic en els equipaments públics.
 
 Es pot accedir a la web mitjançant el següent enllaç: https://equipaments.catedragironasmartcity.cat/
 
@@ -10,22 +10,22 @@ Es pot accedir a la web mitjançant el següent enllaç: https://equipaments.cat
 ## Coneixements necessaris
 
 Per comprendre el codi, editar-lo o afegir noves funcionalitats cal haver assumit els següents coneixements:
-- Coneixer els diferents tipus de peticions HTTP (get, patch, delete, post).
+- Conèixer els diferents tipus de peticions HTTP (get, patch, delete, post).
 - Nocions bàsiques de programació web amb JavaScript, HTML i CSS.
 - Entendre el funcionament i el cicle de vida dels hooks ***UseEffect*** i ***UseState*** de React.
 - Saber utilitzar components de [MaterialUI](https://material-ui.com/) , especialment el component [Grid](https://material-ui.com/components/grid/)
 
-## Instalació pel desenvolupament
+## Instal·lació pel desenvolupament
 
 ### Requeriments 
 - Node v14 o superior
 
 ### Crear entorn
 Abans d'executar el codi, si es descarrega localment, s'han seguir els següents passos:
-- Instalar les dependències: s'ha d'executar la comanda ***npm i*** o ***npm install*** des d'un terminal amb node, dins el directoris [client](https://github.com/PauCasademont/equipaments/tree/main/client) i [server](https://github.com/PauCasademont/equipaments/tree/main/server).
+- Instal·lar les dependències: s'ha d'executar la comanda ***npm i*** o ***npm install*** des d'un terminal amb node, dins el directoris [client](https://github.com/PauCasademont/equipaments/tree/main/client) i [server](https://github.com/PauCasademont/equipaments/tree/main/server).
 - Crear el fitxer .env dins al directori [server](https://github.com/PauCasademont/equipaments/tree/main/server) amb les variables:
-    - CONNECTION_URL: 'enllaç de connexio amb la base dades de MongoDB'
-    - CLIENT_SECRET: 'clau secreta que servirà per autentificar els usuaris, pot ser cualsevol string però es recomana un mínim de 16 caracters aletoris per seguratat'
+    - CONNECTION_URL: 'enllaç de connexió amb la base dades de MongoDB'
+    - CLIENT_SECRET: 'clau secreta que servirà per autentificar els usuaris, pot ser qualsevol string però es recomana un mínim de 16 caràcters aleatoris per seguretat'
     
 El fitxer [.env.example](https://github.com/PauCasademont/equipaments/blob/main/server/.env.example) mostra com han de ser les variables.
 
@@ -33,7 +33,7 @@ El fitxer [.env.example](https://github.com/PauCasademont/equipaments/blob/main/
 Per executar el client cal executar la comanda ***npm start*** dins el directori [client](https://github.com/PauCasademont/equipaments/tree/main/client).
 Per executar el servidor cal executar la comanda ***npm start*** dins el directori [server](https://github.com/PauCasademont/equipaments/tree/main/server.).
 
-NOTA: Si s'utilitza el client localment, també caldra iniciar le servidor perquè funcioni.
+NOTA: Si s'utilitza el client localment, també caldrà iniciar el servidor perquè funcioni.
 
 
 ## Estructura de directoris
@@ -57,7 +57,7 @@ En aquest apartat la funcionalitat de cada directori de l'aplicació.
 - [controllers](https://github.com/PauCasademont/equipaments/tree/main/server/controllers): conté la lògica de totes les peticions HTTP
 - [middleware](https://github.com/PauCasademont/equipaments/tree/main/server/middleware): conté les funcions de middleware. L'única funció que hi ha és la d'autentificació de l'usuari.
 - [models](https://github.com/PauCasademont/equipaments/tree/main/server/models): defineix el format dels documents de la base de dades MongoDB.
-- [router](https://github.com/PauCasademont/equipaments/tree/main/server/routes): defienix les rutes HTTP i les enllaça amb les funcions de middleware i controllers.
+- [router](https://github.com/PauCasademont/equipaments/tree/main/server/routes): defineix les rutes HTTP i les enllaça amb les funcions de middleware i controllers.
 - [index.js](https://github.com/PauCasademont/equipaments/blob/main/server/index.js): és el fitxer que inicia el servidor i crea la connexió amb la base de dades.
 
 
@@ -76,7 +76,7 @@ Hi ha dos tipus de documents diferents, un per les dades dels equipaments i l'al
     - area: superfície en m2.
     - typology: tipologia.
     - users: llista amb els noms dels usuaris administradors de l'equipament.
-    - data: objecte amb les dades de consum de l'equipaments.
+    - data: objecte amb les dades de consum de l'equipament.
 
 Les claus de l'objecte data són els conceptes. Cada concepte conté un objecte on les claus són els anys de les dades. Per cada any hi han dos tipus de dades, consum i preu del consum. Aquestes dades estan representades amb llistes de 12 valors, cada valor representa un mes de l'any.
 
@@ -99,9 +99,9 @@ Exemple:
     - is_admin: booleà que indica si és l'administrador de l'aplicació.
     - password: contrasenya encriptada.
 
-### Enllaç de contexió amb el servidor
+### Enllaç de connexió amb el servidor
 
-El servidor per contectar-se amb la base de dades necessita un codi de connexió. Es pot trobar dins la web l'Atlas, dins la base de dades del projecte, a l'apartat de clusters, cal apretar el botó *connect* i després *connect your aplication*. El driver que s'ha de seleccionar es Node.js, que està per defecte, i a continuació es mostrarà l'enllaç per copiar-lo.
+El servidor per connectar-se amb la base de dades necessita un codi de connexió. Es pot trobar dins la web l'Atlas, dins la base de dades del projecte, a l'apartat de clusters, cal prémer el botó *connect* i després *connect your aplication*. El driver que s'ha de seleccionar es Node.js, que està per defecte, i a continuació es mostrarà l'enllaç per copiar-lo.
 
 Exemple del codi de connexió:
 *mongodb+srv://Admin:< password >@clusterequipaments.maukd.mongodb.net/< database >?retryWrites=true&w=majority*
@@ -112,7 +112,7 @@ Guia de l'Atlas: [SetUpAtlasConnectivity](https://docs.mongodb.com/guides/cloud/
 
 ### Backups i Imports
 
-Per poder fer les copies de seguretat i tornar a importar les dades, cal tenir instalat [MongoDB_Tools](https://www.mongodb.com/try/download/database-tools)
+Per poder fer les copies de seguretat i tornar a importar les dades, cal tenir instal·lat [MongoDB_Tools](https://www.mongodb.com/try/download/database-tools)
 
 Per fer els backups s'ha d'executar la següent comanda des de qualsevol terminal:
 
@@ -149,7 +149,7 @@ La web no disposa d'una funcionalitat per crear un nou usuari administrador, ja 
 - is_admin: true
 - password: 'contrasenya encriptada'
 
-Per encriptar la contrasenya s'utilitza la llibreria bcryptjs amb 12 rondes. Es pot utlitzar la web [bcrypt-generator](https://bcrypt-generator.com/) per encriptar.
+Per encriptar la contrasenya s'utilitza la llibreria bcryptjs amb 12 rondes. Es pot utilitzar la web [bcrypt-generator](https://bcrypt-generator.com/) per encriptar.
 
 ## Contacte
 
