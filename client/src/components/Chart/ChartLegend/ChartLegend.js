@@ -1,10 +1,11 @@
 import { useEffect, useState } from 'react';
 import groupBy from 'lodash.groupby';
 import { useHistory } from 'react-router-dom';
-import { Paper, Button, Grid, Menu, IconButton, MenuItem } from '@material-ui/core';
-import { ArrowBack, GetApp } from '@material-ui/icons';
+import { Paper, Button, Grid } from '@material-ui/core';
+import { ArrowBack } from '@material-ui/icons';
 import Tippy from '@tippy.js/react';
 import { CSVLink } from 'react-csv';
+import tinycolor from 'tinycolor2';
 
 import './ChartLegend.css';
 import { getCSVReport } from '../../../actions/publicFacility';
@@ -71,10 +72,17 @@ function ChartLegend({ data, setData, ids, dataType, handleExportPNG, chartTitle
     };
 
     const handleChangeColor = (label, color) => {
+        //Find dataset
         let datasetsCopy = data.datasets;
         const indexDataset = datasetsCopy.findIndex(dataset => dataset.label == label);
         if(indexDataset > -1){
+            //Change color
             datasetsCopy[indexDataset].borderColor = color;
+            //Change color deviation. Every deviation has two datasets and background color
+            if(datasetsCopy[indexDataset].isDeviation){
+                datasetsCopy[indexDataset + 1].borderColor = color;
+                datasetsCopy[indexDataset].backgroundColor = tinycolor(color).lighten(30);
+            }
             setData({ labels: data.labels, datasets: datasetsCopy });
         }
     }
