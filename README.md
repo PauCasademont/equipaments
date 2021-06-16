@@ -117,7 +117,7 @@ Per poder fer les copies de seguretat i tornar a importar les dades, cal tenir i
 Per fer els backups s'ha d'executar la següent comanda des de qualsevol terminal:
 
 mongoexport --db <DB_NAME> --collection <COLLECTION_NAME> --out <PATH_FILE> 
---dir <CONNECTION_URL>
+--uri <CONNECTION_URL>
 
 Canviant:
 - <DB_NAME> per el nom de la base de dades.
