@@ -130,7 +130,7 @@ Per importar els backups s'ha d'executar la següent comanda des de qualsevol te
 mongoimport --uri <CONNECTION_URL> --collection <COLLECTION_NAME> --type <FILE_TYPE> --file <FILE_PATH>
 
 Canviant:
-- <CONNECTION_URL> enllaç de connexió (veure l'apartat anterior per trobar-lo).
+- <CONNECTION_URL> enllaç de connexió sense paràmetres (eliminar '?retryWrites=true&w=majority' de l'enllaç).
 - <COLLECTION_NAME> per el nom dels documents (public_facilities o users).
 - <FILE_TYPE> tipus de fitxer, pot ser JSON o CSV (en majúscules).
 - <PATH_FILE> ubicació on es guardarà el backup. L'extensió del fitxer pot ser json o csv.
