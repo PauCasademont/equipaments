@@ -77,15 +77,21 @@ function Edit() {
         //Set updated values according to it's dataType
         let updatedValues = null;
 
+        //Typology
         if(dataType == DATA_TYPES[TYPOLOGY]){
             updatedValues = [formValues[0]];
         }
 
         else {
-            updatedValues = formValues.map(value => parseFloat(value));
-    
+            //Consumption and price
+            updatedValues = formValues.map(value => 
+                value == '' ? 0 : parseFloat(value)
+            );
+            
+            //Area
             if (dataType == DATA_TYPES[AREA]) updatedValues = updatedValues.slice(0,1);
-    
+            
+            //Coordinates
             else if (dataType == DATA_TYPES[COORDINATES]) {
                 updatedValues = updatedValues.slice(0,2);
                 if(!inRangeLatitude(updatedValues[0]) || !inRangeLongitude(updatedValues[1])){
@@ -96,7 +102,7 @@ function Edit() {
         }
 
         //Update values
-        updatePublicFacility(facilityId, dataType, concept, year, formValues)
+        updatePublicFacility(facilityId, dataType, concept, year, updatedValues)
         .then((updatedPublicFacility) => {
             if(updatedPublicFacility){
                 setPublicFacility(updatedPublicFacility);

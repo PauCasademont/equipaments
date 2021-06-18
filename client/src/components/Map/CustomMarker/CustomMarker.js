@@ -1,6 +1,7 @@
 import { Marker, Popup } from 'react-leaflet';
 import { Typography, IconButton, Button } from '@material-ui/core';
 import { useParams } from 'react-router-dom';
+import Tippy from '@tippy.js/react';
 import L from 'leaflet';
 
 import './CustomMarker.css';
@@ -67,28 +68,36 @@ function CustomMarker({ publicFacility, userFacilityIds, ids, displayedDatasets,
                         Administradors: {publicFacility.users.join(', ')}
                     </Typography>
                 }
-                {/* Popup data */}
+                {/* Popup Buttons */}
                 { isHomePage ? 
                 <> 
                     { publicFacility.hasConsumptionData &&
-                    <IconButton className='popup-icon-button' onClick={() => { handleChartClick(CONSUMPTION) }}>
-                        <img className='popup-icon' src={icons.consum} alt='icon_btn' />
-                    </IconButton> }
+                    <Tippy content="mostra el consum d'energia">
+                        <IconButton className='popup-icon-button' onClick={() => { handleChartClick(CONSUMPTION) }}>
+                            <img className='popup-icon' src={icons.consum} alt='icon_btn' />
+                        </IconButton> 
+                    </Tippy> }
                     { publicFacility.hasPriceData &&
-                    <IconButton className='popup-icon-button' onClick={() => { handleChartClick(PRICE) }}>
-                        <img className='popup-icon' src={icons.cost} alt='icon_btn' />
-                    </IconButton> }
+                    <Tippy content="mostra el cost d'energia">
+                        <IconButton className='popup-icon-button' onClick={() => { handleChartClick(PRICE) }}>
+                            <img className='popup-icon' src={icons.cost} alt='icon_btn' />
+                        </IconButton> 
+                    </Tippy> }
                     { publicFacility.hasConsumptionData && area > 0 && 
-                    <IconButton className='popup-icon-button' onClick={() => { handleChartClick(AREA) }}>
-                        <img className='popup-icon' src={icons.indicadors} alt='icon_btn' />
-                    </IconButton> }
+                    <Tippy content="mostra els indicadors d'energia">
+                        <IconButton className='popup-icon-button' onClick={() => { handleChartClick(AREA) }}>
+                            <img className='popup-icon' src={icons.indicadors} alt='icon_btn' />
+                        </IconButton> 
+                    </Tippy> }
                     { userCanEdit() && 
-                    <IconButton className='popup-icon-button' onClick={() => { handleEditClick() }}>
-                        <img className='popup-icon' src={icons.editar} alt='icon_btn' />
-                    </IconButton> }
+                    <Tippy content="edita l'equipament">
+                        <IconButton className='popup-icon-button' onClick={() => { handleEditClick() }}>
+                            <img className='popup-icon' src={icons.editar} alt='icon_btn' />
+                        </IconButton> 
+                    </Tippy> }
                 </>
                 : <div className='popup-button-div'>
-                    { !ids.includes(id) && 
+                    { !ids.includes(id) && (dataType != AREA || area > 0) && 
                     <Button className='popup-button' variant='outlined' onClick={() => { handleChartClick(dataType) }}>
                         Afegir
                     </Button> }

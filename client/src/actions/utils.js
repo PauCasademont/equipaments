@@ -1,7 +1,7 @@
 import swal from 'sweetalert';
 import tinycolor from 'tinycolor2';
 
-import { AREA, COLORS, CONCEPTS, CONSUMPTION, YEARS_LIST } from '../constants';
+import { AREA, COLORS, CONCEPTS, CONSUMPTION, DESCENDANT_YEARS } from '../constants';
 
 export const createAlert = (title, text='', icon='error', button='ok') => {
     swal({ title, text, icon, button });
@@ -72,13 +72,12 @@ export const add = (list, value) => {
 export const getAverageAndDeviationDatasets = (facilities, dataType, typology) => {
 //Return list of datasets ready to use in Chart js with the average and deviation of every facility in facilities.
 
-    const descendantYears = YEARS_LIST.reverse();
     const menuName = `Mostra mitjanes i desviacions dels equipaments de tipologia ${getTypologyUserFormat(typology)}`
     let datasets = [];
 
     CONCEPTS.forEach((concept, darkenAmount) => {
         let indexColor = 0
-        descendantYears.forEach((year) => {
+        DESCENDANT_YEARS.forEach((year) => {
             //Get all values of concept, year and dataType of facilities
             const arrays = getConceptYearArrays(facilities, concept, year, dataType);
 
@@ -153,6 +152,9 @@ export const getAverageAndDeviationDatasets = (facilities, dataType, typology) =
                     indexColor += 2;
                 }
             }
+            // console.log('year: ',year);
+            // datasets.forEach(dataset => {if(dataset.concept == concept) console.log(dataset.year)});
+            // console.log('\n');
         });
     });
     return datasets;

@@ -79,8 +79,8 @@ function Chart({ displayedDatasets = [] }) {
         let facilitiesDatasets = await getPublicFacilitiesDatasets(idsList, dataType);  
 
         if(facilitiesDatasets.length > 0){
-            const typologyAverageDatasets = await getTypologyDatasets();
-            facilitiesDatasets = facilitiesDatasets.concat(typologyAverageDatasets);
+            const typologyDatasets = await getTypologyDatasets();
+            facilitiesDatasets = facilitiesDatasets.concat(typologyDatasets);
         }
         const datasets = setDisplayedDatasets(facilitiesDatasets);
         setData({

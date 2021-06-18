@@ -139,7 +139,7 @@ function Map({ ids = [], displayedDatasets = [] }) {
         // If public Facilities are loading
         <div className='map-loading-div'>
             <Typography variant='h5' className='map-loading-text' color='primary'>
-                Carregant...
+                Carregant equipaments...
             </Typography>
             <CircularProgress />
         </div>
