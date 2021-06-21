@@ -125,7 +125,7 @@ Canviant:
 - <PATH_FILE> ubicació on es guardarà el backup. L'extensió del fitxer pot ser json o csv.
 - <CONNECTION_URL> enllaç de connexió (veure l'apartat anterior per trobar-lo).
 
-Per importar els backups s'ha d'executar la següent comanda des de qualsevol terminal:
+Per importar els backups, primer s'ha d'eliminar la col·lecció que es vol importar des de l'Atlas i s'ha d'executar la següent comanda des de qualsevol terminal:
 
 mongoimport --uri <CONNECTION_URL> --collection <COLLECTION_NAME> --type <FILE_TYPE> --file <FILE_PATH>
 
