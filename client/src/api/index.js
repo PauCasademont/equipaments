@@ -3,8 +3,8 @@ import axios from 'axios';
 import { USER_STORAGE } from '../constants';
 
 //API instance using axios
-// const API = axios.create({ baseURL: 'http://localhost:5000' });
-const API = axios.create({ baseURL: 'https://consum-equipaments-publics.herokuapp.com/' });
+const API = axios.create({ baseURL: 'http://localhost:5000' });
+// const API = axios.create({ baseURL: 'https://consum-equipaments-publics.herokuapp.com/' });
 
 //Add JWT in API request headers if exist
 API.interceptors.request.use((req) => {
